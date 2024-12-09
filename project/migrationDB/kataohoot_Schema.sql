@@ -29,9 +29,9 @@ CREATE TABLE `fb_quiz_determination` (
   `Record_id` int NOT NULL,
   `is_correct` tinyint(1) NOT NULL,
   PRIMARY KEY (`FB_id`,`Record_id`),
-  KEY `Record_id` (`Record_id`),
-  CONSTRAINT `fb_quiz_determination_ibfk_1` FOREIGN KEY (`FB_id`) REFERENCES `fill_blank_question` (`FB_id`),
-  CONSTRAINT `fb_quiz_determination_ibfk_2` FOREIGN KEY (`Record_id`) REFERENCES `quiz_record` (`Record_id`)
+  KEY `fk_fbdetermination_record` (`Record_id`),
+  CONSTRAINT `fk_fbdetermination_fillblank` FOREIGN KEY (`FB_id`) REFERENCES `fill_blank_question` (`FB_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_fbdetermination_record` FOREIGN KEY (`Record_id`) REFERENCES `quiz_record` (`Record_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,9 +50,9 @@ CREATE TABLE `fill_blank_question` (
   `points` int NOT NULL,
   `Quiz_id` int NOT NULL,
   PRIMARY KEY (`FB_id`),
-  KEY `Quiz_id` (`Quiz_id`),
-  CONSTRAINT `fill_blank_question_ibfk_1` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_fillblank_quiz` (`Quiz_id`),
+  CONSTRAINT `fk_fillblank_quiz` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,11 +68,11 @@ CREATE TABLE `folder` (
   `User_id` int NOT NULL,
   `Parent_folder_id` int DEFAULT NULL,
   PRIMARY KEY (`Folder_id`),
-  KEY `User_id` (`User_id`),
-  KEY `Parent_folder_id` (`Parent_folder_id`),
-  CONSTRAINT `folder_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`),
-  CONSTRAINT `folder_ibfk_2` FOREIGN KEY (`Parent_folder_id`) REFERENCES `folder` (`Folder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_folder_user` (`User_id`),
+  KEY `fk_folder_parent` (`Parent_folder_id`),
+  CONSTRAINT `fk_folder_parent` FOREIGN KEY (`Parent_folder_id`) REFERENCES `folder` (`Folder_id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_folder_user` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,9 +86,9 @@ CREATE TABLE `friendship` (
   `User1_id` int NOT NULL,
   `User2_id` int NOT NULL,
   PRIMARY KEY (`User1_id`,`User2_id`),
-  KEY `User2_id` (`User2_id`),
-  CONSTRAINT `friendship_ibfk_1` FOREIGN KEY (`User1_id`) REFERENCES `user` (`User_id`),
-  CONSTRAINT `friendship_ibfk_2` FOREIGN KEY (`User2_id`) REFERENCES `user` (`User_id`)
+  KEY `fk_friendship_user2` (`User2_id`),
+  CONSTRAINT `fk_friendship_user1` FOREIGN KEY (`User1_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_friendship_user2` FOREIGN KEY (`User2_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -105,9 +105,9 @@ CREATE TABLE `quiz` (
   `is_public` tinyint(1) NOT NULL DEFAULT '0',
   `Folder_id` int DEFAULT NULL,
   PRIMARY KEY (`Quiz_id`),
-  KEY `Folder_id` (`Folder_id`),
-  CONSTRAINT `quiz_ibfk_1` FOREIGN KEY (`Folder_id`) REFERENCES `folder` (`Folder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_quiz_folder` (`Folder_id`),
+  CONSTRAINT `fk_quiz_folder` FOREIGN KEY (`Folder_id`) REFERENCES `folder` (`Folder_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,11 +124,11 @@ CREATE TABLE `quiz_record` (
   `User_id` int NOT NULL,
   `Quiz_id` int NOT NULL,
   PRIMARY KEY (`Record_id`),
-  KEY `User_id` (`User_id`),
-  KEY `Quiz_id` (`Quiz_id`),
-  CONSTRAINT `quiz_record_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`),
-  CONSTRAINT `quiz_record_ibfk_2` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_quizrecord_user` (`User_id`),
+  KEY `fk_quizrecord_quiz` (`Quiz_id`),
+  CONSTRAINT `fk_quizrecord_quiz` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_quizrecord_user` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,9 +149,9 @@ CREATE TABLE `single_open_question` (
   `optionC` varchar(50) DEFAULT NULL,
   `Quiz_id` int NOT NULL,
   PRIMARY KEY (`SO_id`),
-  KEY `Quiz_id` (`Quiz_id`),
-  CONSTRAINT `single_open_question_ibfk_1` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_singleopen_quiz` (`Quiz_id`),
+  CONSTRAINT `fk_singleopen_quiz` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,9 +166,9 @@ CREATE TABLE `so_quiz_determination` (
   `Record_id` int NOT NULL,
   `is_correct` tinyint(1) NOT NULL,
   PRIMARY KEY (`SO_id`,`Record_id`),
-  KEY `Record_id` (`Record_id`),
-  CONSTRAINT `so_quiz_determination_ibfk_1` FOREIGN KEY (`SO_id`) REFERENCES `single_open_question` (`SO_id`),
-  CONSTRAINT `so_quiz_determination_ibfk_2` FOREIGN KEY (`Record_id`) REFERENCES `quiz_record` (`Record_id`)
+  KEY `fk_sodetermination_record` (`Record_id`),
+  CONSTRAINT `fk_sodetermination_record` FOREIGN KEY (`Record_id`) REFERENCES `quiz_record` (`Record_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_sodetermination_singleopen` FOREIGN KEY (`SO_id`) REFERENCES `single_open_question` (`SO_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -187,9 +187,9 @@ CREATE TABLE `tf_question` (
   `q_number` int NOT NULL,
   `Quiz_id` int NOT NULL,
   PRIMARY KEY (`TF_id`),
-  KEY `Quiz_id` (`Quiz_id`),
-  CONSTRAINT `tf_question_ibfk_1` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_tfquestion_quiz` (`Quiz_id`),
+  CONSTRAINT `fk_tfquestion_quiz` FOREIGN KEY (`Quiz_id`) REFERENCES `quiz` (`Quiz_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,9 +204,9 @@ CREATE TABLE `tf_quiz_determination` (
   `Record_id` int NOT NULL,
   `is_correct` tinyint(1) NOT NULL,
   PRIMARY KEY (`TF_id`,`Record_id`),
-  KEY `Record_id` (`Record_id`),
-  CONSTRAINT `tf_quiz_determination_ibfk_1` FOREIGN KEY (`TF_id`) REFERENCES `tf_question` (`TF_id`),
-  CONSTRAINT `tf_quiz_determination_ibfk_2` FOREIGN KEY (`Record_id`) REFERENCES `quiz_record` (`Record_id`)
+  KEY `fk_tfdetermination_record` (`Record_id`),
+  CONSTRAINT `fk_tfdetermination_record` FOREIGN KEY (`Record_id`) REFERENCES `quiz_record` (`Record_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_tfdetermination_tfquestion` FOREIGN KEY (`TF_id`) REFERENCES `tf_question` (`TF_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -224,7 +224,7 @@ CREATE TABLE `user` (
   `password` varchar(30) NOT NULL,
   PRIMARY KEY (`User_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -236,4 +236,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-06 11:39:47
+-- Dump completed on 2024-12-09 12:49:57
