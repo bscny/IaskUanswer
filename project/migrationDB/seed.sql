@@ -1,3 +1,5 @@
+USE `kataohoot`;
+
 -- 插入 User 表的測試資料
 INSERT INTO User (name, email, password) VALUES
 ('Alice Smith', 'alice.smith@example.com', 'password123'),
