@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import UserLibrary from "@/views/LibraryPage/UserLibrary.vue"
+import UserLibrary from "@/views/UserLibraryPages/UserLibrary.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
