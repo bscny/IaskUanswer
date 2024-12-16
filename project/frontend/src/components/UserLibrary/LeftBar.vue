@@ -5,7 +5,7 @@
         </button>
 
         <ul class="folders-flexbox" v-for="folder in folders" :key="folder.Folder_id">
-            <button class="edit-folder-button"  @click="EditFolder()">
+            <button class="edit-folder-button"  @click="EditFolder(folder)">
                 Edit Folder
             </button>
             
@@ -45,8 +45,8 @@ export default{
             this.$emit("CreateFolder");
         },
 
-        EditFolder(){
-            this.$emit("EditFolder");
+        EditFolder(folder){
+            this.$emit("EditFolder", folder);
         },
 
         ToggleShow(folder){

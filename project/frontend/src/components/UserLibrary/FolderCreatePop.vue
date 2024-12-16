@@ -1,31 +1,31 @@
 <template>
     <div class="BG">
         <div class="window">
-            <button class="done-button"  @click="CreationDone()">
+            <button class="done-button" @click="CreationDone()">
                 Crate Folder
             </button>
 
-            <button class="cancel-button"  @click="Cancel()">
+            <button class="cancel-button" @click="Cancel()">
                 Cancel
             </button>
-            
+
             <p>
                 Give New Folder a Name
             </p>
 
-            <input class="folder-name-input" type="text" v-model="folderName" @keydown.enter="CreationDone()"/>
+            <input class="folder-name-input" type="text" v-model="folderName" @keydown.enter="CreationDone()" />
         </div>
     </div>
 </template>
 
 <script>
 
-export default{
+export default {
     name: 'FolderCreatePop',
     components: {},
 
-    data(){
-        return{
+    data() {
+        return {
             folderName: '',
 
             // fake data
@@ -34,22 +34,28 @@ export default{
     },
 
     methods: {
-        CreationDone(){
+        CreationDone() {
             // call backend API to insert
 
             // call backend API to retrieve the newly created record
             // fake data:
-            const newRecord = {
+            let newRecord = {
                 Folder_id: 10,
                 Folder_name: this.folderName,
                 User_id: this.userID,
-                Parent_folder_id: null
+                Parent_folder_id: null,
             }
+
+            // append empty quiz to folder object
+            Object.assign(newRecord, {
+                quizes: null,
+                show: false
+            });
 
             this.$emit("Created", newRecord);
         },
 
-        Cancel(){
+        Cancel() {
             this.$emit("Cancel");
         }
     }
@@ -88,7 +94,7 @@ export default{
     right: 5px;
     bottom: 5px;
 
-    padding: 10px 20px 10px 20px;
+    padding: 1vh 1.2vw 1vh 1.2vw;
     background-color: #4caf50;
     color: white;
     border: none;
@@ -109,7 +115,7 @@ export default{
     left: 5px;
     bottom: 5px;
 
-    padding: 10px 20px 10px 20px;
+    padding: 1vh 1.2vw 1vh 1.2vw;
     background-color: #32a9be;
     color: white;
     border: none;
@@ -124,20 +130,20 @@ export default{
     background-color: #12a3bd;
 }
 
-.window p{
+.window p {
     display: block;
 
     margin: 1vh 1vw;
 
-    font-size: 30px;
+    font-size: 2.5vw;
 }
 
 .folder-name-input {
     display: block;
     margin: 3vh 1vw;
 
-    font-size: 30px;
-    padding: 5px 10px;
+    font-size: 2.5vw;
+    padding: 0.5vh 0.4vw;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

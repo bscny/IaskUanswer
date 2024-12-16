@@ -2,7 +2,7 @@
     <NavBar/>
     <LeftBar    :folders="folders"
                 @CreateFolder="SetCreateFolder()"
-                @EditFolder="SetEditFolder()"
+                @EditFolder="SetEditFolder($event)"
                 @DisplayQuestions="SetDisplay()" />
 
     <div v-if="canCreateFolder">
@@ -10,12 +10,20 @@
                             @Cancel="CancelAction()"
                             @Created="FolderCreated($event)" />
     </div>
+
+    <div v-if="canEditFolder">
+        <FolderEditPop  :folder="curLookingFolder" 
+                        @Cancel="CancelAction()" 
+                        @Edited="FolderEdited($event)"
+                        @Deleted="FolderDeleted($event)" />
+    </div>
 </template>
 
 <script>
 import NavBar from "@/components/NavBar.vue"
 import LeftBar from "@/components/UserLibrary/LeftBar.vue";
 import FolderCreatePop from "@/components/UserLibrary/FolderCreatePop.vue";
+import FolderEditPop from "@/components/UserLibrary/FolderEditPop.vue";
 
 export default{
     name: "UserLibrary",
@@ -23,6 +31,7 @@ export default{
         NavBar,
         LeftBar,
         FolderCreatePop,
+        FolderEditPop,
     },
 
     data(){
@@ -46,15 +55,35 @@ export default{
         FolderCreated(newFolder){
             this.folders.push(newFolder);
             alert("Folder Created!");
-            
+
             this.canCreateFolder = false;
         },
 
-        SetEditFolder(){
+        SetEditFolder(folder){
+            this.curLookingFolder = folder;
+
             this.canEditFolder = true;
         },
 
-        ResetEditFolder(){
+        FolderEdited(editedFolder){
+            for(let i = 0; i < this.folders.length; i ++){
+                if(this.folders[i].Folder_id == editedFolder.Folder_id){
+                    this.folders[i] = editedFolder;
+                }
+            }
+            alert("Change Saved!");
+
+            this.canEditFolder = false;
+        },
+
+        FolderDeleted(deletedFolderID){
+            for(let i = 0; i < this.folders.length; i ++){
+                if(this.folders[i].Folder_id == deletedFolderID){
+                    this.folders.splice(i, 1);
+                }
+            }
+            alert("Deleted!!");
+
             this.canEditFolder = false;
         },
 
@@ -116,7 +145,7 @@ export default{
                 },
             ];
             
-            // append quizes and show indicator in folder class
+            // append quizes and show indicator in folder object
             Object.assign(folder, {
                 quizes: quizes,
                 show: false
