@@ -13,6 +13,10 @@
         </button>
     </div>
 
+    <div class="description">
+        Description: {{ quiz.Quiz_description }}
+    </div>
+
     <ul class="question-flexbox" v-for="question in questions" :key="question.Q_number">
         <div class="question-body">
             <div class="q-number">
@@ -91,7 +95,7 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-    margin: 0 0 5vh 0;
+    margin: 0 0 2vh 0;
 }
 
 .quiz-button {
@@ -127,6 +131,13 @@ export default {
 
 .edit-quiz-button:hover {
     background-color: #c96f99;
+}
+
+.description {
+    display: block;
+    margin-bottom: 2vh;
+    font-size: 2vw;
+    text-decoration: underline;
 }
 
 .question-flexbox {

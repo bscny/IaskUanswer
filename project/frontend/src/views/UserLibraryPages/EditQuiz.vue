@@ -1,13 +1,17 @@
 <template>
     <NavBar />
+
+    <div class="header">
+        <QuizEditBlock  :quiz="quizStore.quiz"
+                        @Edited="Done()"
+                        @Deleted="Done()" />
+    </div>
     
-    <button @click="Cancel()">
-        back
-    </button>
 </template>
 
 <script>
 import NavBar from "@/components/NavBar.vue";
+import QuizEditBlock from "@/components/UserLibrary/QuizEditBlock.vue";
 
 import { 
     useQuizStore,
@@ -18,6 +22,7 @@ export default {
     name: "EditQuiz",
     components: {
         NavBar,
+        QuizEditBlock,
     },
 
     data() {
@@ -33,6 +38,13 @@ export default {
             this.$router.push({
                 name: 'UserLibrary'
             });
+        },
+
+        Done(){
+            // dont need to store the data back to the store because router.push reload the UserLibrary page
+            this.$router.push({
+                name: 'UserLibrary'
+            });
         }
     },
 
@@ -40,5 +52,7 @@ export default {
 </script>
 
 <style scoped>
-
+.header{
+    margin: 10vh 5vw 5vh 5vw;
+}
 </style>

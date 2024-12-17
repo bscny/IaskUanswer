@@ -113,6 +113,7 @@ export default{
 
         EditQuiz(){
             if(this.curLookingQuiz != null){
+                // store quiz and corresponding question to store
                 this.quizStore.SetQuiz(this.curLookingQuiz);
                 this.questionsStore.SetQuestions(this.curLookingQuestions);
             }
@@ -195,6 +196,12 @@ export default{
 
     computed: {
 
+    },
+
+    watch: {
+        quizStore(){
+            console.error(this.quizStore.quiz);
+        }
     },
 
     created(){
