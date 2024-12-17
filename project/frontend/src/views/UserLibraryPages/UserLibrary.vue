@@ -3,7 +3,7 @@
     <LeftBar    :folders="folders"
                 @CreateFolder="SetCreateFolder()"
                 @EditFolder="SetEditFolder($event)"
-                @DisplayQuestions="SetDisplay()" />
+                @DisplayQuestions="SetDisplay($event)" />
 
     <div v-if="canCreateFolder">
         <FolderCreatePop    :folders="folders"
@@ -17,6 +17,10 @@
                         @Edited="FolderEdited($event)"
                         @Deleted="FolderDeleted($event)" />
     </div>
+
+    <div class="display-area" v-if="curLookingQuiz != null">
+        <DisplayQuestion    :quiz="curLookingQuiz" />
+    </div>
 </template>
 
 <script>
@@ -24,6 +28,7 @@ import NavBar from "@/components/NavBar.vue"
 import LeftBar from "@/components/UserLibrary/LeftBar.vue";
 import FolderCreatePop from "@/components/UserLibrary/FolderCreatePop.vue";
 import FolderEditPop from "@/components/UserLibrary/FolderEditPop.vue";
+import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
 
 export default{
     name: "UserLibrary",
@@ -32,6 +37,7 @@ export default{
         LeftBar,
         FolderCreatePop,
         FolderEditPop,
+        DisplayQuestion,
     },
 
     data(){
@@ -40,6 +46,7 @@ export default{
             canCreateFolder: false,
             canEditFolder: false,
             curLookingFolder: null,
+            curLookingQuiz: null,
 
             // variables for datas from backend
             // fake data
@@ -87,8 +94,8 @@ export default{
             this.canEditFolder = false;
         },
 
-        SetDisplay(){
-
+        SetDisplay(quiz){
+            this.curLookingQuiz = quiz;
         },
 
         CancelAction(){
@@ -128,19 +135,21 @@ export default{
         // for each folder get quizes in it, get quizes from given folderId
         let i = 1;
         this.folders.forEach(async function (folder) {
-            // actioms for each elements in folders
-            // get quizes belongs to each folder
+            // actions for each elements in folders
+            // get quizes belongs to each folder from backend API
             const quizes = [
                 {
                     Quiz_id: i,
                     Quiz_name: `test quiz 1 in ${folder.Folder_name}`,
-                    is_public: true,
+                    Quiz_description: "testetstetetetst",
+                    Is_public: true,
                     Folder_id: folder.Folder_id
                 },
                 {
                     Quiz_id: i + 1,
                     Quiz_name: `test quiz 2 in ${folder.Folder_name}`,
-                    is_public: true,
+                    Quiz_description: "test 22222",
+                    Is_public: true,
                     Folder_id: folder.Folder_id
                 },
             ];
@@ -163,5 +172,8 @@ export default{
 </script>
 
 <style scoped>
+.display-area {
+    margin: 10vh 5vw 10vh 14vw;
+}
 
 </style>

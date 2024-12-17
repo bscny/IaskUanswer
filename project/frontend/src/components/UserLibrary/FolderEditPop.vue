@@ -151,7 +151,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .done-button:hover {
@@ -172,7 +172,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .delete-button:hover {
@@ -193,7 +193,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .cancel-button:hover {
@@ -204,21 +204,21 @@ export default {
     display: block;
     margin: 1vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .window p2 {
     display: block;
     margin: 1vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .folder-name-input {
     display: block;
     margin: 3vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
     padding: 0.5vh 0.4vw;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -235,14 +235,14 @@ export default {
     display: block;
     margin: 10vh 1vw 0 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .set-name-input {
     display: block;
     margin: 5vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
