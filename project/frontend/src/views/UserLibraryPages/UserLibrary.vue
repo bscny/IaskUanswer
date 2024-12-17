@@ -19,7 +19,9 @@
     </div>
 
     <div class="display-area" v-if="curLookingQuiz != null">
-        <DisplayQuestion    :quiz="curLookingQuiz" />
+        <DisplayQuestion    :quiz="curLookingQuiz"
+                            :questions="curLookingQuestions"
+                            @Editing="EditQuiz()" />
     </div>
 </template>
 
@@ -29,6 +31,11 @@ import LeftBar from "@/components/UserLibrary/LeftBar.vue";
 import FolderCreatePop from "@/components/UserLibrary/FolderCreatePop.vue";
 import FolderEditPop from "@/components/UserLibrary/FolderEditPop.vue";
 import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
+
+import { 
+    useQuizStore,
+    useQuestionsStore,
+} from "@/stores/Userlibrary/QuizQuestionStore.js";
 
 export default{
     name: "UserLibrary",
@@ -47,6 +54,11 @@ export default{
             canEditFolder: false,
             curLookingFolder: null,
             curLookingQuiz: null,
+            curLookingQuestions: null,
+
+            // pinia store share variables
+            quizStore: useQuizStore(),
+            questionsStore: useQuestionsStore(),
 
             // variables for datas from backend
             // fake data
@@ -94,14 +106,91 @@ export default{
             this.canEditFolder = false;
         },
 
-        SetDisplay(quiz){
+        async SetDisplay(quiz){
             this.curLookingQuiz = quiz;
+            await this.FetchQuestion();
+        },
+
+        EditQuiz(){
+            if(this.curLookingQuiz != null){
+                this.quizStore.SetQuiz(this.curLookingQuiz);
+                this.questionsStore.SetQuestions(this.curLookingQuestions);
+            }
+
+            this.$router.push({
+                name: 'EditQuiz',
+            });
         },
 
         CancelAction(){
             this.canCreateFolder = false;
             this.canEditFolder = false;
-        }
+        },
+
+        async FetchQuestion(){
+            // get all question based on quiz id from backend API
+            // fake data for SO question:
+            let questions = [
+                {
+                    SO_id: 4,
+                    Q_number: 4,
+                    Body: "test question 4",
+                    Points: 30,
+                    Answer: "i'm gay",
+                    OptionA: "nonohuang is gay",
+                    OptionB: "JX is gay",
+                    OptionC: "benny is not gay",
+                    Quiz_id: this.curLookingQuiz.Quiz_id
+                },
+                {
+                    SO_id: 2,
+                    Q_number: 2,
+                    Body: "test question 2",
+                    Points: 30,
+                    Answer: "i'm loli con",
+                    OptionA: "nonohuang is loli con",
+                    OptionB: "JX is loli con",
+                    OptionC: "benny is not loli con",
+                    Quiz_id: this.curLookingQuiz.Quiz_id
+                },
+            ];
+
+            // fake data for TF question:
+            let questions1 = [
+                {
+                    SO_id: 3,
+                    Q_number: 3,
+                    Body: "test question 3",
+                    Points: 30,
+                    Answer: "i'm a bitch",
+                    OptionA: "nonohuang is a bitch",
+                    OptionB: "JX is a bitch",
+                    OptionC: "benny is not a bitch",
+                    Quiz_id: this.curLookingQuiz.Quiz_id
+                },
+                {
+                    SO_id: 1,
+                    Q_number: 1,
+                    Body: "test question 1",
+                    Points: 30,
+                    Answer: "i'm obscene",
+                    OptionA: "nonohuang is obscene",
+                    OptionB: "JX is obscene",
+                    OptionC: "benny is not obscene",
+                    Quiz_id: this.curLookingQuiz.Quiz_id
+                },
+            ];
+
+            // fill in blank... you are hard to deal with.....
+            
+            // re-structure each question
+            questions = [...questions, ...questions1];
+            questions.sort(function(a, b){
+                return a.Q_number - b.Q_number;
+            });
+            
+            this.curLookingQuestions = questions;
+        },
     },
 
     computed: {

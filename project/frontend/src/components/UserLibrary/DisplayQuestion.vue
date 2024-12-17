@@ -1,10 +1,14 @@
 <template>
-    <div class="flex-buttons">
+    <div class="flex-buttons-titles">
         <button class="quiz-button">
             Try Quiz
         </button>
 
-        <button class="edit-quiz-button" @click="EditSet()">
+        <div class="quiz-name">
+            {{ quiz.Quiz_name }}
+        </div>
+
+        <button class="edit-quiz-button" @click="EditQuiz()">
             Edit Quiz
         </button>
     </div>
@@ -63,96 +67,25 @@ export default {
 
     props:{
         quiz: Object,
+        questions: Array,
     },
 
     data() {
         return {
-            questions: null,
+
         };
     },
 
     methods: {
-        async FetchQuestion(){
-            // get all question based on quiz id from backend API
-            // fake data for SO question:
-            let questions = [
-                {
-                    SO_id: 4,
-                    Q_number: 4,
-                    Body: "test question 4",
-                    Points: 30,
-                    Answer: "i'm gay",
-                    OptionA: "nonohuang is gay",
-                    OptionB: "JX is gay",
-                    OptionC: "benny is not gay",
-                    Quiz_id: this.quiz.Quiz_id
-                },
-                {
-                    SO_id: 2,
-                    Q_number: 2,
-                    Body: "test question 2",
-                    Points: 30,
-                    Answer: "i'm loli con",
-                    OptionA: "nonohuang is loli con",
-                    OptionB: "JX is loli con",
-                    OptionC: "benny is not loli con",
-                    Quiz_id: this.quiz.Quiz_id
-                },
-            ];
-
-            // fake data for TF question:
-            let questions1 = [
-                {
-                    SO_id: 3,
-                    Q_number: 3,
-                    Body: "test question 3",
-                    Points: 30,
-                    Answer: "i'm a bitch",
-                    OptionA: "nonohuang is a bitch",
-                    OptionB: "JX is a bitch",
-                    OptionC: "benny is not a bitch",
-                    Quiz_id: this.quiz.Quiz_id
-                },
-                {
-                    SO_id: 1,
-                    Q_number: 1,
-                    Body: "test question 1",
-                    Points: 30,
-                    Answer: "i'm obscene",
-                    OptionA: "nonohuang is obscene",
-                    OptionB: "JX is obscene",
-                    OptionC: "benny is not obscene",
-                    Quiz_id: this.quiz.Quiz_id
-                },
-            ];
-
-            // fill in blank... you are hard to deal with.....
-            
-            // re-structure each question
-            questions = [...questions, ...questions1];
-            questions.sort(function(a, b){
-                return a.Q_number - b.Q_number;
-            });
-            
-            this.questions = questions;
+        EditQuiz(){
+            this.$emit("Editing");
         },
-        
     },
-
-    watch: {
-        async quiz(){
-            await this.FetchQuestion();
-        }
-    },
-
-    async created(){
-        await this.FetchQuestion();
-    }
 }
 </script>
 
 <style scoped>
-.flex-buttons {
+.flex-buttons-titles {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -170,6 +103,11 @@ export default {
 
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.quiz-name {
+    font-size: 3.5vw;
+    text-decoration: underline;
 }
 
 .quiz-button:hover {

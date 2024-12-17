@@ -45,7 +45,7 @@ export default {
 
     data() {
         return {
-            folderName: '',
+            folderName: this.folder.Folder_name,
             quizName: '',
         }
     },
@@ -58,11 +58,14 @@ export default {
 
                 // call backend API to retrieve the record of updated folder
                 // fake data:
-                const newRecord = {
-                    Folder_id: this.folder.Folder_id,
-                    Folder_name: this.folderName,
-                    User_id: this.folder.User_id,
-                    Parent_folder_id: this.folder.Parent_folder_id
+                let newRecord;
+                if (this.folderName != "") {
+                    newRecord = {
+                        Folder_id: this.folder.Folder_id,
+                        Folder_name: this.folderName,
+                        User_id: this.folder.User_id,
+                        Parent_folder_id: this.folder.Parent_folder_id
+                    }
                 }
 
                 if (this.quizName != "") {
@@ -76,22 +79,30 @@ export default {
                     }
 
                     // append quizes and show indicator in folder object
-                    if(this.folder.quizes == null){
+                    if (this.folder.quizes == null) {
                         // to make sure to treat this.folder.quizes as an array
                         this.folder.quizes = [];
                     }
-                    
+
                     this.folder.quizes.push(quiz);
                     Object.assign(newRecord, {
                         quizes: this.folder.quizes,
                         show: false
                     });
-                }else{
-                    // append empty quiz to folder object
-                    Object.assign(newRecord, {
-                        quizes: null,
-                        show: false
-                    });
+                } else {
+                    if (this.folder.quizes == null) {
+                        // append empty quiz to folder object
+                        Object.assign(newRecord, {
+                            quizes: null,
+                            show: false
+                        });
+                    } else {
+                        // asign original quizes back
+                        Object.assign(newRecord, {
+                            quizes: this.folder.quizes,
+                            show: false
+                        });
+                    }
                 }
 
                 this.$emit("Edited", newRecord);
