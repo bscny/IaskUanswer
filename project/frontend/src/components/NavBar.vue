@@ -1,25 +1,31 @@
 <template>
     <nav class="navbar">
-        <div class="logo">
-            logo
+        <div>
+            <a href="/">
+                <img src="@/assets/logo.png" class="logo">
+            </a>
         </div>
 
         <div class="title">
             title
         </div>
 
-        <div class="sign-in-up-button">
-            sign in/up
+        <div class="account-field">
+            <a v-if="!isLogged" class="account-btn" href="/Signup">Signup</a>
+            <a v-if="!isLogged" class="account-btn" href="/Login">Login</a>
+            <a v-else class="account-btn" href="/"> Logout </a>
         </div>
     </nav>
 </template>
 
 <script>
-export default{
+export default {
     name: "NavBar",
 
-    data(){
-
+    data() {
+        return {
+        isLogged: false,
+    };
     },
 
     methods: {
@@ -30,11 +36,11 @@ export default{
 
     },
 
-    mounted(){
+    mounted() {
 
     },
 
-    created(){
+    created() {
 
     },
 
@@ -42,7 +48,7 @@ export default{
 </script>
 
 <style scoped>
-.navbar{
+.navbar {
     position: fixed;
     display: flex;
 
@@ -60,10 +66,8 @@ export default{
 }
 
 .logo {
-    display: inline;
-
-    padding: 0 0 0 1.5vw;
-    font-size: 1vw;
+    height: 8vh;
+    width: auto;
 }
 
 .title {
@@ -72,10 +76,24 @@ export default{
     font-size: 1vw;
 }
 
-.sign-in-up-button {
+.account-field {
     display: inline;
 
     padding: 0 1.5vw 0 0;
     font-size: 1vw;
+}
+
+a.account-btn, a.account-btn:visited {
+  background-color: #999dfe;
+  color: rgb(0, 0, 0);
+  padding: 14px 25px;
+  margin-left: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a.account-btn:hover, a.account-btn:active {
+  background-color: rgb(107, 84, 255);
 }
 </style>
