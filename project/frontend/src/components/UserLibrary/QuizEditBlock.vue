@@ -52,7 +52,7 @@ export default {
 
     methods: {
         ToggleIsPublic(){
-            originalIsPublic = !originalIsPublic;
+            this.originalIsPublic = !this.originalIsPublic;
         },
 
         async DeleteQuiz(){

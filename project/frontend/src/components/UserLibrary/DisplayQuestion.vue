@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-buttons-titles">
+    <div class="flex-buttons-titles" v-if="!editMode">
         <button class="quiz-button">
             Try Quiz
         </button>
@@ -13,23 +13,29 @@
         </button>
     </div>
 
-    <div class="description">
+    <div class="description" v-if="!editMode">
         Description: {{ quiz.Quiz_description }}
     </div>
 
     <ul class="question-flexbox" v-for="question in questions" :key="question.Q_number">
-        <div class="question-body">
+        <div class="question-params-flexbox">
             <div class="q-number">
                 {{ question.Q_number }}.
             </div>
 
-            <div class="body">
-                {{ question.Body }}
+            <div class="points-edit-fiexbox">
+                <div class="points">
+                    {{ question.Points }} points
+                </div>
+                
+                <button class="edit-question-button" v-if="editMode" @click="EditQuestion(question)">
+                    edit
+                </button>
             </div>
-
-            <div class="points">
-                {{ question.Points }} points
-            </div>
+        </div>
+        
+        <div class="body">
+            {{ question.Body }}
         </div>
 
         <div class="SO-option-grid" v-if="question.SO_id !== undefined">
@@ -58,6 +64,10 @@
 
     </ul>
 
+    <button class="create-question-button" v-if="editMode" @click="CreateQuestion()">
+        Create Question
+    </button>
+
     <div class="extra-space">
 
     </div>
@@ -72,6 +82,7 @@ export default {
     props:{
         quiz: Object,
         questions: Array,
+        editMode: Boolean,
     },
 
     data() {
@@ -82,7 +93,15 @@ export default {
 
     methods: {
         EditQuiz(){
-            this.$emit("Editing");
+            this.$emit("EditingQuiz");
+        },
+
+        EditQuestion(question){
+            this.$emit("EditingQuestion", question);
+        },
+
+        CreateQuestion(){
+            this.$emit("CreatingQuestion");
         },
     },
 }
@@ -154,7 +173,7 @@ export default {
     /* margin: 6vh 0 0 17vw; */
 }
 
-.question-body {
+.question-params-flexbox {
     display: flex;
     
     flex-direction: row;
@@ -174,8 +193,32 @@ export default {
     font-size: 3vw;
 }
 
+.points-edit-fiexbox {
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
 .points {
     font-size: 1.5vw;
+}
+
+.edit-question-button {
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    margin-left: 1vw;
+    background-color: #ce249b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-question-button:hover {
+    background-color: #ce43a4;
 }
 
 .SO-option-grid {
@@ -191,6 +234,26 @@ export default {
     font-size: 2vw;
     margin: auto;
     margin-top: 1.5vh;
+}
+
+.create-question-button {
+    display: block;
+
+    margin: auto;
+    margin-top: 10vh;
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: rgb(177, 187, 240);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2vw;
+    
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.create-question-button:hover {
+    background-color: #ccc7eb;
 }
 
 .extra-space {

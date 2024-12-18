@@ -6,8 +6,7 @@
                 @DisplayQuestions="SetDisplay($event)" />
 
     <div v-if="canCreateFolder">
-        <FolderCreatePop    :folders="folders"
-                            @Cancel="CancelAction()"
+        <FolderCreatePop    @Cancel="CancelAction()"
                             @Created="FolderCreated($event)" />
     </div>
 
@@ -21,7 +20,8 @@
     <div class="display-area" v-if="curLookingQuiz != null">
         <DisplayQuestion    :quiz="curLookingQuiz"
                             :questions="curLookingQuestions"
-                            @Editing="EditQuiz()" />
+                            :editMode="false"
+                            @EditingQuiz="EditQuiz()" />
     </div>
 </template>
 
@@ -146,7 +146,7 @@ export default{
                 {
                     SO_id: 2,
                     Q_number: 2,
-                    Body: "test question 2",
+                    Body: "testtttttttt questionnnnnn 22222222",
                     Points: 30,
                     Answer: "i'm loli con",
                     OptionA: "nonohuang is loli con",
@@ -172,7 +172,7 @@ export default{
                 {
                     SO_id: 1,
                     Q_number: 1,
-                    Body: "test question 1",
+                    Body: "testttttttttttttttttttttt ttttttttttttttttttttttttttttt tttttttttttttttttttttttttttttttttttttttttttttttttt question 1",
                     Points: 30,
                     Answer: "i'm obscene",
                     OptionA: "nonohuang is obscene",
