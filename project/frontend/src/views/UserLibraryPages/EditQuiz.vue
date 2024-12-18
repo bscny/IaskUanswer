@@ -23,9 +23,7 @@
     </div>
 
     <div v-if="canEditQuestion">
-        <QuestionEditPop    :quiz="quizStore.quiz"
-                            :questions="questionsStore.questions"
-                            :question="curLookingQuestion"
+        <QuestionEditPop    :question="curLookingQuestion"
                             @Cancel="CancelQuestionAction()"
                             @Edited="QuestionEdited($event)" 
                             @Deleted="QuestionDeleted($event)" />
@@ -77,6 +75,7 @@ export default {
 
         Done(){
             // dont need to store the data back to the store because router.push reload the UserLibrary page
+            // which means we only CRUD the data from UserLibrary without storing it back 
             this.$router.push({
                 name: 'UserLibrary'
             });

@@ -114,8 +114,8 @@ export default{
         EditQuiz(){
             if(this.curLookingQuiz != null){
                 // store quiz and corresponding question to store
-                this.quizStore.SetQuiz(this.curLookingQuiz);
-                this.questionsStore.SetQuestions(this.curLookingQuestions);
+                this.quizStore.quiz = this.curLookingQuiz;
+                this.questionsStore.questions = this.curLookingQuestions;
             }
 
             this.$router.push({
@@ -199,9 +199,7 @@ export default{
     },
 
     watch: {
-        quizStore(){
-            console.error(this.quizStore.quiz);
-        }
+
     },
 
     created(){

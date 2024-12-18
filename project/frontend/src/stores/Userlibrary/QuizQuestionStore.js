@@ -6,9 +6,7 @@ const useQuizStore = defineStore('QuizStore', {
     }),
 
     actions: {
-        SetQuiz(quiz){
-            this.quiz = quiz;
-        }
+        
     }
 });
 
@@ -18,9 +16,7 @@ const useQuestionsStore = defineStore('QuestionStore', {
     }),
 
     actions: {
-        SetQuestions(questions){
-            this.questions = questions;
-        }
+        
     }
 });
 

@@ -59,59 +59,65 @@ export default {
 
     methods: {
         EditionDone() {
-            // call backend API to update folder
-
-            // call backend API to retrieve the record of updated folder
-            // fake data:
-            let newRecord;
-            if (this.folderName != "") {
-                newRecord = {
-                    Folder_id: this.folder.Folder_id,
-                    Folder_name: this.folderName,
-                    User_id: this.folder.User_id,
-                    Parent_folder_id: this.folder.Parent_folder_id
-                }
-            }
-
-            if (this.quizName != "") {
-                // call backend API to create quiz under this folder
+            if((this.folderName != "" && this.folderName != this.folder.Folder_name) || (this.quizName != "" && this.quizDescription != "")){
+                // call backend API to update folder
+    
+                // call backend API to retrieve the record of updated folder
                 // fake data:
-                const quiz = {
-                    Quiz_id: 10,
-                    Quiz_name: this.quizName,
-                    Quiz_description: this.quizDescription,
-                    is_public: true,
-                    Folder_id: this.folder.Folder_id
+                let newRecord;
+                if (this.folderName != "") {
+                    newRecord = {
+                        Folder_id: this.folder.Folder_id,
+                        Folder_name: this.folderName,
+                        User_id: this.folder.User_id,
+                        Parent_folder_id: this.folder.Parent_folder_id
+                    }
                 }
-
-                // append quizes and show indicator in folder object
-                if (this.folder.quizes == null) {
-                    // to make sure to treat this.folder.quizes as an array
-                    this.folder.quizes = [];
-                }
-
-                this.folder.quizes.push(quiz);
-                Object.assign(newRecord, {
-                    quizes: this.folder.quizes,
-                    show: false
-                });
-            } else {
-                if (this.folder.quizes == null) {
-                    // append empty quiz to folder object
-                    Object.assign(newRecord, {
-                        quizes: null,
-                        show: false
-                    });
-                } else {
-                    // asign original quizes back
+    
+                if (this.quizName != "") {
+                    // call backend API to create quiz under this folder
+    
+                    // call backend API to get created quiz
+                    // fake data:
+                    const quiz = {
+                        Quiz_id: 10,  // auto increment
+                        Quiz_name: this.quizName,
+                        Quiz_description: this.quizDescription,
+                        is_public: true,
+                        Folder_id: this.folder.Folder_id
+                    }
+    
+                    // append quizes and show indicator in folder object
+                    if (this.folder.quizes == null) {
+                        // to make sure to treat this.folder.quizes as an array
+                        this.folder.quizes = [];
+                    }
+    
+                    this.folder.quizes.push(quiz);
                     Object.assign(newRecord, {
                         quizes: this.folder.quizes,
                         show: false
                     });
+                } else {
+                    if (this.folder.quizes == null) {
+                        // append empty quiz to folder object
+                        Object.assign(newRecord, {
+                            quizes: null,
+                            show: false
+                        });
+                    } else {
+                        // asign original quizes back
+                        Object.assign(newRecord, {
+                            quizes: this.folder.quizes,
+                            show: false
+                        });
+                    }
                 }
-            }
 
-            this.$emit("Edited", newRecord);
+                this.$emit("Edited", newRecord);
+            }else{
+                this.$emit("Cancel");
+            }
         },
 
         Delete() {
