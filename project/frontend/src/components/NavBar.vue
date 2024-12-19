@@ -49,7 +49,7 @@ export default {
 
 <style scoped>
 .navbar {
-    position: fixed;
+    position: block;
     display: flex;
 
     flex-direction: row;

@@ -2,6 +2,7 @@
 
     <div>
         <NavBar/>
+        <Login/>
     </div>
     <div>
         
@@ -11,11 +12,12 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
+import Login from '@/components/SignView/Login.vue';
 export default{
 
     name: 'LoginPage',
     components:{
-        NavBar
+        NavBar, Login
     }
 }
 </script>

@@ -1,4 +1,5 @@
 <template>
+    <div class="empty"></div>
     <div class="signup-form">
       <h2>Sign Up</h2>
       <form @submit.prevent="submitForm">
@@ -41,6 +42,7 @@
         <button type="submit">Sign Up</button>
       </form>
     </div>
+
   </template>
   
   <script>
@@ -69,6 +71,9 @@
         if (!this.form.username) {
           this.errors.username = "Username is required.";
           valid = false;
+        } else if (!this.validUsername(this.form.username)){
+          this.errors.username = "Special character is not required."
+          valid = false;
         }
   
         if (!this.form.email) {
@@ -89,6 +94,9 @@
       validEmail(email) {
         return email.includes('@');
       },
+      validUsername(username){
+        return !username.includes('@');
+      },
       async submitForm() {
         if (this.validateForm()) {
           alert("Signup successful!\n");
@@ -104,15 +112,24 @@
   </script>
   
   <style scoped>
+
   .signup-form {
-    max-width: 400px;
-    margin: 0 auto;
+    position:absolute;
+    top:25%;
+    left: 33%;
+    width: 34%;
+    height: 40%;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background: #f9f9f9;
   }
-  
+  .empty{
+    display:inline-block;
+
+    width: 33%;
+    height: 40vw;
+  }
   .signup-form h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -153,5 +170,7 @@
     color: red;
     font-size: 0.9em;
   }
+
+
   </style>
   
