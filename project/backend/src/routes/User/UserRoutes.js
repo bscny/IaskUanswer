@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
 
-const AllUserNameController = require('@/controllers/User/UserController.js');
+const UserControllers = require('@/controllers/User/UserController.js');
+//DisplayUsers
+router.get("/:UserId", UserControllers.DisplayUser);
 
-// real http addr is:
-// http://localhost:PORT/test
+//DisplayAlLUser
+router.get("/", UserControllers.DisplayALLUser);
 
-router.get("/", AllUserNameController.GetUser);
+//CreateUser
+router.post("/post-user/", UserControllers.CreateUser);
+
+//UpdateUser
+router.put("/put-user/:UserId", UserControllers.UpdateUser);
+
+//DeleteUser
+router.delete("/delete-user/:UserId", UserControllers.DeleteUser);
+
 
 module.exports = router;
