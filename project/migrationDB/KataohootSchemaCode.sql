@@ -2,115 +2,115 @@ CREATE DATABASE `kataohoot`;
 USE kataohoot;
 
 -- User 表
-CREATE TABLE User (
-    User_id INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(30) NOT NULL,
-    Email VARCHAR(100) UNIQUE NOT NULL,
-    Password VARCHAR(30) NOT NULL
+CREATE TABLE user (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(30) NOT NULL
 );
 
 -- Friendship 表
-CREATE TABLE Friendship (
-    User1_id INT NOT NULL,
-    User2_id INT NOT NULL,
-    PRIMARY KEY (User1_id, User2_id),
-    FOREIGN KEY (User1_id) REFERENCES User(User_id) ON DELETE CASCADE,
-    FOREIGN KEY (User2_id) REFERENCES User(User_id) ON DELETE CASCADE
+CREATE TABLE friendship (
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    PRIMARY KEY (user1_id, user2_id),
+    FOREIGN KEY (user1_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (user2_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
 -- Folder 表
-CREATE TABLE Folder (
-    Folder_id INT PRIMARY KEY AUTO_INCREMENT,
-    Folder_name VARCHAR(30) NOT NULL,
-    User_id INT NOT NULL,
-    Parent_folder_id INT,
-    FOREIGN KEY (User_id) REFERENCES User(User_id) ON DELETE CASCADE,
-    FOREIGN KEY (Parent_folder_id) REFERENCES Folder(Folder_id) ON DELETE SET NULL
+CREATE TABLE folder (
+    folder_id INT PRIMARY KEY AUTO_INCREMENT,
+    folder_name VARCHAR(30) NOT NULL,
+    user_id INT NOT NULL,
+    parent_folder_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_folder_id) REFERENCES folder(folder_id) ON DELETE SET NULL
 );
 
 -- Quiz 表
-CREATE TABLE Quiz (
-    Quiz_id INT PRIMARY KEY AUTO_INCREMENT,
-    Quiz_name VARCHAR(30) NOT NULL,
-    Is_public BOOLEAN NOT NULL DEFAULT FALSE,
-    Folder_id INT,
-    Quiz_description VARCHAR(150) NOT NULL,
-    FOREIGN KEY (Folder_id) REFERENCES Folder(Folder_id) ON DELETE CASCADE
+CREATE TABLE quiz (
+    quiz_id INT PRIMARY KEY AUTO_INCREMENT,
+    quiz_name VARCHAR(30) NOT NULL,
+    is_public BOOLEAN NOT NULL DEFAULT FALSE,
+    folder_id INT,
+    quiz_description VARCHAR(150) NOT NULL,
+    FOREIGN KEY (folder_id) REFERENCES folder(folder_id) ON DELETE CASCADE
 );
 
 -- Quiz_record 表
-CREATE TABLE Quiz_record (
-    Record_id INT PRIMARY KEY AUTO_INCREMENT,
-    Total_points INT NOT NULL,
-    Quiz_Date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    User_id INT NOT NULL,
-    Quiz_id INT NOT NULL,
-    FOREIGN KEY (User_id) REFERENCES User(User_id) ON DELETE CASCADE,
-    FOREIGN KEY (Quiz_id) REFERENCES Quiz(Quiz_id) ON DELETE CASCADE
+CREATE TABLE quiz_record (
+    record_id INT PRIMARY KEY AUTO_INCREMENT,
+    total_points INT NOT NULL,
+    quiz_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (quiz_id) REFERENCES quiz(quiz_id) ON DELETE CASCADE
 );
 
 -- Fill_blank_question 表
-CREATE TABLE Fill_blank_question (
-    FB_id INT PRIMARY KEY AUTO_INCREMENT,
-    Body VARCHAR(250) NOT NULL,
-    Q_number INT NOT NULL,
-    Answer VARCHAR(100) NOT NULL,
-    Points INT NOT NULL,
-    Quiz_id INT NOT NULL,
-    FOREIGN KEY (Quiz_id) REFERENCES Quiz(Quiz_id) ON DELETE CASCADE
+CREATE TABLE fill_blank_question (
+    fb_id INT PRIMARY KEY AUTO_INCREMENT,
+    body VARCHAR(250) NOT NULL,
+    q_number INT NOT NULL,
+    answer VARCHAR(100) NOT NULL,
+    points INT NOT NULL,
+    quiz_id INT NOT NULL,
+    FOREIGN KEY (quiz_id) REFERENCES quiz(quiz_id) ON DELETE CASCADE
 );
 
 -- Single_open_question 表
-CREATE TABLE Single_open_question (
-    SO_id INT PRIMARY KEY AUTO_INCREMENT,
-    Q_number INT NOT NULL,
-    Body VARCHAR(250) NOT NULL,
-    Points INT NOT NULL,
-    Answer VARCHAR(250) NOT NULL,
-    OptionA VARCHAR(50),
-    OptionB VARCHAR(50),
-    OptionC VARCHAR(50),
-    Quiz_id INT NOT NULL,
-    FOREIGN KEY (Quiz_id) REFERENCES Quiz(Quiz_id) ON DELETE CASCADE
+CREATE TABLE single_open_question (
+    so_id INT PRIMARY KEY AUTO_INCREMENT,
+    q_number INT NOT NULL,
+    body VARCHAR(250) NOT NULL,
+    points INT NOT NULL,
+    answer VARCHAR(250) NOT NULL,
+    optiona VARCHAR(50),
+    optionb VARCHAR(50),
+    optionc VARCHAR(50),
+    quiz_id INT NOT NULL,
+    FOREIGN KEY (quiz_id) REFERENCES quiz(quiz_id) ON DELETE CASCADE
 );
 
 -- TF_question 表
-CREATE TABLE TF_question (
-    TF_id INT PRIMARY KEY AUTO_INCREMENT,
-    Body VARCHAR(250) NOT NULL,
-    Answer BOOLEAN NOT NULL,
-    Points INT NOT NULL,
-    Q_number INT NOT NULL,
-    Quiz_id INT NOT NULL,
-    FOREIGN KEY (Quiz_id) REFERENCES Quiz(Quiz_id) ON DELETE CASCADE
+CREATE TABLE tf_question (
+    tf_id INT PRIMARY KEY AUTO_INCREMENT,
+    body VARCHAR(250) NOT NULL,
+    answer BOOLEAN NOT NULL,
+    points INT NOT NULL,
+    q_number INT NOT NULL,
+    quiz_id INT NOT NULL,
+    FOREIGN KEY (quiz_id) REFERENCES quiz(quiz_id) ON DELETE CASCADE
 );
 
 -- FB_quiz_determination 表
-CREATE TABLE FB_quiz_determination (
-    FB_id INT NOT NULL,
-    Record_id INT NOT NULL,
-    Is_correct BOOLEAN NOT NULL,
-    PRIMARY KEY (FB_id, Record_id),
-    FOREIGN KEY (FB_id) REFERENCES Fill_blank_question(FB_id) ON DELETE CASCADE,
-    FOREIGN KEY (Record_id) REFERENCES Quiz_record(Record_id) ON DELETE CASCADE
+CREATE TABLE fb_quiz_determination (
+    fb_id INT NOT NULL,
+    record_id INT NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    PRIMARY KEY (fb_id, record_id),
+    FOREIGN KEY (fb_id) REFERENCES fill_blank_question(fb_id) ON DELETE CASCADE,
+    FOREIGN KEY (record_id) REFERENCES quiz_record(record_id) ON DELETE CASCADE
 );
 
 -- SO_quiz_determination 表
-CREATE TABLE SO_quiz_determination (
-    SO_id INT NOT NULL,
-    Record_id INT NOT NULL,
-    Is_correct BOOLEAN NOT NULL,
-    PRIMARY KEY (SO_id, Record_id),
-    FOREIGN KEY (SO_id) REFERENCES Single_open_question(SO_id) ON DELETE CASCADE,
-    FOREIGN KEY (Record_id) REFERENCES Quiz_record(Record_id) ON DELETE CASCADE
+CREATE TABLE so_quiz_determination (
+    so_id INT NOT NULL,
+    record_id INT NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    PRIMARY KEY (so_id, record_id),
+    FOREIGN KEY (so_id) REFERENCES single_open_question(so_id) ON DELETE CASCADE,
+    FOREIGN KEY (record_id) REFERENCES quiz_record(record_id) ON DELETE CASCADE
 );
 
 -- TF_quiz_determination 表
-CREATE TABLE TF_quiz_determination (
-    TF_id INT NOT NULL,
-    Record_id INT NOT NULL,
-    Is_correct BOOLEAN NOT NULL,
-    PRIMARY KEY (TF_id, Record_id),
-    FOREIGN KEY (TF_id) REFERENCES TF_question(TF_id) ON DELETE CASCADE,
-    FOREIGN KEY (Record_id) REFERENCES Quiz_record(Record_id) ON DELETE CASCADE
+CREATE TABLE tf_quiz_determination (
+    tf_id INT NOT NULL,
+    record_id INT NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    PRIMARY KEY (tf_id, record_id),
+    FOREIGN KEY (tf_id) REFERENCES tf_question(tf_id) ON DELETE CASCADE,
+    FOREIGN KEY (record_id) REFERENCES quiz_record(record_id) ON DELETE CASCADE
 );
