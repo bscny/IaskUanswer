@@ -4,7 +4,7 @@ const db = require('@/database.js');
 async function GetTest(Id) {
     const [records] = await db.query(`select *
                                       from user
-                                      `);
+                                      where User_id = ?`, [Id]);
 
     return records;
 }
