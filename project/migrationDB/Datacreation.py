@@ -32,7 +32,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     # 插入 User 資料
     f.write("USE `kataohoot`;\n")
     f.write("-- 插入 User 資料\n")
-    f.write("INSERT INTO User (Name, Email, Password) VALUES\n")
+    f.write("INSERT INTO user (Name, Email, Password) VALUES\n")
     users = []
     for i in range(num_users):
         name = faker.first_name()
@@ -47,7 +47,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 Friendship 資料
     f.write("-- 插入 Friendship 資料\n")
-    f.write("INSERT INTO Friendship (User1_id, User2_id) VALUES\n")
+    f.write("INSERT INTO friendship (User1_id, User2_id) VALUES\n")
     friendships = set()
     for _ in range(num_friendships):
         user1, user2 = random.sample(users, 2)
@@ -62,7 +62,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 Folder 資料
     f.write("-- 插入 Folder 資料\n")
-    f.write("INSERT INTO Folder (Folder_name, User_id, Parent_folder_id) VALUES\n")
+    f.write("INSERT INTO folder (Folder_name, User_id, Parent_folder_id) VALUES\n")
     folders = []
     for i in range(num_folders):
         folder_name = faker.word().capitalize() + " Folder"
@@ -77,7 +77,7 @@ with open(output_path, "w", encoding="utf-8") as f:
 
     # 插入 Quiz 資料
     f.write("-- 插入 Quiz 資料\n")
-    f.write("INSERT INTO Quiz (Quiz_name, Is_public, Folder_id, Quiz_description) VALUES\n")
+    f.write("INSERT INTO quiz (Quiz_name, Is_public, Folder_id, Quiz_description) VALUES\n")
     quizzes = []
     for i in range(num_quizzes):
         quiz_name = faker.word().capitalize() + " Quiz"
@@ -93,7 +93,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 Quiz_record 資料
     f.write("-- 插入 Quiz_record 資料\n")
-    f.write("INSERT INTO Quiz_record (Total_points, User_id, Quiz_id) VALUES\n")
+    f.write("INSERT INTO quiz_record (Total_points, User_id, Quiz_id) VALUES\n")
     records = []
     for i in range(num_records):
         total_points = random.randint(50, 100)
@@ -108,7 +108,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 Fill_blank_question 資料
     f.write("-- 插入 Fill_blank_question 資料\n")
-    f.write("INSERT INTO Fill_blank_question (Body, Q_number, Answer, Points, Quiz_id) VALUES\n")
+    f.write("INSERT INTO fill_blank_question (Body, Q_number, Answer, Points, Quiz_id) VALUES\n")
     for i in range(num_fill_blank_questions):
         body = faker.sentence()
         q_number = i + 1
@@ -123,7 +123,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 Single_open_question 資料
     f.write("-- 插入 Single_open_question 資料\n")
-    f.write("INSERT INTO Single_open_question (Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id) VALUES\n")
+    f.write("INSERT INTO single_open_question (Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id) VALUES\n")
     for i in range(num_single_open_questions):
         q_number = i + 1
         body = faker.sentence()
@@ -139,7 +139,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 TF_question 資料
     f.write("-- 插入 TF_question 資料\n")
-    f.write("INSERT INTO TF_question (Body, Answer, Points, Q_number, Quiz_id) VALUES\n")
+    f.write("INSERT INTO tf_question (Body, Answer, Points, Q_number, Quiz_id) VALUES\n")
     for i in range(num_tf_questions):
         body = faker.sentence()
         answer = random.choice([True, False])
@@ -154,7 +154,7 @@ with open(output_path, "w", encoding="utf-8") as f:
 
     # 插入 FB_quiz_determination 資料
     f.write("-- 插入 FB_quiz_determination 資料\n")
-    f.write("INSERT INTO FB_quiz_determination (FB_id, Record_id, Is_correct) VALUES\n")
+    f.write("INSERT INTO fb_quiz_determination (FB_id, Record_id, Is_correct) VALUES\n")
     for i in range(num_fb_determinations):
         fb_id = random.randint(1, num_fill_blank_questions)
         record_id = random.choice(records)
@@ -167,7 +167,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 SO_quiz_determination 資料
     f.write("-- 插入 SO_quiz_determination 資料\n")
-    f.write("INSERT INTO SO_quiz_determination (SO_id, Record_id, Is_correct) VALUES\n")
+    f.write("INSERT INTO so_quiz_determination (SO_id, Record_id, Is_correct) VALUES\n")
     for i in range(num_so_determinations):
         so_id = random.randint(1, num_single_open_questions)
         record_id = random.choice(records)
@@ -180,7 +180,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     
     # 插入 TF_quiz_determination 資料
     f.write("-- 插入 TF_quiz_determination 資料\n")
-    f.write("INSERT INTO TF_quiz_determination (TF_id, Record_id, Is_correct) VALUES\n")
+    f.write("INSERT INTO tf_quiz_determination (TF_id, Record_id, Is_correct) VALUES\n")
     for i in range(num_tf_determinations):
         tf_id = random.randint(1, num_tf_questions)
         record_id = random.choice(records)
