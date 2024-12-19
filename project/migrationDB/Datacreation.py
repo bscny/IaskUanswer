@@ -1,157 +1,191 @@
-import mysql.connector
 import random
-import faker
+from faker import Faker
+import os
 
-# 使用 faker 庫生成隨機資料
-fake = faker.Faker()
+# 取得目前程式的執行目錄
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
-# 連接到 MySQL 資料庫
-conn = mysql.connector.connect(
-    host="localhost",       # 資料庫主機
-    user="root",            # 資料庫用戶名
-    password="password",    # 資料庫密碼
-    database="kataohoot"    # 使用的資料庫名稱
-)
+# 在執行目錄下的 migrationDB 資料夾中生成檔案
+output_path = os.path.join(base_dir, "Seed.sql")
 
-cursor = conn.cursor()
+# 確保資料夾存在，如果不存在則建立
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
+# 初始化 Faker
+faker = Faker()
 
-# 隨機生成 User 資料
-def generate_users():
-    users = []
-    for _ in range(10):
-        name = fake.name()
-        email = fake.email()
-        password = fake.password()
-        users.append((name, email, password))
-    return users
+# 設定生成資料數量
+num_users = 10
+num_friendships = 15
+num_folders = 8
+num_quizzes = 10
+num_records = 12
+num_fill_blank_questions = 10
+num_single_open_questions = 10
+num_tf_questions = 10
+num_fb_determinations = 5
+num_so_determinations = 5
+num_tf_determinations = 5
 
-# 隨機生成 Friendship 資料
-def generate_friendships():
-    friendships = []
-    for _ in range(10):
-        user1_id = random.randint(1, 10)
-        user2_id = random.randint(1, 10)
-        while user1_id == user2_id:
-            user2_id = random.randint(1, 10)
-        friendships.append((user1_id, user2_id))
-    return friendships
 
-# 隨機生成 Folder 資料
-def generate_folders():
-    folders = []
-    for i in range(1, 11):
-        folder_name = fake.word()
-        user_id = random.randint(1, 10)
-        parent_folder_id = random.choice([None, random.randint(1, 10)])
-        folders.append((folder_name, user_id, parent_folder_id))
-    return folders
-
-# 隨機生成 Quiz 資料
-def generate_quizzes():
-    quizzes = []
-    for i in range(1, 11):
-        quiz_name = fake.sentence()
-        is_public = random.choice([True, False])
-        folder_id = random.randint(1, 10)
-        quiz_description = fake.text(max_nb_chars=150)
-        quizzes.append((quiz_name, is_public, folder_id, quiz_description))
-    return quizzes
-
-# 隨機生成 Quiz_record 資料
-def generate_quiz_records():
-    quiz_records = []
-    for i in range(1, 11):
-        total_points = random.randint(50, 100)
-        user_id = random.randint(1, 10)
-        quiz_id = random.randint(1, 10)
-        quiz_records.append((total_points, user_id, quiz_id))
-    return quiz_records
-
-# 隨機生成題目資料
-def generate_questions(quiz_id):
-    fill_blank_questions = []
-    single_open_questions = []
-    tf_questions = []
-
-    for i in range(1, 6):
-        fb_body = fake.sentence()
-        fb_answer = fake.word()
-        fb_points = random.randint(5, 10)
-        fill_blank_questions.append((fb_body, i, fb_answer, fb_points, quiz_id))
-
-        so_body = fake.sentence()
-        so_answer = fake.word()
-        so_points = random.randint(5, 10)
-        options = [fake.word() for _ in range(3)]
-        single_open_questions.append((i, so_body, so_points, so_answer, *options, quiz_id))
-
-        tf_body = fake.sentence()
-        tf_answer = random.choice([True, False])
-        tf_points = random.randint(5, 10)
-        tf_questions.append((tf_body, tf_answer, tf_points, i, quiz_id))
-
-    return fill_blank_questions, single_open_questions, tf_questions
-
-# 隨機生成 quiz_determination 資料
-def generate_quiz_determinations(quiz_id, record_id, question_type, question_id):
-    determinations = []
-    for i in range(1, 6):
-        is_correct = random.choice([True, False])
-        determinations.append((question_id, record_id, is_correct))
-    return determinations
-
-# 插入資料
-def insert_data():
+# 建立檔案
+with open(output_path, "w", encoding="utf-8") as f:
     # 插入 User 資料
-    users = generate_users()
-    cursor.executemany("INSERT INTO User (Name, Email, Password) VALUES (%s, %s, %s)", users)
-
+    f.write("-- 插入 User 資料\n")
+    f.write("INSERT INTO User (Name, Email, Password) VALUES\n")
+    users = []
+    for i in range(num_users):
+        name = faker.first_name()
+        email = faker.email()
+        password = faker.password(length=10)
+        users.append(i + 1)
+        f.write(f"('{name}', '{email}', '{password}')")
+        if i < num_users - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
     # 插入 Friendship 資料
-    friendships = generate_friendships()
-    cursor.executemany("INSERT INTO Friendship (User1_id, User2_id) VALUES (%s, %s)", friendships)
-
+    f.write("-- 插入 Friendship 資料\n")
+    f.write("INSERT INTO Friendship (User1_id, User2_id) VALUES\n")
+    friendships = set()
+    for _ in range(num_friendships):
+        user1, user2 = random.sample(users, 2)
+        while (user1, user2) in friendships or (user2, user1) in friendships:
+            user1, user2 = random.sample(users, 2)
+        friendships.add((user1, user2))
+        f.write(f"({user1}, {user2})")
+        if len(friendships) < num_friendships:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
     # 插入 Folder 資料
-    folders = generate_folders()
-    cursor.executemany("INSERT INTO Folder (Folder_name, User_id, Parent_folder_id) VALUES (%s, %s, %s)", folders)
+    f.write("-- 插入 Folder 資料\n")
+    f.write("INSERT INTO Folder (Folder_name, User_id, Parent_folder_id) VALUES\n")
+    folders = []
+    for i in range(num_folders):
+        folder_name = faker.word().capitalize() + " Folder"
+        user_id = random.choice(users)
+        parent_folder_id = random.choice(folders) if folders and random.random() > 0.5 else "NULL"
+        folders.append(i + 1)
+        f.write(f"('{folder_name}', {user_id}, {parent_folder_id})")
+        if i < num_folders - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
 
     # 插入 Quiz 資料
-    quizzes = generate_quizzes()
-    cursor.executemany("INSERT INTO Quiz (Quiz_name, Is_public, Folder_id, Quiz_description) VALUES (%s, %s, %s, %s)", quizzes)
-
+    f.write("-- 插入 Quiz 資料\n")
+    f.write("INSERT INTO Quiz (Quiz_name, Is_public, Folder_id, Quiz_description) VALUES\n")
+    quizzes = []
+    for i in range(num_quizzes):
+        quiz_name = faker.word().capitalize() + " Quiz"
+        is_public = random.choice([True, False])
+        folder_id = random.choice(folders)
+        description = faker.sentence()
+        quizzes.append(i + 1)
+        f.write(f"('{quiz_name}', {is_public}, {folder_id}, '{description}')")
+        if i < num_quizzes - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
     # 插入 Quiz_record 資料
-    quiz_records = generate_quiz_records()
-    cursor.executemany("INSERT INTO Quiz_record (Total_points, User_id, Quiz_id) VALUES (%s, %s, %s)", quiz_records)
+    f.write("-- 插入 Quiz_record 資料\n")
+    f.write("INSERT INTO Quiz_record (Total_points, User_id, Quiz_id) VALUES\n")
+    records = []
+    for i in range(num_records):
+        total_points = random.randint(50, 100)
+        user_id = random.choice(users)
+        quiz_id = random.choice(quizzes)
+        records.append(i + 1)
+        f.write(f"({total_points}, {user_id}, {quiz_id})")
+        if i < num_records - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
+    # 插入 Fill_blank_question 資料
+    f.write("-- 插入 Fill_blank_question 資料\n")
+    f.write("INSERT INTO Fill_blank_question (Body, Q_number, Answer, Points, Quiz_id) VALUES\n")
+    for i in range(num_fill_blank_questions):
+        body = faker.sentence()
+        q_number = i + 1
+        answer = faker.word()
+        points = random.randint(5, 20)
+        quiz_id = random.choice(quizzes)
+        f.write(f"('{body}', {q_number}, '{answer}', {points}, {quiz_id})")
+        if i < num_fill_blank_questions - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
+    # 插入 Single_open_question 資料
+    f.write("-- 插入 Single_open_question 資料\n")
+    f.write("INSERT INTO Single_open_question (Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id) VALUES\n")
+    for i in range(num_single_open_questions):
+        q_number = i + 1
+        body = faker.sentence()
+        points = random.randint(5, 20)
+        answer = faker.word()
+        option_a, option_b, option_c = faker.word(), faker.word(), faker.word()
+        quiz_id = random.choice(quizzes)
+        f.write(f"({q_number}, '{body}', {points}, '{answer}', '{option_a}', '{option_b}', '{option_c}', {quiz_id})")
+        if i < num_single_open_questions - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
+    # 插入 TF_question 資料
+    f.write("-- 插入 TF_question 資料\n")
+    f.write("INSERT INTO TF_question (Body, Answer, Points, Q_number, Quiz_id) VALUES\n")
+    for i in range(num_tf_questions):
+        body = faker.sentence()
+        answer = random.choice([True, False])
+        points = random.randint(5, 20)
+        q_number = i + 1
+        quiz_id = random.choice(quizzes)
+        f.write(f"('{body}', {answer}, {points}, {q_number}, {quiz_id})")
+        if i < num_tf_questions - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
 
-    # 插入題目資料並插入 quiz_determination 資料
-    for quiz_id in range(1, 11):
-        fill_blank_questions, single_open_questions, tf_questions = generate_questions(quiz_id)
-
-        # 插入 Fill_blank_question
-        cursor.executemany("INSERT INTO Fill_blank_question (Body, Q_number, Answer, Points, Quiz_id) VALUES (%s, %s, %s, %s, %s)", fill_blank_questions)
-
-        # 插入 Single_open_question
-        cursor.executemany("INSERT INTO Single_open_question (Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", single_open_questions)
-
-        # 插入 TF_question
-        cursor.executemany("INSERT INTO TF_question (Body, Answer, Points, Q_number, Quiz_id) VALUES (%s, %s, %s, %s, %s)", tf_questions)
-
-        # 插入 quiz_determination 資料
-        record_id = random.randint(1, 10)
-        for fb_question in fill_blank_questions:
-            cursor.executemany("INSERT INTO FB_quiz_determination (FB_id, Record_id, Is_correct) VALUES (%s, %s, %s)", generate_quiz_determinations(quiz_id, record_id, 'FB', fb_question[0]))
-
-        for so_question in single_open_questions:
-            cursor.executemany("INSERT INTO SO_quiz_determination (SO_id, Record_id, Is_correct) VALUES (%s, %s, %s)", generate_quiz_determinations(quiz_id, record_id, 'SO', so_question[0]))
-
-        for tf_question in tf_questions:
-            cursor.executemany("INSERT INTO TF_quiz_determination (TF_id, Record_id, Is_correct) VALUES (%s, %s, %s)", generate_quiz_determinations(quiz_id, record_id, 'TF', tf_question[0]))
-
-    # 提交事務
-    conn.commit()
-
-# 執行資料插入
-insert_data()
-
-# 關閉連接
-cursor.close()
-conn.close()
+    # 插入 FB_quiz_determination 資料
+    f.write("-- 插入 FB_quiz_determination 資料\n")
+    f.write("INSERT INTO FB_quiz_determination (FB_id, Record_id, Is_correct) VALUES\n")
+    for i in range(num_fb_determinations):
+        fb_id = random.randint(1, num_fill_blank_questions)
+        record_id = random.choice(records)
+        is_correct = random.choice([True, False])
+        f.write(f"({fb_id}, {record_id}, {is_correct})")
+        if i < num_fb_determinations - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
+    # 插入 SO_quiz_determination 資料
+    f.write("-- 插入 SO_quiz_determination 資料\n")
+    f.write("INSERT INTO SO_quiz_determination (SO_id, Record_id, Is_correct) VALUES\n")
+    for i in range(num_so_determinations):
+        so_id = random.randint(1, num_single_open_questions)
+        record_id = random.choice(records)
+        is_correct = random.choice([True, False])
+        f.write(f"({so_id}, {record_id}, {is_correct})")
+        if i < num_so_determinations - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
+    
+    # 插入 TF_quiz_determination 資料
+    f.write("-- 插入 TF_quiz_determination 資料\n")
+    f.write("INSERT INTO TF_quiz_determination (TF_id, Record_id, Is_correct) VALUES\n")
+    for i in range(num_tf_determinations):
+        tf_id = random.randint(1, num_tf_questions)
+        record_id = random.choice(records)
+        is_correct = random.choice([True, False])
+        f.write(f"({tf_id}, {record_id}, {is_correct})")
+        if i < num_tf_determinations - 1:
+            f.write(",\n")
+        else:
+            f.write(";\n\n")
