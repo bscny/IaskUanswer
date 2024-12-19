@@ -23,8 +23,10 @@ app.use(cors({
 // for example:
 
 const testRoutes = require("@/routes/testFunction/testRoutes.js");
+const UserRoutes = require("@/routes/User/UserRoutes.js");
 
 app.use("/test", testRoutes);
+app.use("/User", UserRoutes);
 
 // routes end
 
