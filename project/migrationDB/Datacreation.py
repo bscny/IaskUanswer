@@ -30,6 +30,7 @@ num_tf_determinations = 5
 # 建立檔案
 with open(output_path, "w", encoding="utf-8") as f:
     # 插入 User 資料
+    f.write("USE `kataohoot`;\n")
     f.write("-- 插入 User 資料\n")
     f.write("INSERT INTO User (Name, Email, Password) VALUES\n")
     users = []
