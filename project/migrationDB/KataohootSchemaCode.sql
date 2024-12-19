@@ -1,4 +1,4 @@
-SHOW DATABASES;
+CREATE DATABASE `kataohoot`;
 USE kataohoot;
 
 -- User 表
