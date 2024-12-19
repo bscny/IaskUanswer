@@ -1,132 +1,76 @@
--- 1. User 表
-INSERT INTO User (Name, Email, Password) VALUES
-('Alice', 'alice@example.com', 'password123'),
-('Bob', 'bob@example.com', 'password456'),
-('Charlie', 'charlie@example.com', 'password789'),
-('David', 'david@example.com', 'password321'),
-('Eva', 'eva@example.com', 'password654'),
-('Frank', 'frank@example.com', 'password987'),
-('Grace', 'grace@example.com', 'password135'),
-('Helen', 'helen@example.com', 'password246'),
-('Ivy', 'ivy@example.com', 'password369'),
-('Jack', 'jack@example.com', 'password111');
+USE `kataohoot`;
+-- 插入 User 資料
+INSERT INTO User (Name, Email, Password) VALUES 
+('Alice', 'alice@example.com', 'password123'),  -- User_id 1
+('Bob', 'bob@example.com', 'password456'),      -- User_id 2
+('Charlie', 'charlie@example.com', 'password789'), -- User_id 3
+('David', 'david@example.com', 'password321'),   -- User_id 4
+('Eve', 'eve@example.com', 'password654');       -- User_id 5
 
--- 2. Friendship 表
+-- 插入 Friendship 資料
 INSERT INTO Friendship (User1_id, User2_id) VALUES
-(1, 2),
-(1, 3),
-(2, 4),
-(3, 5),
-(4, 6),
-(5, 7),
-(6, 8),
-(7, 9),
-(8, 10),
-(9, 1);
+(1, 2),  -- User1_id 1, User2_id 2
+(2, 3),  -- User1_id 2, User2_id 3
+(1, 3),  -- User1_id 1, User2_id 3
+(4, 5),  -- User1_id 4, User2_id 5
+(2, 4);  -- User1_id 2, User2_id 4
 
--- 3. Folder 表
+-- 插入 Folder 資料
 INSERT INTO Folder (Folder_name, User_id, Parent_folder_id) VALUES
-('Science', 1, NULL),
-('Math', 2, 1),
-('History', 3, NULL),
-('English', 4, NULL),
-('Geography', 5, 4),
-('Programming', 6, NULL),
-('Art', 7, NULL),
-('Music', 8, 7),
-('Physics', 9, NULL),
-('Chemistry', 10, 9);
+('Math Folder', 1, NULL),  -- Folder_id 1, User_id 1
+('Science Folder', 2, NULL),  -- Folder_id 2, User_id 2
+('History Folder', 3, NULL),  -- Folder_id 3, User_id 3
+('Math Subfolder', 1, 1),  -- Folder_id 4, User_id 1, Parent_folder_id 1
+('Science Subfolder', 2, 2);  -- Folder_id 5, User_id 2, Parent_folder_id 2
 
--- 4. Quiz 表
+-- 插入 Quiz 資料
 INSERT INTO Quiz (Quiz_name, Is_public, Folder_id, Quiz_description) VALUES
-('Basic Science Quiz', TRUE, 1, 'A basic quiz about science.'),
-('Advanced Math Quiz', FALSE, 2, 'A challenging math quiz.'),
-('History Knowledge Quiz', TRUE, 3, 'Test your knowledge of history.'),
-('English Grammar Quiz', TRUE, 4, 'A quiz on English grammar.'),
-('Geography World Quiz', FALSE, 5, 'How well do you know the world geography?'),
-('Programming Basics Quiz', TRUE, 6, 'Test your basic programming skills.'),
-('Art Knowledge Quiz', TRUE, 7, 'A quiz on famous art and artists.'),
-('Music Theory Quiz', FALSE, 8, 'A quiz on music theory basics.'),
-('Physics Fundamentals Quiz', TRUE, 9, 'How much do you know about physics?'),
-('Chemistry Concepts Quiz', TRUE, 10, 'A chemistry quiz for advanced learners.');
+('Math Quiz 1', TRUE, 1, 'A quiz on basic math topics'),  -- Quiz_id 1, Folder_id 1
+('Science Quiz 1', FALSE, 2, 'A quiz on science topics'),  -- Quiz_id 2, Folder_id 2
+('History Quiz 1', TRUE, 3, 'A quiz on world history'),  -- Quiz_id 3, Folder_id 3
+('Math Quiz 2', TRUE, 1, 'An advanced math quiz'),  -- Quiz_id 4, Folder_id 1
+('Science Quiz 2', FALSE, 2, 'Advanced science quiz');  -- Quiz_id 5, Folder_id 2
 
--- 5. Quiz_record 表
+-- 插入 Quiz_record 資料
 INSERT INTO Quiz_record (Total_points, User_id, Quiz_id) VALUES
-(85, 1, 1),
-(90, 2, 2),
-(80, 3, 3),
-(75, 4, 4),
-(95, 5, 5),
-(88, 6, 6),
-(92, 7, 7),
-(78, 8, 8),
-(85, 9, 9),
-(90, 10, 10);
+(80, 1, 1),  -- Record_id 1, User_id 1, Quiz_id 1
+(90, 2, 2),  -- Record_id 2, User_id 2, Quiz_id 2
+(70, 3, 3),  -- Record_id 3, User_id 3, Quiz_id 3
+(85, 1, 4),  -- Record_id 4, User_id 1, Quiz_id 4
+(95, 5, 5);  -- Record_id 5, User_id 5, Quiz_id 5
 
--- 6. Fill_blank_question 表
+-- 插入 Fill_blank_question 資料
 INSERT INTO Fill_blank_question (Body, Q_number, Answer, Points, Quiz_id) VALUES
-('The capital of France is ___.', 1, 'Paris', 5, 1),
-('Water boils at ___ degrees Celsius.', 2, '100', 5, 2),
-('The Earth orbits the ___.', 3, 'Sun', 5, 3),
-('Shakespeare wrote ___ and Juliet.', 4, 'Romeo', 5, 4),
-('Mount Everest is located in ___.', 5, 'Nepal', 5, 5),
-('A byte is equal to ___ bits.', 6, '8', 5, 6),
-('The Mona Lisa was painted by ___.', 7, 'Leonardo da Vinci', 5, 7),
-('Mozart was born in ___.', 8, 'Austria', 5, 8),
-('The symbol for hydrogen is ___.', 9, 'H', 5, 9),
-('Atoms are made of protons, neutrons, and ___.', 10, 'Electrons', 5, 10);
+('What is 2 + 2?', 1, '4', 10, 1),  -- FB_id 1, Quiz_id 1
+('What is the capital of France?', 2, 'Paris', 15, 2),  -- FB_id 2, Quiz_id 2
+('Who developed the theory of relativity?', 3, 'Einstein', 20, 5);  -- FB_id 3, Quiz_id 5
 
--- 7. Single_open_question 表
+-- 插入 Single_open_question 資料
 INSERT INTO Single_open_question (Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id) VALUES
-(1, 'Who was the first president of the United States?', 10, 'George Washington', 'Thomas Jefferson', 'Abraham Lincoln', 'John Adams', 3),
-(2, 'Which element is most abundant in Earth’s crust?', 10, 'Oxygen', 'Silicon', 'Iron', 'Aluminum', 4),
-(3, 'Who developed the theory of relativity?', 10, 'Albert Einstein', 'Isaac Newton', 'Galileo Galilei', 'Nikola Tesla', 9),
-(4, 'Which artist painted the ceiling of the Sistine Chapel?', 10, 'Michelangelo', 'Leonardo da Vinci', 'Raphael', 'Donatello', 7),
-(5, 'What is the freezing point of water in Celsius?', 10, '0', '32', '100', '273', 10);
+(1, 'What is 5 + 7?', 10, '12', '10', '12', '15', 1),  -- SO_id 1, Quiz_id 1
+(2, 'What is the chemical formula of water?', 10, 'H2O', 'H2O', 'CO2', 'O2', 2),  -- SO_id 2, Quiz_id 2
+(3, 'Who wrote "1984"?', 10, 'George Orwell', 'Aldous Huxley', 'George Orwell', 'Mark Twain', 3);  -- SO_id 3, Quiz_id 3
 
--- 8. TF_question 表
+-- 插入 TF_question 資料
 INSERT INTO TF_question (Body, Answer, Points, Q_number, Quiz_id) VALUES
-('The Earth is flat.', FALSE, 5, 1, 1),
-('Water is made up of hydrogen and oxygen.', TRUE, 5, 2, 2),
-('Shakespeare was born in Italy.', FALSE, 5, 3, 3),
-('The sun rises in the east.', TRUE, 5, 4, 4),
-('An atom is the smallest unit of matter.', TRUE, 5, 5, 5);
+('The Earth is flat.', FALSE, 5, 1, 1),  -- TF_id 1, Quiz_id 1
+('The sun is a star.', TRUE, 5, 2, 3),  -- TF_id 2, Quiz_id 3
+('Humans have landed on Mars.', FALSE, 5, 3, 5);  -- TF_id 3, Quiz_id 5
 
--- 9. FB_quiz_determination 表
+-- 插入 FB_quiz_determination 資料
 INSERT INTO FB_quiz_determination (FB_id, Record_id, Is_correct) VALUES
-(1, 1, TRUE),
-(2, 2, TRUE),
-(3, 3, FALSE),
-(4, 4, TRUE),
-(5, 5, TRUE),
-(6, 6, TRUE),
-(7, 7, FALSE),
-(8, 8, TRUE),
-(9, 9, TRUE),
-(10, 10, FALSE);
+(1, 1, TRUE),  -- FB_id 1, Record_id 1
+(2, 2, FALSE),  -- FB_id 2, Record_id 2
+(3, 5, TRUE);  -- FB_id 3, Record_id 5
 
--- 10. SO_quiz_determination 表
+-- 插入 SO_quiz_determination 資料
 INSERT INTO SO_quiz_determination (SO_id, Record_id, Is_correct) VALUES
-(1, 1, TRUE),
-(2, 2, TRUE),
-(3, 3, FALSE),
-(4, 4, TRUE),
-(5, 5, TRUE),
-(6, 6, TRUE),
-(7, 7, FALSE),
-(8, 8, TRUE),
-(9, 9, TRUE),
-(10, 10, FALSE);
+(1, 1, TRUE),  -- SO_id 1, Record_id 1
+(2, 2, FALSE),  -- SO_id 2, Record_id 2
+(3, 3, TRUE);  -- SO_id 3, Record_id 3
 
--- 11. TF_quiz_determination 表
+-- 插入 TF_quiz_determination 資料
 INSERT INTO TF_quiz_determination (TF_id, Record_id, Is_correct) VALUES
-(1, 1, FALSE),
-(2, 2, TRUE),
-(3, 3, FALSE),
-(4, 4, TRUE),
-(5, 5, TRUE),
-(6, 6, TRUE),
-(7, 7, FALSE),
-(8, 8, TRUE),
-(9, 9, TRUE),
-(10, 10, FALSE);
+(1, 1, FALSE),  -- TF_id 1, Record_id 1
+(2, 2, TRUE),  -- TF_id 2, Record_id 2
+(3, 3, FALSE);  -- TF_id 3, Record_id 3
