@@ -23,20 +23,20 @@ async function GetSpecificUserFolder(UserId) {
 
 // create services
 async function CreateFolder(BodyData) {
-    const [records] = await db.query(`insert into folder(Name, parent_folder_id)
+    const [records] = await db.query(`insert into folder(Folder_name, User_id, parent_folder_id)
                                       values
-                                      (?, ?)`, [BodyData.Name, BodyData.parent_folder_id]);
+                                      (?, ?, ?)`, [BodyData.Folder_name, BodyData.User_id, BodyData.parent_folder_id]);
 
     return records;
 }
 
 // update services
 async function UpdateFolder(BodyData, FolderId) {
-    const [records] = await db.query(`update folders
+    const [records] = await db.query(`update folder
         set
-        Name = ?,
-        parent_folder_id = ?
-        where Folder_id = ?`, [BodyData.Name, BodyData.parent_folder_id, FolderId]);
+        Folder_name = ?,
+        Parent_folder_id = ?
+        where Folder_id = ?`, [BodyData.Folder_name, BodyData.Parent_folder_id, FolderId]);
 
     return records;
 }
