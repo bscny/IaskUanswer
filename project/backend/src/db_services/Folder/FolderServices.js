@@ -17,24 +17,45 @@ async function GetSpecificFolder(FolderId) {
 async function GetSpecificUserFolder(UserId) {
     const [records] = await db.query(`SELECT * 
                                     FROM folder 
-                                    WHERE User_id = ?`, [FolderId]);
+                                    WHERE User_id = ?`, [UserId]);
     return records;
 }
-// create services
-async function CreateFolder(FolderId) {
 
+// create services
+async function CreateFolder(BodyData) {
+    const [records] = await db.query(`insert into folder(Name, parent_folder_id)
+                                      values
+                                      (?, ?)`, [BodyData.Name, BodyData.parent_folder_id]);
+
+    return records;
 }
 
 // update services
-async function UpdateFolder(UserData, UserId) {
-    
+async function UpdateFolder(BodyData, FolderId) {
+    const [records] = await db.query(`update folders
+        set
+        Name = ?,
+        parent_folder_id = ?
+        where Folder_id = ?`, [BodyData.Name, BodyData.parent_folder_id, FolderId]);
+
+    return records;
 }
 
 // delete services
 async function DeleteFolder(FolderId) {
-    await db.query(`DELETE FROM folder WHERE folder_id = ?`, [folderId]);
+    const [records] = await db.query(`delete
+                                      from folder
+                                      where Folder_id = ?`, [FolderId]);
+
+    return records.affectedRows;
 }
 
-module.exports = {
 
+module.exports = {
+    GetAllFolder,
+    GetSpecificFolder,
+    GetSpecificUserFolder,
+    CreateFolder,
+    UpdateFolder,
+    DeleteFolder
 };
