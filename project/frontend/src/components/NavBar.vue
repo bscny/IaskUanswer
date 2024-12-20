@@ -11,29 +11,51 @@
         </div>
 
         <div class="account-field">
-            <a v-if="!isLogged" class="account-btn" href="/Signup">Signup</a>
-            <a v-if="!isLogged" class="account-btn" href="/Login">Login</a>
-            <a v-else class="account-btn" href="/"> Logout </a>
+            <button v-if="!authState.isAuthenticated" class="account-btn" @click=navSignup>Signup</button>
+            <button v-if="!authState.isAuthenticated" class="account-btn" @click=navLogin>Login</button>
+            <div v-if="authState.isAuthenticated" class="account-username"> {{ getLoggedUsername()}} </div>
+            <button v-if="authState.isAuthenticated" class="account-btn" @click=logout> Logout </button>
+            
         </div>
     </nav>
 </template>
 
 <script>
+import { authState, logout } from '@/service/auth.js';
+
 export default {
     name: "NavBar",
-
+    setup(){
+        return {
+            authState,
+            logout,
+        }
+    },
     data() {
         return {
-        isLogged: false,
+        
     };
     },
 
     methods: {
+        navLogin(){
+            this.$router.push("/Login");    
+        },
+        navSignup(){
+            this.$router.push("/Signup");
+        }, 
+        getLoggedUsername(){
+            let userdata =  localStorage.getItem("userdata");
+            if(userdata){
+                return JSON.parse(userdata).username;
+            }
+
+            return "unknown";
+        }
 
     },
 
     computed: {
-
     },
 
     mounted() {
@@ -83,7 +105,7 @@ export default {
     font-size: 1vw;
 }
 
-a.account-btn, a.account-btn:visited {
+.account-btn{
   background-color: #999dfe;
   color: rgb(0, 0, 0);
   padding: 14px 25px;
@@ -93,7 +115,12 @@ a.account-btn, a.account-btn:visited {
   display: inline-block;
 }
 
-a.account-btn:hover, a.account-btn:active {
+.account-btn:hover {
   background-color: rgb(107, 84, 255);
+}
+
+.account-username{
+    display: inline;
+    color: rgb(65, 255, 81);
 }
 </style>
