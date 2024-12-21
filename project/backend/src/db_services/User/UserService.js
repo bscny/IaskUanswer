@@ -29,7 +29,8 @@ async function UpdateUser(UserData, UserId) {
 
 // delete services
 async function DeleteUser(UserId) {
-    await db.query(`DELETE FROM user WHERE User_id = ?`, [UserId]);
+    const [result] = await db.query(`DELETE FROM user WHERE User_id = ?`, [UserId]);
+    return result.affectedRows;
 }
 
 module.exports = {
