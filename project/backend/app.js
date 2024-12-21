@@ -22,10 +22,15 @@ app.use(cors({
 // routes are here
 // for example:
 
-const testRoutes = require("@/routes/testFunction/testRoutes.js");
+const UserRoutes = require("@/routes/User/UserRoutes.js");
+const FolderRoutes = require("@/routes/Folder/FolderRoutes.js");
+const QuizRoutes = require("@/routes/Quiz/QuizRoutes.js");
+const QuestionRoutes = require("@/routes/Question/SO_QuestionRoutes.js");
 
-app.use("/test", testRoutes);
-
+app.use("/User", UserRoutes);
+app.use("/Folder", FolderRoutes);
+app.use("/Quiz", QuizRoutes);
+app.use("/Question", QuestionRoutes);
 // routes end
 
 // globally checker for error handling, so we dont need catch for any async func in backend
