@@ -12,16 +12,22 @@
             <input class="folder-name-input" type="text" v-model="folderName" />
 
             <p3>
-                Want a new set? Give New Set a Name:
+                Want a new Quiz? Give New Quiz a Name:
             </p3>
 
-            <input class="set-name-input" type="text" v-model="quizName" />
+            <input class="quiz-name-input" type="text" v-model="quizName" />
 
-            <button class="done-button" @click="EditionDone(1)">
+            <p4>
+                Write your Quiz Description:
+            </p4>
+
+            <input class="quiz-description-input" type="text" v-model="quizDescription" />
+
+            <button class="done-button" @click="EditionDone()">
                 Save Changes
             </button>
 
-            <button class="delete-button" @click="EditionDone(0)">
+            <button class="delete-button" @click="Delete()">
                 Delete This Folder
             </button>
 
@@ -45,63 +51,80 @@ export default {
 
     data() {
         return {
-            folderName: '',
+            folderName: this.folder.Folder_name,
             quizName: '',
+            quizDescription: '',
         }
     },
 
     methods: {
-        EditionDone(mode) {
-            if (mode == 1) {
-                // edit mode
+        EditionDone() {
+            if((this.folderName != "" && this.folderName != this.folder.Folder_name) || (this.quizName != "" && this.quizDescription != "")){
                 // call backend API to update folder
-
+    
                 // call backend API to retrieve the record of updated folder
                 // fake data:
-                const newRecord = {
-                    Folder_id: this.folder.Folder_id,
-                    Folder_name: this.folderName,
-                    User_id: this.folder.User_id,
-                    Parent_folder_id: this.folder.Parent_folder_id
+                let newRecord;
+                if (this.folderName != "") {
+                    newRecord = {
+                        Folder_id: this.folder.Folder_id,
+                        Folder_name: this.folderName,
+                        User_id: this.folder.User_id,
+                        Parent_folder_id: this.folder.Parent_folder_id
+                    }
                 }
-
+    
                 if (this.quizName != "") {
                     // call backend API to create quiz under this folder
+    
+                    // call backend API to get created quiz
                     // fake data:
                     const quiz = {
-                        Quiz_id: 10,
+                        Quiz_id: 10,  // auto increment
                         Quiz_name: this.quizName,
+                        Quiz_description: this.quizDescription,
                         is_public: true,
                         Folder_id: this.folder.Folder_id
                     }
-
+    
                     // append quizes and show indicator in folder object
-                    if(this.folder.quizes == null){
+                    if (this.folder.quizes == null) {
                         // to make sure to treat this.folder.quizes as an array
                         this.folder.quizes = [];
                     }
-                    
+    
                     this.folder.quizes.push(quiz);
                     Object.assign(newRecord, {
                         quizes: this.folder.quizes,
                         show: false
                     });
-                }else{
-                    // append empty quiz to folder object
-                    Object.assign(newRecord, {
-                        quizes: null,
-                        show: false
-                    });
+                } else {
+                    if (this.folder.quizes == null) {
+                        // append empty quiz to folder object
+                        Object.assign(newRecord, {
+                            quizes: null,
+                            show: false
+                        });
+                    } else {
+                        // asign original quizes back
+                        Object.assign(newRecord, {
+                            quizes: this.folder.quizes,
+                            show: false
+                        });
+                    }
                 }
 
                 this.$emit("Edited", newRecord);
-            } else {
-                // delete mode
-                const deletedFolderID = this.folder.Folder_id;
-                // call backend API to delete folder
-
-                this.$emit("Deleted", deletedFolderID);
+            }else{
+                this.$emit("Cancel");
             }
+        },
+
+        Delete() {
+            const deletedFolderID = this.folder.Folder_id;
+            // call backend API to delete folder
+
+            this.$emit("Deleted", deletedFolderID);
         },
 
         Cancel() {
@@ -151,7 +174,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .done-button:hover {
@@ -172,7 +195,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .delete-button:hover {
@@ -182,7 +205,7 @@ export default {
 .cancel-button {
     position: absolute;
 
-    left: 1px;
+    right: 1px;
     bottom: 70px;
 
     padding: 1vh 1.2vw 1vh 1.2vw;
@@ -193,7 +216,7 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .cancel-button:hover {
@@ -204,21 +227,21 @@ export default {
     display: block;
     margin: 1vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .window p2 {
     display: block;
     margin: 1vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
 .folder-name-input {
     display: block;
     margin: 3vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
     padding: 0.5vh 0.4vw;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -235,21 +258,45 @@ export default {
     display: block;
     margin: 10vh 1vw 0 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
 }
 
-.set-name-input {
+.quiz-name-input {
     display: block;
-    margin: 5vh 1vw;
+    margin: 5vh 1vw 2vh 1vw;
 
-    font-size: 2.5vw;
+    font-size: 2vw;
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.set-name-input:focus {
+.quiz-name-input:focus {
+    border-color: #4caf50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.window p4 {
+    display: block;
+    margin: 1vh 1vw 0 1vw;
+
+    font-size: 2vw;
+}
+.quiz-description-input {
+    display: block;
+    margin: 5vh 1vw;
+
+    font-size: 2vw;
+    padding: 5px 10px;
+    width: 50vw;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-description-input:focus {
     border-color: #4caf50;
     outline: none;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);

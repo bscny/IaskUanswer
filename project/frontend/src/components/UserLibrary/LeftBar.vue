@@ -14,7 +14,7 @@
             </div>
 
             <div v-if="folder.show">
-                <ul v-for="quiz in folder.quizes" :key="quiz.Quiz_id"  @click="DisplayQuestions()">
+                <ul v-for="quiz in folder.quizes" :key="quiz.Quiz_id"  @click="DisplayQuestions(quiz)">
                     <div class="quiz">
                         {{ quiz.Quiz_name }}
                     </div>
@@ -53,8 +53,8 @@ export default{
             folder.show = !folder.show;
         },
 
-        DisplayQuestions(){
-            this.$emit("DisplayQuestions");
+        DisplayQuestions(quiz){
+            this.$emit("DisplayQuestions", quiz);
         }
     },
 
@@ -74,10 +74,11 @@ export default{
     align-items: center;
     justify-content: start;
 
-    top: 8vh;
+    top: 7.8vh;
     left: 0;
-    bottom: 0;
+    /* bottom: 0; */
     width: 12vw;
+    border-radius: 5px;
 
     background-color: rgb(160, 148, 148);
 }

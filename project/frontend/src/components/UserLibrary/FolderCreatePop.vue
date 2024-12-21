@@ -35,24 +35,28 @@ export default {
 
     methods: {
         CreationDone() {
-            // call backend API to insert
-
-            // call backend API to retrieve the newly created record
-            // fake data:
-            let newRecord = {
-                Folder_id: 10,
-                Folder_name: this.folderName,
-                User_id: this.userID,
-                Parent_folder_id: null,
+            if(this.folderName != ''){
+                // call backend API to insert
+    
+                // call backend API to retrieve the newly created record
+                // fake data:
+                let newRecord = {
+                    Folder_id: 10,
+                    Folder_name: this.folderName,
+                    User_id: this.userID,
+                    Parent_folder_id: null,
+                }
+    
+                // append empty quiz to folder object
+                Object.assign(newRecord, {
+                    quizes: null,
+                    show: false
+                });
+    
+                this.$emit("Created", newRecord);
+            }else{
+                this.$emit("Cancel");
             }
-
-            // append empty quiz to folder object
-            Object.assign(newRecord, {
-                quizes: null,
-                show: false
-            });
-
-            this.$emit("Created", newRecord);
         },
 
         Cancel() {

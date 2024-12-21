@@ -3,6 +3,8 @@ import UserLibrary from "@/views/UserLibraryPages/UserLibrary.vue"
 import HomePage from '@/views/Home/HomePage.vue'
 import SignupPage from '@/views/Signup/SignupPage.vue'
 import LoginPage from '@/views/Login/LoginPage.vue'
+import EditQuiz from '@/views/UserLibraryPages/EditQuiz.vue'
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -24,6 +26,11 @@ const router = createRouter({
             path: '/UserLibrary',
             name: 'UserLibrary',
             component: UserLibrary
+        },
+        {
+            path: '/UserLibrary/EditQuiz',
+            name: 'EditQuiz',
+            component: EditQuiz
         },
     ],
 })
