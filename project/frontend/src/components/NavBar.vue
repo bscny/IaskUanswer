@@ -13,9 +13,9 @@
         <div class="account-field">
             <button v-if="!authState.isAuthenticated" class="account-btn" @click=navSignup>Signup</button>
             <button v-if="!authState.isAuthenticated" class="account-btn" @click=navLogin>Login</button>
-            <div v-if="authState.isAuthenticated" class="account-username"> {{ getLoggedUsername()}} </div>
+            <div v-if="authState.isAuthenticated" class="account-username"> {{ getLoggedUsername() }} </div>
             <button v-if="authState.isAuthenticated" class="account-btn" @click=logout> Logout </button>
-            
+
         </div>
     </nav>
 </template>
@@ -25,28 +25,34 @@ import { authState, logout } from '@/service/auth.js';
 
 export default {
     name: "NavBar",
-    setup(){
+    setup() {
         return {
             authState,
             logout,
         }
     },
+    beforeCreate() {
+        console.log("nav beforeCraete");
+        const userdata = localStorage.getItem("userdata");
+        authState.isAuthenticated = (!userdata) ? false : true;
+        
+    },
     data() {
         return {
-        
-    };
+
+        };
     },
 
     methods: {
-        navLogin(){
-            this.$router.push("/Login");    
+        navLogin() {
+            this.$router.push("/Login");
         },
-        navSignup(){
+        navSignup() {
             this.$router.push("/Signup");
-        }, 
-        getLoggedUsername(){
-            let userdata =  localStorage.getItem("userdata");
-            if(userdata){
+        },
+        getLoggedUsername() {
+            let userdata = localStorage.getItem("userdata");
+            if (userdata) {
                 return JSON.parse(userdata).username;
             }
 
@@ -105,21 +111,21 @@ export default {
     font-size: 1vw;
 }
 
-.account-btn{
-  background-color: #999dfe;
-  color: rgb(0, 0, 0);
-  padding: 14px 25px;
-  margin-left: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+.account-btn {
+    background-color: #999dfe;
+    color: rgb(0, 0, 0);
+    padding: 14px 25px;
+    margin-left: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .account-btn:hover {
-  background-color: rgb(107, 84, 255);
+    background-color: rgb(107, 84, 255);
 }
 
-.account-username{
+.account-username {
     display: inline;
     color: rgb(65, 255, 81);
 }

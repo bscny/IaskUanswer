@@ -4,7 +4,6 @@ import HomePage from '@/views/Home/HomePage.vue'
 import SignupPage from '@/views/Signup/SignupPage.vue'
 import LoginPage from '@/views/Login/LoginPage.vue'
 import EditQuiz from '@/views/UserLibraryPages/EditQuiz.vue'
-import { authState } from '@/service/auth'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,16 +36,4 @@ const router = createRouter({
     ],
 })
 
-router.beforeEach((to, from, next) => {
-    console.log("beforeEach");
-    const userdata = localStorage.getItem("userdata");
-    if (!userdata) {
-        authState.isAuthenticated = false;
-
-    } else {
-        authState.isAuthenticated = true;
-    }
-
-    next();
-});
 export default router
