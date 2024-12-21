@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {login} from '@/service/auth';
+import { authState, login } from '@/service/auth';
 export default {
     name: "Login",
     data() {
@@ -35,9 +35,6 @@ export default {
             errors: {
                 account: null,
                 password: null,
-            },
-            userInfo: {
-                id: null
             },
 
             isSubmitting: false // In canse of multiple submittion.
@@ -61,7 +58,7 @@ export default {
 
                 const response = await login(this.form);
                 console.log(response)
-                if(response.status === 200){
+                if (response.status === 200) {
                     alert("Login successful!\n");
                     this.$router.push("/");
                 }
