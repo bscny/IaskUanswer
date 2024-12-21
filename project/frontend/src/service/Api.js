@@ -17,7 +17,7 @@ export default {
             id: 1,
             account: data.account,
             password: data.password,
-            username: 'Fake User',
+            username: 'Fake User'
         };
 
         const fakeAxiosResponse = {
@@ -34,6 +34,9 @@ export default {
     async fake_signup(data) {
         const fakeData = {
             id: 1,
+            account: data.account,
+            password: data.password,
+            username: data.username
         };
 
         const fakeAxiosResponse = {

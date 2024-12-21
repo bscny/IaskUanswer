@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Api from '@/service/Api';
+import {signup} from '@/service/auth';
 
 export default {
     name: "Signup",
@@ -66,7 +66,8 @@ export default {
             if (!this.form.email) {
                 this.errors.email = "Email is required.";
                 valid = false;
-            } else if (!this.validEmail(this.form.email)) {
+            } 
+            else if (!this.validEmail(this.form.email)) {
                 this.errors.email = "Invalid email format.";
                 valid = false;
             }
@@ -87,15 +88,14 @@ export default {
 
         async submitForm() {
             if (!this.validateForm()) return;
-
+            console.log(`Submitting signup form: ${JSON.stringify(this.form)}`);
             this.isSubmitting = true;
 
             try {
-                // for testing
-                const response = await Api.fake_signup({ email: this.email, username: this.username, password: this.password });
+                const response = await signup(this.form);
                 if(response.status == 200){
                     alert("Signup successful!\n");
-                    this.$router.push("/Login");
+                    this.$router.push("/");
                 }
                 
                 // Reset the form
