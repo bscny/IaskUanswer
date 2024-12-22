@@ -86,10 +86,7 @@ export default {
     align-items: center;
     justify-content: space-between;
 
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6rem;
+    height: 8vh;
     background-color: rgba(31, 26, 51, 0.719);
 
     z-index: 10000;
@@ -98,10 +95,12 @@ export default {
 
 .logo {
     background-color: rgb(255, 172, 218);
-    height: 6rem;
+    height: inherit;
     width: auto;
-    font-size: 3rem;
-    padding: 1rem;
+    font-size: 4vh;
+    text-align: center;
+    padding-left: 1vw;
+    padding-right: 1vw;
     font-family: "Sofia", sans-serif;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -119,7 +118,7 @@ export default {
 .title {
     display: inline;
     font-family: DFKai-sb;
-    font-size: 4rem;
+    font-size: 5vh;
     color:azure
 }
 
@@ -131,10 +130,10 @@ export default {
 .account-btn {
     background-color: #999dfe;
     color: rgb(0, 0, 0);
-    margin-left: 1rem;
-    font-size: 2rem;
-    width: 9rem;
-    height: 6rem;
+    margin-left: 1vw;
+    font-size: 4vh;
+    width: 20vh;
+    height: 8vh;
     text-align: center;
     text-decoration: none;
     display: inline-block;
