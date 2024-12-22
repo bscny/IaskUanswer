@@ -1,13 +1,12 @@
 <template>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <nav class="navbar">
-        <div>
-            <a href="/">
-                <img src="@/assets/logo.png" class="logo">
-            </a>
-        </div>
+        <span class="logo" @click="toHome">
+            Kataohoot
+        </span>
 
         <div class="title">
-            title
+            資料庫系統期末專題
         </div>
 
         <div class="account-field">
@@ -57,7 +56,10 @@ export default {
             }
 
             return "unknown";
-        }
+        },
+        toHome() {
+            this.$router.push("/");
+        },
 
     },
 
@@ -87,35 +89,52 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    height: 8vh;
-    background-color: rgba(0, 0, 0, 0.719);
+    height: 6rem;
+    background-color: rgba(31, 26, 51, 0.719);
 
     z-index: 10000;
 }
 
+
 .logo {
-    height: 8vh;
+    background-color: rgb(255, 172, 218);
+    height: 6rem;
     width: auto;
+    font-size: 3rem;
+    padding: 1rem;
+    font-family: "Sofia", sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+.logo:hover {
+    background-color: rgb(255, 132, 200)
 }
 
 .title {
     display: inline;
-
-    font-size: 1vw;
+    font-family: DFKai-sb;
+    font-size: 4rem;
+    color:azure
 }
 
 .account-field {
     display: inline;
-
-    padding: 0 1.5vw 0 0;
-    font-size: 1vw;
+    padding : 1rem;
 }
 
 .account-btn {
     background-color: #999dfe;
     color: rgb(0, 0, 0);
-    padding: 14px 25px;
-    margin-left: 10px;
+    margin-left: 1rem;
+    font-size: 2rem;
+    width: 9rem;
+    height: 6rem;
     text-align: center;
     text-decoration: none;
     display: inline-block;

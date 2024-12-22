@@ -41,6 +41,13 @@ export default {
 
         };
     },
+    beforeCreate(){
+        const userdata = localStorage.getItem("userdata");
+        if(userdata){
+            authState.isAuthenticated = true;
+            this.$router.push("/");
+        }
+    },
     methods: {
         validateForm() {
             let valid = true;
