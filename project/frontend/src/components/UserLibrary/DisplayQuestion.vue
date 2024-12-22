@@ -124,6 +124,8 @@ export default {
     border: none;
     border-radius: 5px;
 
+    font-size: 3vh;
+
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -143,6 +145,8 @@ export default {
     color: white;
     border: none;
     border-radius: 5px;
+
+    font-size: 3vh;
     
     cursor: pointer;
     transition: background-color 0.3s;

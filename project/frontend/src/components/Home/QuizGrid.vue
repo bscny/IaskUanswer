@@ -39,9 +39,9 @@ export default {
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
     gap: 5%;
-    padding: 3rem;
-    margin: auto;
-    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top: 0vh;
+    border-radius: 0.5rem;
     border-color: black;
     background-color: #f9f9f9;
 }

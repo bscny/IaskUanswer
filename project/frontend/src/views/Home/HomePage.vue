@@ -1,7 +1,9 @@
 <template>
     <NavBar />
-    <div style="display: flex;">
-        <SideBar />
+
+    <SideBar />
+
+    <div class="body">
         <QuizGrid />
     </div>
 </template>
@@ -16,3 +18,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.body {
+    margin-top: 8vh;
+    margin-left: 10.2vw;
+}
+</style>

@@ -10,10 +10,10 @@
         </div>
 
         <div class="account-field">
-            <button v-if="!authState.isAuthenticated" class="account-btn" @click=navSignup>Signup</button>
+            <button v-if="!authState.isAuthenticated" class="account-btn" @click=navSignup>Sign up</button>
             <button v-if="!authState.isAuthenticated" class="account-btn" @click=navLogin>Login</button>
             <div v-if="authState.isAuthenticated" class="account-username"> {{ getLoggedUsername() }} </div>
-            <button v-if="authState.isAuthenticated" class="account-btn" @click=logout> Logout </button>
+            <button v-if="authState.isAuthenticated" class="account-btn" @click=logout> Log out </button>
 
         </div>
     </nav>
@@ -31,7 +31,6 @@ export default {
         }
     },
     beforeCreate() {
-        console.log("nav beforeCraete");
         const userdata = localStorage.getItem("userdata");
         authState.isAuthenticated = (!userdata) ? false : true;
         
@@ -79,15 +78,19 @@ export default {
 
 <style scoped>
 .navbar {
-    position: block;
+    position: fixed;
     display: flex;
+
+    top: 0;
+    left: 0;
+    right: 0;
 
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 
     height: 8vh;
-    background-color: rgba(31, 26, 51, 0.719);
+    background-color: rgba(31, 26, 51);
 
     z-index: 10000;
 }
@@ -123,7 +126,12 @@ export default {
 }
 
 .account-field {
-    display: inline;
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
     padding : 1rem;
 }
 
@@ -145,6 +153,7 @@ export default {
 
 .account-username {
     display: inline;
+    font-size: 3vh;
     color: rgb(65, 255, 81);
 }
 </style>

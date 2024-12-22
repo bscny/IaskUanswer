@@ -46,7 +46,7 @@ export default {
                 password: null,
             },
 
-            isSubmitting: false // In canse of multiple submittion.
+            isSubmitting: false // In case of multiple submittion.
         };
     },
     methods: {
@@ -88,14 +88,16 @@ export default {
 
         async submitForm() {
             if (!this.validateForm()) return;
-            console.log(`Submitting signup form: ${JSON.stringify(this.form)}`);
             this.isSubmitting = true;
 
             try {
+                // call backend API to register
                 const response = await signup(this.form);
                 if(response.status == 200){
                     alert("Signup successful!\n");
-                    this.$router.push("/");
+                    this.$router.push({
+                        name: 'Home'
+                    });
                 }
                 
                 // Reset the form

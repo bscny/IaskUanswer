@@ -62,12 +62,14 @@ export default {
 
             this.isSubmitting = true;
             try {
-
+                // call API to get user/check data
                 const response = await login(this.form);
-                console.log(response)
+
                 if (response.status === 200) {
                     alert("Login successful!\n");
-                    this.$router.push("/");
+                    this.$router.push({
+                        name: 'Home'
+                    });
                 }
 
                 // Reset the form
