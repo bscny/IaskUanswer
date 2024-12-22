@@ -74,7 +74,7 @@ export default{
     align-items: center;
     justify-content: start;
 
-    top: 7.8vh;
+    top: 8.8vh;
     left: 0;
     /* bottom: 0; */
     width: 12vw;

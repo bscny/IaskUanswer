@@ -1,40 +1,76 @@
 <template>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     <nav class="navbar">
-        <div class="logo">
-            logo
-        </div>
+        <span class="logo" @click="toHome">
+            Kataohoot
+        </span>
 
         <div class="title">
-            title
+            資料庫系統期末專題
         </div>
 
-        <div class="sign-in-up-button">
-            sign in/up
+        <div class="account-field">
+            <button v-if="!authState.isAuthenticated" class="account-btn" @click=navSignup>Signup</button>
+            <button v-if="!authState.isAuthenticated" class="account-btn" @click=navLogin>Login</button>
+            <div v-if="authState.isAuthenticated" class="account-username"> {{ getLoggedUsername() }} </div>
+            <button v-if="authState.isAuthenticated" class="account-btn" @click=logout> Logout </button>
+
         </div>
     </nav>
 </template>
 
 <script>
-export default{
+import { authState, logout } from '@/service/auth.js';
+
+export default {
     name: "NavBar",
+    setup() {
+        return {
+            authState,
+            logout,
+        }
+    },
+    beforeCreate() {
+        console.log("nav beforeCraete");
+        const userdata = localStorage.getItem("userdata");
+        authState.isAuthenticated = (!userdata) ? false : true;
+        
+    },
+    data() {
+        return {
 
-    data(){
-
+        };
     },
 
     methods: {
+        navLogin() {
+            this.$router.push("/Login");
+        },
+        navSignup() {
+            this.$router.push("/Signup");
+        },
+        getLoggedUsername() {
+            let userdata = localStorage.getItem("userdata");
+            if (userdata) {
+                return JSON.parse(userdata).username;
+            }
+
+            return "unknown";
+        },
+        toHome() {
+            this.$router.push("/");
+        },
 
     },
 
     computed: {
+    },
+
+    mounted() {
 
     },
 
-    mounted(){
-
-    },
-
-    created(){
+    created() {
 
     },
 
@@ -42,40 +78,73 @@ export default{
 </script>
 
 <style scoped>
-.navbar{
-    position: fixed;
+.navbar {
+    position: block;
     display: flex;
 
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 
-    top: 0;
-    left: 0;
-    right: 0;
     height: 8vh;
-    background-color: rgba(0, 0, 0, 0.719);
+    background-color: rgba(31, 26, 51, 0.719);
 
     z-index: 10000;
 }
 
-.logo {
-    display: inline;
 
-    padding: 0 0 0 1.5vw;
-    font-size: 1vw;
+.logo {
+    background-color: rgb(255, 172, 218);
+    height: inherit;
+    width: auto;
+    font-size: 4vh;
+    text-align: center;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    font-family: "Sofia", sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+.logo:hover {
+    background-color: rgb(255, 132, 200)
 }
 
 .title {
     display: inline;
-
-    font-size: 1vw;
+    font-family: DFKai-sb;
+    font-size: 5vh;
+    color:azure
 }
 
-.sign-in-up-button {
+.account-field {
     display: inline;
+    padding : 1rem;
+}
 
-    padding: 0 1.5vw 0 0;
-    font-size: 1vw;
+.account-btn {
+    background-color: #999dfe;
+    color: rgb(0, 0, 0);
+    margin-left: 1vw;
+    font-size: 4vh;
+    width: 20vh;
+    height: 8vh;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.account-btn:hover {
+    background-color: rgb(107, 84, 255);
+}
+
+.account-username {
+    display: inline;
+    color: rgb(65, 255, 81);
 }
 </style>
