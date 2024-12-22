@@ -20,7 +20,9 @@
 </template>
 
 <script>
-import { authState, logout } from '@/service/auth.js';
+import { 
+    authState, logout 
+} from '@/service/AccountApi/accountAPI.js';
 
 export default {
     name: "NavBar",

@@ -27,9 +27,9 @@
 
 <script>
 import NavBar from "@/components/NavBar.vue"
-import LeftBar from "@/components/UserLibrary/LeftBar.vue";
-import FolderCreatePop from "@/components/UserLibrary/FolderCreatePop.vue";
-import FolderEditPop from "@/components/UserLibrary/FolderEditPop.vue";
+import LeftBar from "@/components/UserLibrary/Library/LeftBar.vue";
+import FolderCreatePop from "@/components/UserLibrary/Library/FolderCreatePop.vue";
+import FolderEditPop from "@/components/UserLibrary/Library/FolderEditPop.vue";
 import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
 
 import { 

@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import Api from "@/service/Api";
+import {
+    GetRandQuizes,
+} from "@/service/AccountApi/accountAPI";
 
 export default {
     name: "QuizGrid",
-    beforeCreate() {
-        Api.fake_getNQuizes("quizzes").then((response) => {
-            this.quizzes = response.data.quizzes;
-        });
+    async beforeCreate() {
+        this.quizzes = await GetRandQuizes();
     },
     methods: {
         goToQuiz(id) {
@@ -40,8 +40,7 @@ export default {
     grid-template-columns: repeat(3, 1fr);
     gap: 5%;
     padding: 1.5rem;
-    margin-top: 0vh;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     border-color: black;
     background-color: #f9f9f9;
 }

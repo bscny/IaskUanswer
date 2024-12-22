@@ -33,10 +33,10 @@
 
 <script>
 import NavBar from "@/components/NavBar.vue";
-import QuizEditBlock from "@/components/UserLibrary/QuizEditBlock.vue";
+import QuizEditBlock from "@/components/UserLibrary/EditQuiz/QuizEditBlock.vue";
 import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
-import QuestionCreatePop from "@/components/UserLibrary/QuestionCreatePop.vue";
-import QuestionEditPop from "@/components/UserLibrary/QuestionEditPop.vue";
+import QuestionCreatePop from "@/components/UserLibrary/EditQuiz/QuestionCreatePop.vue";
+import QuestionEditPop from "@/components/UserLibrary/EditQuiz/QuestionEditPop.vue";
 
 import { 
     useQuizStore,

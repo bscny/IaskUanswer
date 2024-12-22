@@ -29,7 +29,9 @@
 </template>
 
 <script>
-import {signup} from '@/service/auth';
+import {
+    signup
+} from '@/service/AccountApi/accountAPI';
 
 export default {
     name: "Signup",

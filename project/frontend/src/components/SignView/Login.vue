@@ -23,7 +23,11 @@
 </template>
 
 <script>
-import { authState, login } from '@/service/auth';
+import { 
+    authState,
+    login 
+} from '@/service/AccountApi/accountAPI';
+
 export default {
     name: "Login",
     data() {
