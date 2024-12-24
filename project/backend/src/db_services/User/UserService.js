@@ -1,5 +1,9 @@
 const db = require('@/database.js');
 
+async function UserLoginConfirmation() {
+    const [records] = await db.query(`SELECT * FROM user WHERE Email = ? AND Password = ?`, [email, password]);
+    return records.length > 0 ? records[0] : null;
+}
 // read services
 async function GetAllUser() {
     const [records] = await db.query(`SELECT * FROM user`);
@@ -34,6 +38,7 @@ async function DeleteUser(UserId) {
 }
 
 module.exports = {
+    UserLoginConfirmation,
     GetAllUser,
     GetSpecificUser,
     CreateUser,

@@ -1,5 +1,16 @@
 const service = require("@/db_services/User/UserService.js");
 
+async function UserLoginConfirmation(req, res) {
+    const { email, password } = req.body;
+    const user = await service.UserLoginConfirmation(email, password);
+
+    if (user) {
+        res.status(200).json({ message: "Login successful", user });
+    } else {
+        res.status(401).json({ message: "Invalid email or password" });
+    }
+}
+
 async function DisplayUser(req, res) {
     const UserName = await service.GetSpecificUser(req.params.UserId);
 
@@ -36,6 +47,7 @@ async function DeleteUser(req, res) {
 
 
 module.exports = {
+    UserLoginConfirmation,
     DisplayUser,
     DisplayALLUser,
     CreateUser,
