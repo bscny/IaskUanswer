@@ -10,14 +10,11 @@
 </template>
 
 <script>
-import {
-    GetRandQuizes,
-} from "@/service/AccountApi/accountAPI";
 
 export default {
     name: "QuizGrid",
-    async beforeCreate() {
-        this.quizzes = await GetRandQuizes();
+    props: {
+        quizzes: Array,
     },
     methods: {
         goToQuiz(id) {
@@ -27,7 +24,7 @@ export default {
     },
     data() {
         return {
-            quizzes: null
+
         }
     },
 };
@@ -45,7 +42,6 @@ export default {
     background-color: #f9f9f9;
 }
 
-
 .grid-item {
     background-color:rgb(57, 99, 109) ;
     color: rgb(0, 0, 0);
@@ -55,6 +51,11 @@ export default {
 
     border-radius: 12rem;
     text-align: center;
+}
+
+.grid-item:hover {
+    cursor: pointer;
+    background-color: #6092a1;
 }
 
 .grid-item-title {
@@ -67,14 +68,12 @@ export default {
     border-radius: 12rem;
     
 }
+
 .grid-item-description{
     color: black;
     size: 1rem;
     font-size: 1.5rem;
     margin-left: 2rem;
     margin-right: 2rem;
-}
-.grid-item:hover {
-    background-color: #6092a1;
 }
 </style>
