@@ -16,6 +16,12 @@ async function GetSpecificFolderQuiz(FolderId) {
     return records;
 }
 
+async function GetRandomQuizzes(number) {
+    const [records] = await db.query(`SELECT * FROM quiz ORDER BY RAND() LIMIT ?`, [number]);
+    return records;
+}
+
+
 // create services
 async function CreateQuiz(BodyData) {
     const [result] = await db.query(`INSERT INTO quiz (Quiz_name, Is_public, Folder_id, Quiz_description) VALUES (?, ?, ?, ?)`, 
@@ -40,6 +46,7 @@ module.exports = {
     GetAllQuiz,
     GetSpecificQuiz,
     GetSpecificFolderQuiz,
+    GetRandomQuizzes,
     CreateQuiz,
     UpdateQuiz,
     DeleteQuiz
