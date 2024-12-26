@@ -1,9 +1,14 @@
 const db = require('@/database.js');
 
-async function UserLoginConfirmation() {
-    const [records] = await db.query(`SELECT * FROM user WHERE Email = ? AND Password = ?`, [email, password]);
-    return records.length > 0 ? records[0] : null;
+async function UserLoginConfirmation(UserData) {
+    const { Name, Email, Password } = UserData;
+    const [records] = await db.query(
+        `SELECT * FROM user WHERE (Name = ? OR Email = ?) AND Password = ?`, 
+        [Name, Email, Password]
+    );
+    return records.length > 0 ? records[0].Name : false;
 }
+
 // read services
 async function GetAllUser() {
     const [records] = await db.query(`SELECT * FROM user`);
