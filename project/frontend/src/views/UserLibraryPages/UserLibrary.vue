@@ -37,6 +37,17 @@ import {
     useQuestionsStore,
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
 
+import {
+     getQuizzesByFolder 
+} from '@/service/LibraryApi/QuizAPI';
+
+//import FolderAPI
+import { 
+    createFolder, 
+    updateFolder, 
+    deleteFolder 
+} from '@/service/LibraryApi/FolderAPI';
+
 export default{
     name: "UserLibrary",
     components: {
@@ -71,39 +82,51 @@ export default{
             this.canCreateFolder = true;
         },
 
-        FolderCreated(newFolder){
-            this.folders.push(newFolder);
-            alert("Folder Created!");
-
-            this.canCreateFolder = false;
+        async FolderCreated(newFolder){
+            try {
+                const createdFolder = await createFolder(newFolder);
+                this.folders.push(createdFolder);
+                alert("Folder Created!");
+                this.canCreateFolder = false;
+            } catch (error) {
+                console.error("Failed to create folder:", error);
+            }
         },
 
-        SetEditFolder(folder){
+        async SetEditFolder(folder){
             this.curLookingFolder = folder;
 
             this.canEditFolder = true;
         },
 
-        FolderEdited(editedFolder){
-            for(let i = 0; i < this.folders.length; i ++){
-                if(this.folders[i].Folder_id == editedFolder.Folder_id){
-                    this.folders[i] = editedFolder;
+        async FolderEdited(editedFolder){
+            try {
+                const updatedFolder = await updateFolder(editedFolder.Folder_id, editedFolder);
+                for (let i = 0; i < this.folders.length; i++) {
+                    if (this.folders[i].Folder_id == updatedFolder.Folder_id) {
+                        this.folders[i] = updatedFolder;
+                    }
                 }
+                alert("Change Saved!");
+                this.canEditFolder = false;
+            } catch (error) {
+                console.error("Failed to update folder:", error);
             }
-            alert("Change Saved!");
-
-            this.canEditFolder = false;
         },
 
-        FolderDeleted(deletedFolderID){
-            for(let i = 0; i < this.folders.length; i ++){
-                if(this.folders[i].Folder_id == deletedFolderID){
-                    this.folders.splice(i, 1);
+        async FolderDeleted(deletedFolderID){
+            try {
+                await deleteFolder(deletedFolderID);
+                for (let i = 0; i < this.folders.length; i++) {
+                    if (this.folders[i].Folder_id == deletedFolderID) {
+                        this.folders.splice(i, 1);
+                    }
                 }
+                alert("Deleted!!");
+                this.canEditFolder = false;
+            } catch (error) {
+                console.error("Failed to delete folder:", error);
             }
-            alert("Deleted!!");
-
-            this.canEditFolder = false;
         },
 
         async SetDisplay(quiz){

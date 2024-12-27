@@ -55,8 +55,17 @@ export default {
     methods: {
         validateForm() {
             let valid = true;
-            // Clear previous errors
-            this.errors = { account: null, password: null };
+            if (!this.form.account) {
+                this.errors.account = "Account is required.";
+                valid = false;
+            }
+
+            if (!this.form.password) {
+                this.errors.password = "Password is required.";
+                valid = false;
+            }
+
+            
             return valid;
         },
 

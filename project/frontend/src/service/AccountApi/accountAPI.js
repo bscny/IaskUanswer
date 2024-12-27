@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import api from '@/service/ApiClient';
+import apiClient from '@/service/ApiClient';
 
 export const authState = reactive({
     isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
@@ -7,48 +7,57 @@ export const authState = reactive({
 
 export async function signup(userInfo) {
     try {
-        // Call Backend API
-        // const response = await apiClient.post(`/User/post-user`, 
-        // {
-        //     Name: userInfo.Name,
-        //     Email: userInfo.Email,
-        //     Password: userInfo.Password
-        // }, 
-        // {
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // });
+        // Call Backend API (Create User)
+        const response = await apiClient.post(`User/post-user`, 
+            {
+                Name: userInfo.username,
+                Email: userInfo.email,
+                Password: userInfo.password
+            }, 
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (response.status === 201) {
+                authState.isAuthenticated = true;
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userdata', JSON.stringify(response.data));
+            }
+    
+            return response;
 
         // fake data:
-        const fakeData = {
-            id: 1,
-            account: userInfo.account,
-            password: userInfo.password,
-            username: userInfo.username
-        };
+        // const fakeData = {
+        //     id: 1,
+        //     account: userInfo.account,
+        //     password: userInfo.password,
+        //     username: userInfo.username
+        // };
 
-        const fakeAxiosResponse = {
-            data: fakeData,
-            status: 200,
-            statusText: 'OK',
-        };
+        // const fakeAxiosResponse = {
+        //     data: fakeData,
+        //     status: 200,
+        //     statusText: 'OK',
+        // };
 
-        if (fakeAxiosResponse.status === 200) {
-            authState.isAuthenticated = true;
-            let item = {
-                isAuthenticated: true,
-                userID: fakeAxiosResponse.data.id,
-                username: fakeAxiosResponse.data.username,
-            }
+        // if (fakeAxiosResponse.status === 200) {
+        //     authState.isAuthenticated = true;
+        //     let item = {
+        //         isAuthenticated: true,
+        //         userID: fakeAxiosResponse.data.id,
+        //         username: fakeAxiosResponse.data.username,
+        //     }
 
-            localStorage.setItem('userdata', JSON.stringify(item));
+        //     localStorage.setItem('userdata', JSON.stringify(item));
 
-        }
+        // }
 
-        return fakeAxiosResponse;
+        // return fakeAxiosResponse;
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 export async function login(data) {
