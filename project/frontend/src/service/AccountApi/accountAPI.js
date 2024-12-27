@@ -35,43 +35,29 @@ async function signup(userInfo) {
     }
 }
 
-
-async function login(data) {
+async function login(userInfo){
     try {
-        // Call Backend API
-        // const response = await api.get('/User/${Email}/${Password}'); // u didnt write this in your backend tho Mr.nono  
+        const credentials = {
+            Name: userInfo.account, 
+            Email: userInfo.account, 
+            Password: userInfo.password
+        };     
+        console.log('Sending login request with credentials:', credentials);
+        const response = await apiClient.post('/User/login', credentials);
+        console.log('Login response:', response);
 
-        // fake data:
-        const fakeData = {
-            id: 1,
-            account: data.account,
-            password: data.password,
-            username: 'Fake User'
-        };
-
-        const fakeAxiosResponse = {
-            data: fakeData,
-            status: 200,
-            statusText: 'OK',
-        };
-
-        if (fakeAxiosResponse.status === 200) {
+        if (response.status === 200) {
             authState.isAuthenticated = true;
-            let item = {
-                isAuthenticated: true,
-                userID: fakeAxiosResponse.data.id,
-                username: fakeAxiosResponse.data.username,
-            }
-            console.log(JSON.stringify(item))
-            localStorage.setItem('userdata', JSON.stringify(item));
-
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userdata', JSON.stringify(response.data.user));
         }
-
-        return fakeAxiosResponse;
+        return response;
     } catch (error) {
-        console.error(error);
+        console.error('Login error:', error);
+        throw error;
     }
 }
+
 
 async function logout() {
     authState.isAuthenticated = false;
@@ -83,6 +69,8 @@ export {
     login,
     logout,
 };
+
+
 
 // ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // this service SHOULD NOT appear in accountAPI.js
