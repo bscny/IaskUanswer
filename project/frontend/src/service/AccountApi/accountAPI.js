@@ -22,13 +22,8 @@ async function signup(userInfo) {
         }        
         
         const response = await apiClient.post('/User/post-user', userInfo);
-        
-    if (response.status === 201) {
-            authState.isAuthenticated = true;
-            localStorage.setItem('isAuthenticated', 'true');
-            localStorage.setItem('userdata', JSON.stringify(response.data));
-        }
         return response;
+        
     } catch (error) {
         console.error('Signup error:', error);
         throw error;
@@ -42,14 +37,13 @@ async function login(userInfo){
             Email: userInfo.account, 
             Password: userInfo.password
         };     
-        console.log('Sending login request with credentials:', credentials);
+        //console.log('Sending login request with credentials:', credentials);
         const response = await apiClient.post('/User/login', credentials);
-        console.log('Login response:', response);
-
+        //console.log('Login response:', response);
         if (response.status === 200) {
             authState.isAuthenticated = true;
             localStorage.setItem('isAuthenticated', 'true');
-            localStorage.setItem('userdata', JSON.stringify(response.data.user));
+            localStorage.setItem('userdata', JSON.stringify(response.data));
         }
         return response;
     } catch (error) {

@@ -53,7 +53,7 @@ export default {
         getLoggedUsername() {
             let userdata = localStorage.getItem("userdata");
             if (userdata) {
-                return JSON.parse(userdata).username;
+                return JSON.parse(userdata).user;
             }
 
             return "unknown";
