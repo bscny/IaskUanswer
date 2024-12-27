@@ -5,62 +5,38 @@ export const authState = reactive({
     isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
 });
 
-export async function signup(userInfo) {
+//backend user format
+// userI = {
+//     Id : ,
+//     Name : , 
+//     Email : , 
+//     Password : 
+// } 
+async function signup(userInfo) {
     try {
-        // Call Backend API (Create User)
-        const response = await apiClient.post(`User/post-user`, 
-            {
-                Name: userInfo.username,
-                Email: userInfo.email,
-                Password: userInfo.password
-            }, 
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-    
-            if (response.status === 201) {
-                authState.isAuthenticated = true;
-                localStorage.setItem('isAuthenticated', 'true');
-                localStorage.setItem('userdata', JSON.stringify(response.data));
-            }
-    
-            return response;
-
-        // fake data:
-        // const fakeData = {
-        //     id: 1,
-        //     account: userInfo.account,
-        //     password: userInfo.password,
-        //     username: userInfo.username
-        // };
-
-        // const fakeAxiosResponse = {
-        //     data: fakeData,
-        //     status: 200,
-        //     statusText: 'OK',
-        // };
-
-        // if (fakeAxiosResponse.status === 200) {
-        //     authState.isAuthenticated = true;
-        //     let item = {
-        //         isAuthenticated: true,
-        //         userID: fakeAxiosResponse.data.id,
-        //         username: fakeAxiosResponse.data.username,
-        //     }
-
-        //     localStorage.setItem('userdata', JSON.stringify(item));
-
-        // }
-
-        // return fakeAxiosResponse;
+        // change userInfo to match backend
+        userInfo = {
+            Name : userInfo.username, 
+            Email : userInfo.email, 
+            Password : userInfo.password
+        }        
+        console.log('Sending signup request with userInfo:', userInfo);
+        const response = await apiClient.post('/User/post-user', userInfo);
+        console.log('Signup response:', response);
+    if (response.status === 201) {
+            authState.isAuthenticated = true;
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userdata', JSON.stringify(response.data));
+        }
+        return response;
     } catch (error) {
-        console.error(error);
+        console.error('Signup error:', error);
         throw error;
     }
 }
-export async function login(data) {
+
+
+async function login(data) {
     try {
         // Call Backend API
         // const response = await api.get('/User/${Email}/${Password}'); // u didnt write this in your backend tho Mr.nono  
@@ -97,10 +73,16 @@ export async function login(data) {
     }
 }
 
-export async function logout() {
+async function logout() {
     authState.isAuthenticated = false;
     localStorage.removeItem('userdata');
 }
+
+export {
+    signup,
+    login,
+    logout,
+};
 
 // ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // this service SHOULD NOT appear in accountAPI.js
