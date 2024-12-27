@@ -20,9 +20,9 @@ async function signup(userInfo) {
             Email : userInfo.email, 
             Password : userInfo.password
         }        
-        console.log('Sending signup request with userInfo:', userInfo);
+        
         const response = await apiClient.post('/User/post-user', userInfo);
-        console.log('Signup response:', response);
+        
     if (response.status === 201) {
             authState.isAuthenticated = true;
             localStorage.setItem('isAuthenticated', 'true');
