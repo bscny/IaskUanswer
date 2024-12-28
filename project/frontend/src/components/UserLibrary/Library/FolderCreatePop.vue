@@ -27,34 +27,24 @@ export default {
     data() {
         return {
             folderName: '',
-
-            // fake data
-            userID: 1,
+            userId: JSON.parse(localStorage.getItem('userdata')).user.UserId
         }
     },
 
     methods: {
         CreationDone() {
-            if(this.folderName != ''){
-                // call backend API to insert
-    
-                // call backend API to retrieve the newly created record
-                // fake data:
-                let newRecord = {
-                    Folder_id: 10,
+            if (this.folderName != '') {
+                const newFolder = {
                     Folder_name: this.folderName,
-                    User_id: this.userID,
-                    Parent_folder_id: null,
-                }
-    
-                // append empty quiz to folder object
-                Object.assign(newRecord, {
+                    User_id: this.userId,
+                    Parent_folder_id: null
+                };
+                Object.assign(newFolder, {
                     quizes: null,
                     show: false
                 });
-    
-                this.$emit("Created", newRecord);
-            }else{
+                this.$emit("Created", newFolder);
+            } else {
                 this.$emit("Cancel");
             }
         },
