@@ -14,17 +14,17 @@ os.makedirs(os.path.dirname(output_path), exist_ok=True)
 faker = Faker()
 
 # 設定生成資料數量
-num_users = 10
-num_friendships = 15
-num_folders = 8
-num_quizzes = 10
-num_records = 12
-num_fill_blank_questions = 10
-num_single_open_questions = 10
-num_tf_questions = 10
-num_fb_determinations = 5
-num_so_determinations = 5
-num_tf_determinations = 5
+num_users = 15
+num_friendships = 20
+num_folders = 40
+num_quizzes = 50
+num_records = 50
+num_fill_blank_questions = 40
+num_single_open_questions = 40
+num_tf_questions = 40
+num_fb_determinations = 40
+num_so_determinations = 40
+num_tf_determinations = 40
 
 
 # 建立檔案
