@@ -31,7 +31,7 @@ async function CreateFolder(BodyData) {
 }
 
 // update services
-async function UpdateFolder(BodyData, FolderId) {
+async function UpdateFolder(FolderId, BodyData) {
     const [records] = await db.query(`update folder
         set
         Folder_name = ?,
