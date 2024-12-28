@@ -14,7 +14,7 @@
             </div>
 
             <div v-if="folder.show">
-                <ul v-for="quiz in folder.quizes" :key="quiz.Quiz_id"  @click="DisplayQuestions(quiz)">
+                <ul v-for="quiz in folder.quizzes" :key="quiz.Quiz_id"  @click="DisplayQuestions(quiz)">
                     <div class="quiz">
                         {{ quiz.Quiz_name }}
                     </div>
