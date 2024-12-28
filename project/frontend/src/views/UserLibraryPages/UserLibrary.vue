@@ -43,6 +43,8 @@ import {
 
 //import FolderAPI
 import { 
+    getAllFolders,
+    getSpecUserFolder,
     createFolder, 
     updateFolder, 
     deleteFolder 
@@ -225,62 +227,69 @@ export default{
 
     },
 
-    created(){
-        // get folders from given userId
-        // fake data:
-        this.folders = [
-            {
-                Folder_id: 1,
-                Folder_name: "test folder 1",
-                User_id: 1,
-                Parent_folder_id: null,
-            },
-            {
-                Folder_id: 2,
-                Folder_name: "test folder 2",
-                User_id: 1,
-                Parent_folder_id: null
-            },
-            {
-                Folder_id: 3,
-                Folder_name: "test folder 3",
-                User_id: 1,
-                Parent_folder_id: null
-            },
-        ];
+    // created(){
+    //     // get folders from given userId
+    //     // fake data:
+    //     this.folders = [
+    //         {
+    //             Folder_id: 1,
+    //             Folder_name: "test folder 1",
+    //             User_id: 1,
+    //             Parent_folder_id: null,
+    //         },
+    //         {
+    //             Folder_id: 2,
+    //             Folder_name: "test folder 2",
+    //             User_id: 1,
+    //             Parent_folder_id: null
+    //         },
+    //         {
+    //             Folder_id: 3,
+    //             Folder_name: "test folder 3",
+    //             User_id: 1,
+    //             Parent_folder_id: null
+    //         },
+    //     ];
 
-        // for each folder get quizes in it, get quizes from given folderId
-        let i = 1;
-        this.folders.forEach(async function (folder) {
-            // actions for each elements in folders
-            // get quizes belongs to each folder from backend API
-            const quizes = [
-                {
-                    Quiz_id: i,
-                    Quiz_name: `test quiz 1 in ${folder.Folder_name}`,
-                    Quiz_description: "testetstetetetst",
-                    Is_public: true,
-                    Folder_id: folder.Folder_id
-                },
-                {
-                    Quiz_id: i + 1,
-                    Quiz_name: `test quiz 2 in ${folder.Folder_name}`,
-                    Quiz_description: "test 22222",
-                    Is_public: true,
-                    Folder_id: folder.Folder_id
-                },
-            ];
+    //     // for each folder get quizes in it, get quizes from given folderId
+    //     let i = 1;
+    //     this.folders.forEach(async function (folder) {
+    //         // actions for each elements in folders
+    //         // get quizes belongs to each folder from backend API
+    //         const quizes = [
+    //             {
+    //                 Quiz_id: i,
+    //                 Quiz_name: `test quiz 1 in ${folder.Folder_name}`,
+    //                 Quiz_description: "testetstetetetst",
+    //                 Is_public: true,
+    //                 Folder_id: folder.Folder_id
+    //             },
+    //             {
+    //                 Quiz_id: i + 1,
+    //                 Quiz_name: `test quiz 2 in ${folder.Folder_name}`,
+    //                 Quiz_description: "test 22222",
+    //                 Is_public: true,
+    //                 Folder_id: folder.Folder_id
+    //             },
+    //         ];
             
-            // append quizes and show indicator in folder object
-            Object.assign(folder, {
-                quizes: quizes,
-                show: false
-            });
+    //         // append quizes and show indicator in folder object
+    //         Object.assign(folder, {
+    //             quizes: quizes,
+    //             show: false
+    //         });
 
-            i += 2;
-        });
+    //         i += 2;
+    //     });
+    // },
+    async created() {
+        try {
+            const userId = JSON.parse(localStorage.getItem('userdata')).user.UserId;        
+            this.folders = await getSpecUserFolder(userId);
+        } catch (error) {
+            console.error("Failed to fetch folders:", error);
+        }
     },
-
     mounted(){
 
     },

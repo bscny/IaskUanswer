@@ -45,7 +45,7 @@ export default {
                 password: null,
             },
             isSubmitting: false,
-            successMessage: null // 用于存储成功消息
+            successMessage: null 
         };
     },
     methods: {
@@ -92,7 +92,7 @@ export default {
                     this.successMessage = "Signup successful! Redirecting to homepage...";
                     setTimeout(() => {
                         this.$router.push({ name: 'Home' });
-                    }, 2000); // 2秒后重定向到主页
+                    }, 2000); // after 2 seconds go to homepage
                 }
                 this.form.username = "";
                 this.form.email = "";

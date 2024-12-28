@@ -6,9 +6,15 @@ async function UserLoginConfirmation(UserData) {
         `SELECT * FROM user WHERE (Name = ? OR Email = ?) AND Password = ?`, 
         [Name, Email, Password]
     );
-    return records.length > 0 ? records[0].Name : false;
+    if (records.length > 0) {
+        return {
+            Name: records[0].Name,
+            UserId: records[0].User_id
+        };
+    } else {
+        return false;
+    }
 }
-
 // read services
 async function GetAllUser() {
     const [records] = await db.query(`SELECT * FROM user`);
