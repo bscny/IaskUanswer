@@ -34,6 +34,12 @@
 </template>
 
 <script>
+
+import { 
+    deleteQuiz,
+    updateQuiz
+
+} from '@/service/LibraryApi/QuizAPI.js';
 export default {
     name: "QuizEditBlock",
     components: {},
@@ -57,18 +63,34 @@ export default {
 
         async DeleteQuiz(){
             // call backend API to delete quiz
-
-            this.$emit("Deleted");
+            try {
+                await deleteQuiz(this.quiz.Quiz_id);
+                this.$emit("Deleted");
+            } catch (error) {
+                console.error("Failed to delete quiz:", error);
+            }
         },
 
         async EditionDone(){
-            if (this.quiz.Quiz_name != "" && this.quiz.Quiz_name != this.originalName && 
-                this.quiz.Is_public != this.originalIsPublic && this.quiz.Quiz_description != this.originalDescription) {
-                // call backend API to update quiz
-
+            if (this.originalName != "" && 
+                (this.quiz.Quiz_name != this.originalName || 
+                this.quiz.Is_public != this.originalIsPublic || 
+                this.quiz.Quiz_description != this.originalDescription)) {
+                try {
+                    const quizData = {
+                        Quiz_name: this.originalName,
+                        Is_public: this.originalIsPublic,
+                        Folder_id: this.quiz.Folder_id,
+                        Quiz_description: this.originalDescription,
+                    };
+                    await updateQuiz(this.quiz.Quiz_id, quizData);
+                    this.$emit("edited");
+                } catch (error) {
+                    console.error("Failed to update quiz:", error);
+                }
+            } else {
+                this.$emit("edited");
             }
-
-            this.$emit("Edited");
         },
     },
 }

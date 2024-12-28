@@ -8,6 +8,24 @@ async function getQuizzesByUserFolder(folderId) {
     return response.data;
 }
 
+async function CreateQuiz(quizData) {
+    const response = await api.post(`/Quiz/post-quiz/`, quizData);
+    return response.data;
+}
+
+async function updateQuiz(quizId, quizData) {
+    const response = await api.put(`/Quiz/put-quiz/${quizId}`, quizData);
+    return response.data;
+}
+
+async function deleteQuiz(quizId) {
+    const response = await api.delete(`/Quiz/delete-quiz/${quizId}`);
+    return response.data;
+}
+
 export {
-    getQuizzesByUserFolder
+    getQuizzesByUserFolder,
+    CreateQuiz,
+    updateQuiz,
+    deleteQuiz
 }

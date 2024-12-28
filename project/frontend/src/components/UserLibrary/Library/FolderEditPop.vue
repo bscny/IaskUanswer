@@ -40,6 +40,10 @@
 </template>
 
 <script>
+import { 
+    CreateQuiz
+
+} from '@/service/LibraryApi/QuizAPI.js';
 
 export default {
     name: 'FolderEditPop',
@@ -76,46 +80,58 @@ export default {
     
                 if (this.quizName != "") {
                     // call backend API to create quiz under this folder
+                    try {
+                        const quizData = {
+                            Quiz_name: this.quizName,
+                            Is_public: true,
+                            Folder_id: this.folder.Folder_id,
+                            Quiz_description: this.quizDescription,
+                        };
+                        const response = CreateQuiz(quizData);
+                        console.log("Quiz created with ID:", response.quizId);
+                        
+                        // call backend API to get created quiz
+                        // fake data:
+                        const quiz = {
+                            Quiz_id: response.quizId,
+                            Quiz_name: this.quizName,
+                            Quiz_description: this.quizDescription,
+                            Is_public: true,
+                            Folder_id: this.folder.Folder_id
+                        }
     
-                    // call backend API to get created quiz
-                    // fake data:
-                    const quiz = {
-                        Quiz_id: 10,  // auto increment
-                        Quiz_name: this.quizName,
-                        Quiz_description: this.quizDescription,
-                        is_public: true,
-                        Folder_id: this.folder.Folder_id
+                        // append quizzes and show indicator in folder object
+                        if (this.folder.quizzes == null) {
+                            // to make sure to treat this.folder.quizzes as an array
+                            this.folder.quizzes = [];
+                        }
+    
+                        this.folder.quizzes.push(quiz);
+                        Object.assign(newRecord, {
+                            quizzes: this.folder.quizzes,
+                            show: false
+                        });
+                    } catch (error) {
+                        console.error("Failed to create quiz:", error);
                     }
-    
-                    // append quizes and show indicator in folder object
-                    if (this.folder.quizes == null) {
-                        // to make sure to treat this.folder.quizes as an array
-                        this.folder.quizes = [];
-                    }
-    
-                    this.folder.quizes.push(quiz);
-                    Object.assign(newRecord, {
-                        quizes: this.folder.quizes,
-                        show: false
-                    });
                 } else {
-                    if (this.folder.quizes == null) {
+                    if (this.folder.quizzes == null) {
                         // append empty quiz to folder object
                         Object.assign(newRecord, {
-                            quizes: null,
+                            quizzes: null,
                             show: false
                         });
                     } else {
-                        // asign original quizes back
+                        // assign original quizzes back
                         Object.assign(newRecord, {
-                            quizes: this.folder.quizes,
+                            quizzes: this.folder.quizzes,
                             show: false
                         });
                     }
                 }
 
                 this.$emit("Edited", newRecord);
-            }else{
+            } else {
                 this.$emit("Cancel");
             }
         },
@@ -123,7 +139,7 @@ export default {
         Delete() {
             const deletedFolderID = this.folder.Folder_id;
             // call backend API to delete folder
-
+            
             this.$emit("Deleted", deletedFolderID);
         },
 
