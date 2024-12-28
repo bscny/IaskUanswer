@@ -3,7 +3,11 @@ import api from '@/service/ApiClient';
 // see FetchQuestion() and Created() in UserLibrary.vue to know what api to call
 
 
-export async function getQuizzesByFolder(folderId) {
-    const response = await api.get(`/Quiz/folder/${folderId}`);
+async function getQuizzesByUserFolder(folderId) {
+    const response = await api.get(`/Quiz/FolderId/${folderId}`);
     return response.data;
+}
+
+export {
+    getQuizzesByUserFolder
 }
