@@ -21,7 +21,7 @@ async function signup(userInfo) {
             Password : userInfo.password
         }        
         
-        const response = await apiClient.post('/User/post-user', userInfo);
+        const response = await apiClient.post('/User/post-user/', userInfo);
         return response;
         
     } catch (error) {

@@ -28,7 +28,9 @@
 </template>
 
 <script>
-import { signup } from '@/service/AccountApi/accountAPI';
+import { 
+    signup 
+} from '@/service/AccountApi/accountAPI';
 
 export default {
     name: "Signup",
@@ -85,7 +87,8 @@ export default {
         async submitForm() {
             if (!this.validateForm()) return;
             this.isSubmitting = true;
-
+            
+            //call signup API，if success, redirect to homepage
             try {
                 const response = await signup(this.form);
                 if (response.status === 201) {

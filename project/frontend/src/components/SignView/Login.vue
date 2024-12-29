@@ -23,6 +23,7 @@
 </template>
 
 <script>
+// call API to get user/check data
 import { 
     authState,
     login 
@@ -45,6 +46,7 @@ export default {
 
         };
     },
+    // get user data from local storage so that user can login directly
     beforeCreate(){
         const userdata = localStorage.getItem("userdata");
         if(userdata){
