@@ -77,15 +77,25 @@ export default {
 
             this.isSubmitting = true;
             try {
+                const userInfo = {
+                    Name: this.form.account, 
+                    Email: this.form.account, 
+                    Password: this.form.password
+                };     
                 // call API to get user/check data
-                const response = await login(this.form);
-
+                const response = await login(userInfo);
                 if (response.status === 200) {
-                    alert("Login successful!\n");
-                    this.$router.push({
-                        name: 'Home'
-                    });
+                    this.$emit('loginSuccess', response.data);
                 }
+                // if (response.status === 200) {
+                //     alert("Login successful!\n");
+                //     authState.isAuthenticated = true;
+                //     localStorage.setItem('isAuthenticated', 'true');
+                //     localStorage.setItem('userdata', JSON.stringify(response.data));
+                //     this.$router.push({
+                //         name: 'Home'
+                //     });
+                // }
 
                 // Reset the form
                 this.form.account = "";

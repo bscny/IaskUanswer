@@ -32,21 +32,25 @@ async function signup(userInfo) {
 
 async function login(userInfo){
     try {
-        const credentials = {
-            Name: userInfo.account, 
-            Email: userInfo.account, 
-            Password: userInfo.password
-        };     
-        
-        const response = await apiClient.post('/User/login', credentials);
-        
-        //store user data in local storage(so that we can access userId)
-        if (response.status === 200) {
-            authState.isAuthenticated = true;
-            localStorage.setItem('isAuthenticated', 'true');
-            localStorage.setItem('userdata', JSON.stringify(response.data));
-        }
+        const response = await apiClient.post('/User/login', userInfo);
+        //console.error('Login response:', response);
         return response;
+        
+        // const credentials = {
+        //     Name: userInfo.account, 
+        //     Email: userInfo.account, 
+        //     Password: userInfo.password
+        // };     
+        
+        // const response = await apiClient.post('/User/login', credentials);
+        // console.error('Login response:', response.data);
+        // //store user data in local storage(so that we can access userId)
+        // if (response.status === 200) {
+        //     authState.isAuthenticated = true;
+        //     localStorage.setItem('isAuthenticated', 'true');
+        //     localStorage.setItem('userdata', JSON.stringify(response.data));
+        // }
+        // return response;
     } catch (error) {
         console.error('Login error:', error);
         throw error;
