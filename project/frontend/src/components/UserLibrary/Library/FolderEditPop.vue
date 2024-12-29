@@ -45,6 +45,12 @@ import {
 
 } from '@/service/LibraryApi/QuizAPI.js';
 
+//import FolderAPI
+import { 
+    updateFolder, 
+    deleteFolder 
+} from '@/service/LibraryApi/FolderAPI';
+
 export default {
     name: 'FolderEditPop',
     components: {},
@@ -62,10 +68,10 @@ export default {
     },
 
     methods: {
-        EditionDone() {
+        async EditionDone() {
             if((this.folderName != "" && this.folderName != this.folder.Folder_name) || (this.quizName != "" && this.quizDescription != "")){
                 // call backend API to update folder
-    
+                
                 // call backend API to retrieve the record of updated folder
                 // fake data:
                 let newRecord;
@@ -77,7 +83,7 @@ export default {
                         Parent_folder_id: this.folder.Parent_folder_id
                     }
                 }
-    
+                await updateFolder(newRecord.Folder_id, newRecord);
                 if (this.quizName != "") {
                     // call backend API to create quiz under this folder
                     try {

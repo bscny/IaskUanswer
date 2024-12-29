@@ -27,11 +27,13 @@ export default {
     data() {
         return {
             folderName: '',
+            //parse the user id from the local storage
             userId: JSON.parse(localStorage.getItem('userdata')).user.UserId
         }
     },
 
     methods: {
+        //emit the folder name to the parent component
         CreationDone() {
             if (this.folderName != '') {
                 const newFolder = {
