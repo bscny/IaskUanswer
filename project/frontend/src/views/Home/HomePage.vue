@@ -14,8 +14,8 @@ import SideBar from '@/components/Home/SideBar.vue';
 import QuizGrid from '@/components/Home/QuizGrid.vue';
 
 import {
-    GetRandQuizes,
-} from "@/service/AccountApi/accountAPI";
+    GetRandQuiz
+} from "@/service/LibraryApi/QuizAPI";
 
 export default {
     components: {
@@ -24,12 +24,14 @@ export default {
 
     data(){
         return{
-            quizzes: null,
+            quizzes: [],
         };
     },
 
     async beforeCreate() {
-        this.quizzes = await GetRandQuizes();
+        const response = await GetRandQuiz(9);
+        this.quizzes = response.quizzes;
+
     },
 }
 </script>

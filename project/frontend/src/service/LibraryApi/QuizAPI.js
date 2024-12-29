@@ -3,6 +3,20 @@ import api from '@/service/ApiClient';
 // see FetchQuestion() and Created() in UserLibrary.vue to know what api to call
 
 
+async function GetRandQuiz(number) {
+    const response = await api.get(`/Quiz/random-quizzes/${number}`);
+    
+    const quizzes = response.data.map(quiz => ({
+        id: quiz.Quiz_id,
+        title: quiz.Quiz_name,
+        description: quiz.Quiz_description
+    }));
+   
+    return { quizzes };
+}
+
+
+
 async function getQuizzesByUserFolder(folderId) {
     const response = await api.get(`/Quiz/FolderId/${folderId}`);
     return response.data;
@@ -24,6 +38,7 @@ async function deleteQuiz(quizId) {
 }
 
 export {
+    GetRandQuiz,
     getQuizzesByUserFolder,
     CreateQuiz,
     updateQuiz,
