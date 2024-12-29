@@ -91,6 +91,11 @@ export default{
             try {
                 const createdFolder = await createFolder(newFolder);
                 this.folders.push(createdFolder);
+                for (let i = 0; i < this.folders.length; i++) {
+                    if (this.folders[i].Folder_id == newFolder.Folder_id) {
+                        this.folders[i] = newFolder;
+                    }
+                }
                 alert("Folder Created!");
                 this.canCreateFolder = false;
             } catch (error) {
@@ -106,10 +111,10 @@ export default{
 
         async FolderEdited(editedFolder){
             try {
-                const updatedFolder = await updateFolder(editedFolder.Folder_id, editedFolder);
+                await updateFolder(editedFolder.Folder_id, editedFolder);
                 for (let i = 0; i < this.folders.length; i++) {
-                    if (this.folders[i].Folder_id == updatedFolder.Folder_id) {
-                        this.folders[i] = updatedFolder;
+                    if (this.folders[i].Folder_id == editedFolder.Folder_id) {
+                        this.folders[i] = editedFolder;
                     }
                 }
                 alert("Change Saved!");
