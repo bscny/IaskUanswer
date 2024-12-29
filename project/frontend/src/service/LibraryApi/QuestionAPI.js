@@ -12,8 +12,8 @@ async function createQuestion(questionData) {
     return response.data;
 }
 
-async function updateQuestion(questionId, questionData) {
-    const response = await api.put(`/Question/soque/put/${questionId}`, questionData);
+async function updateQuestion(questionData) {
+    const response = await api.put(`/Question/soque/put/${questionData.SO_id}`, questionData);
     return response.data;
 }
 

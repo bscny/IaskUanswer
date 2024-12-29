@@ -10,11 +10,10 @@
     </div>
 
     <div v-if="canEditFolder">
-        <FolderEditPop  :folder="curLookingFolder" 
-                        @Cancel="CancelAction()" 
-                        @Edited="FolderEdited($event)"
-                        @CreateQuiz="AddQuizToFolder($event)" 
-                        @Deleted="FolderDeleted($event)" />
+        <FolderEditPop :folder="curLookingFolder"   @Cancel="CancelAction()" 
+                                                    @Edited="FolderEdited($event)"
+                                                    @CreateQuiz="AddQuizToFolder($event)" 
+                                                    @Deleted="FolderDeleted($event)" />
     </div>
 
     <div class="display-area" v-if="curLookingQuiz != null">
@@ -90,14 +89,11 @@ export default {
 
         async FolderCreated(newFolder) {
             try {
-                const createdFolder = await createFolder(newFolder);
-                this.folders.push(createdFolder);
-                for (let i = 0; i < this.folders.length; i++) {
-                    if (this.folders[i].Folder_id == newFolder.Folder_id) {
-                        this.folders[i] = newFolder;
-                    }
-                }
+                await createFolder(newFolder);
                 alert("Folder Created!");
+
+                await this.FetchFolders();
+
                 this.canCreateFolder = false;
             } catch (error) {
                 console.error("Failed to create folder:", error);
@@ -146,6 +142,7 @@ export default {
                     }
                 }
 
+                this.canEditFolder = false;
             } catch (error) {
                 console.error("failed to add quiz to folder");
             }
@@ -188,6 +185,29 @@ export default {
             this.canEditFolder = false;
         },
 
+        async FetchFolders() {
+            try {
+                const userId = JSON.parse(localStorage.getItem('userdata')).user.UserId;
+                this.folders = await getSpecUserFolder(userId);
+                // for each folder get quizes in it, get quizes from given folderId
+
+                for (const folder of this.folders) {
+                    try {
+                        const quizzes = await getQuizzesByUserFolder(folder.Folder_id);
+                        // append quizzes and show indicator in folder object
+                        Object.assign(folder, {
+                            quizzes: quizzes,
+                            show: false,
+                        });
+                    } catch (error) {
+                        console.error(`Failed to fetch quizzes for folder ${folder.Folder_id}:`, error);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch folders:", error);
+            }
+        },
+
         async FetchQuestion() {
             try {
                 const questions = await getQuestionsByQuiz(this.curLookingQuiz.Quiz_id);
@@ -223,26 +243,7 @@ export default {
     },
 
     async created() {
-        try {
-            const userId = JSON.parse(localStorage.getItem('userdata')).user.UserId;
-            this.folders = await getSpecUserFolder(userId);
-            //     // for each folder get quizes in it, get quizes from given folderId
-
-            for (const folder of this.folders) {
-                try {
-                    const quizzes = await getQuizzesByUserFolder(folder.Folder_id);
-                    // append quizzes and show indicator in folder object
-                    Object.assign(folder, {
-                        quizzes: quizzes,
-                        show: false,
-                    });
-                } catch (error) {
-                    console.error(`Failed to fetch quizzes for folder ${folder.Folder_id}:`, error);
-                }
-            }
-        } catch (error) {
-            console.error("Failed to fetch folders:", error);
-        }
+        this.FetchFolders();
     },
 }
 </script>

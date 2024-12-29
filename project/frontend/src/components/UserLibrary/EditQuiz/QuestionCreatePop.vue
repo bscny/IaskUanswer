@@ -39,9 +39,6 @@
 </template>
 
 <script>
-import { 
-    createQuestion 
-} from '@/service/LibraryApi/QuestionAPI';
 
 export default {
     name: 'QuestionCreatePop',
@@ -74,10 +71,7 @@ export default {
         CreationDone() {
             if (this.body != "" && this.ans != "" && this.optionA != "" &&
                 this.optionB != "" && this.optionC != "" && this.points != null) {
-                // call backend API to insert new question
-      
-                // call backend API to retrieve the newly created record
-                // fake data:
+                
                 let newRecord = {
                     Q_number: this.questions.length + 1,
                     Body: this.body, 
@@ -88,9 +82,6 @@ export default {
                     OptionC: this.optionC,
                     Quiz_id: this.quiz.Quiz_id
                 }
-                const response = createQuestion(newRecord);
-                console.log("Question created with ID:", response.SO_id);
-
 
                 this.$emit("Created", newRecord);
             }else{

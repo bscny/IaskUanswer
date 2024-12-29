@@ -61,7 +61,7 @@ export default {
         async EditionDone() {
             if ((this.folderName != "" && this.folderName != this.folder.Folder_name) || (this.quizName != "" && this.quizDescription != "")) {
                 let newFolder;
-                if (this.folderName != "") {
+                if (this.folderName != "" && this.folderName != this.folder.Folder_name) {
                     newFolder = {
                         Folder_id: this.folder.Folder_id,
                         Folder_name: this.folderName,
@@ -71,6 +71,8 @@ export default {
                         quizzes: this.folder.quizzes,
                         show: this.folder.show
                     }
+
+                    this.$emit("Edited", newFolder);
                 }
 
                 if (this.quizName != "") {
@@ -85,7 +87,6 @@ export default {
                     this.$emit("CreateQuiz", quizData);
                 }
 
-                this.$emit("Edited", newFolder);
             } else {
                 this.$emit("Cancel");
             }

@@ -27,8 +27,8 @@ async function CreateQuiz(quizData) {
     return response.data;
 }
 
-async function updateQuiz(quizId, quizData) {
-    const response = await api.put(`/Quiz/put-quiz/${quizId}`, quizData);
+async function updateQuiz(quizData) {
+    const response = await api.put(`/Quiz/put-quiz/${quizData.Quiz_id}`, quizData);
     return response.data;
 }
 
