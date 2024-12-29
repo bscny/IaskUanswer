@@ -39,6 +39,9 @@
 </template>
 
 <script>
+import { 
+    createQuestion 
+} from '@/service/LibraryApi/QuestionAPI';
 
 export default {
     name: 'QuestionCreatePop',
@@ -46,7 +49,10 @@ export default {
 
     props: {
         quiz: Object,
-        questions: Array,
+        questions: {
+            type: Array,
+            default: () => []
+        }
     },
 
     data() {
@@ -65,29 +71,32 @@ export default {
             this.$emit("Cancel");
         },
 
-        CreationDone() {
-            if (this.body != "" && this.ans != "" && this.optionA != "" &&
-                this.optionB != "" && this.optionC != "" && this.points != null) {
-                // call backend API to insert new question
+        async  CreationDone() {
+            return this.questions.length;
+            // if (this.body != "" && this.ans != "" && this.optionA != "" &&
+            //     this.optionB != "" && this.optionC != "" && this.points != null) {
+            //     // call backend API to insert new question
+      
+            //     // call backend API to retrieve the newly created record
+            //     // fake data:
+            //     let newRecord = {
+            //         Q_number: this.questions.length + 1,
+            //         Body: this.body, 
+            //         Points: this.points,
+            //         Answer: this.ans,
+            //         OptionA: this.optionA,
+            //         OptionB: this.optionB,
+            //         OptionC: this.optionC,
+            //         Quiz_id: this.quiz.Quiz_id
+            //     }
+            //     const response = await createQuestion(questionData);
+            //     console.log("Question created with ID:", response.SO_id);
 
-                // call backend API to retrieve the newly created record
-                // fake data:
-                let newRecord = {
-                    SO_id: 10,
-                    Q_number: this.questions.length + 1,
-                    Body: this.body, 
-                    Points: this.points,
-                    Answer: this.ans,
-                    OptionA: this.optionA,
-                    OptionB: this.optionB,
-                    OptionC: this.optionC,
-                    Quiz_id: this.quiz.Quiz_id
-                }
 
-                this.$emit("Created", newRecord);
-            }else{
-                this.$emit("Cancel");
-            }
+            //     this.$emit("Created", newRecord);
+            // }else{
+            //     this.$emit("Cancel");
+            // }
         }
     },
 }
