@@ -91,7 +91,7 @@ export default {
             //call signup API，if success, redirect to homepage
             try {
                 const response = await signup(this.form);
-                if (response.status === 201) {
+                if (response.status === 200) {
                     alert("Signup successful! Redirecting to homepage...");
                     this.$router.push({ name: 'Home' });
                 }

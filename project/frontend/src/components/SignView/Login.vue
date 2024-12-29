@@ -87,15 +87,6 @@ export default {
                 if (response.status === 200) {
                     this.$emit('loginSuccess', response.data);
                 }
-                // if (response.status === 200) {
-                //     alert("Login successful!\n");
-                //     authState.isAuthenticated = true;
-                //     localStorage.setItem('isAuthenticated', 'true');
-                //     localStorage.setItem('userdata', JSON.stringify(response.data));
-                //     this.$router.push({
-                //         name: 'Home'
-                //     });
-                // }
 
                 // Reset the form
                 this.form.account = "";

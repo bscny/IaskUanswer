@@ -33,7 +33,7 @@ async function GetSpecificUser(UserId) {
 async function CreateUser(UserData) {
     const { Name, Email, Password } = UserData;
     const result = await db.query(`INSERT INTO user (Name, Email, Password) VALUES (?, ?, ?)`, [Name, Email, Password]);
-    return result.User_id;
+    return result;
 }
 
 // update services
