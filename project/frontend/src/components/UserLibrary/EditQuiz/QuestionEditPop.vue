@@ -43,6 +43,11 @@
 </template>
 
 <script>
+import { 
+    deleteQuestion,
+    updateQuestion 
+} from '@/service/LibraryApi/QuestionAPI';
+
 
 export default {
     name: 'QuestionEditPop',
@@ -77,7 +82,7 @@ export default {
                 !(this.body == this.question.Body && this.ans == this.question.Answer && this.optionA == this.question.OptionA &&
                 this.optionB == this.question.OptionB && this.optionC == this.question.OptionC && this.points == this.question.Points)) {
                 // call backend API to update question
-
+                
                 // call backend API to retrieve the updated record
                 // fake data:
                 let newRecord = {
@@ -91,7 +96,7 @@ export default {
                     OptionC: this.optionC,
                     Quiz_id: this.question.Quiz_id
                 }
-
+                updateQuestion(this.question.SO_id, newRecord);
                 this.$emit("Edited", newRecord);
             }else{
                 this.$emit("Cancel");
@@ -101,7 +106,7 @@ export default {
         Delete(){
             // call backend API to delete this question
             const deletedQuestionNumber = this.question.Q_number;
-
+            deleteQuestion(this.question.SO_id);
             this.$emit("Deleted", deletedQuestionNumber);
         }
     },

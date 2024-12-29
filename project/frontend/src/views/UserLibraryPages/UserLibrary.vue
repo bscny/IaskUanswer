@@ -38,6 +38,10 @@ import {
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
 
 import {
+    getQuestionsByQuiz
+} from '@/service/LibraryApi/QuestionAPI';
+
+import {
     getQuizzesByUserFolder
 } from '@/service/LibraryApi/QuizAPI';
 
