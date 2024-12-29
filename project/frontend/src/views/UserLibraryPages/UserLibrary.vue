@@ -112,10 +112,13 @@ export default{
         async FolderEdited(editedFolder){
             try {
                 await updateFolder(editedFolder.Folder_id, editedFolder);
-                for (let i = 0; i < this.folders.length; i++) {
-                    if (this.folders[i].Folder_id == editedFolder.Folder_id) {
-                        this.folders[i] = editedFolder;
-                    }
+                const index = this.folders.findIndex(folder => folder.Folder_id === editedFolder.Folder_id);
+                if (index !== -1) {
+                    this.folders = [
+                        ...this.folders.slice(0, index),
+                        editedFolder,
+                        ...this.folders.slice(index + 1),
+                    ];
                 }
                 alert("Change Saved!");
                 this.canEditFolder = false;

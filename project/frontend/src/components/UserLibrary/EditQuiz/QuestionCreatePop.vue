@@ -71,7 +71,7 @@ export default {
             this.$emit("Cancel");
         },
 
-        async  CreationDone() {
+        CreationDone() {
             if (this.body != "" && this.ans != "" && this.optionA != "" &&
                 this.optionB != "" && this.optionC != "" && this.points != null) {
                 // call backend API to insert new question
@@ -88,7 +88,7 @@ export default {
                     OptionC: this.optionC,
                     Quiz_id: this.quiz.Quiz_id
                 }
-                const response = await createQuestion(newRecord);
+                const response = createQuestion(newRecord);
                 console.log("Question created with ID:", response.SO_id);
 
 
