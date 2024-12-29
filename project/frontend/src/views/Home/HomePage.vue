@@ -31,7 +31,6 @@ export default {
     async beforeCreate() {
         const response = await GetRandQuiz(9);
         this.quizzes = response.quizzes;
-
     },
 }
 </script>
