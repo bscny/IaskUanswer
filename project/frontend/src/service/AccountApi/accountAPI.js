@@ -37,9 +37,10 @@ async function login(userInfo){
             Email: userInfo.account, 
             Password: userInfo.password
         };     
-        //console.log('Sending login request with credentials:', credentials);
+        
         const response = await apiClient.post('/User/login', credentials);
-        //console.log('Login response:', response);
+        
+        //store user data in local storage(so that we can access userId)
         if (response.status === 200) {
             authState.isAuthenticated = true;
             localStorage.setItem('isAuthenticated', 'true');
