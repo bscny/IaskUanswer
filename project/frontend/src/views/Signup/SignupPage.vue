@@ -13,6 +13,11 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import Signup from '@/components/SignView/Signup.vue';
+
+import {
+    signup
+} from '@/service/AccountApi/accountAPI';
+
 export default{
 
     name: 'SignupPage',

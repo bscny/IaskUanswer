@@ -13,6 +13,11 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import Login from '@/components/SignView/Login.vue';
+
+import {
+    login
+} from '@/service/AccountApi/accountAPI';
+
 export default{
 
     name: 'LoginPage',

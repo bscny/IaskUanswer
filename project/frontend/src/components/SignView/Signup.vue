@@ -92,10 +92,8 @@ export default {
             try {
                 const response = await signup(this.form);
                 if (response.status === 201) {
-                    this.successMessage = "Signup successful! Redirecting to homepage...";
-                    setTimeout(() => {
-                        this.$router.push({ name: 'Home' });
-                    }, 2000); // after 2 seconds go to homepage
+                    alert("Signup successful! Redirecting to homepage...");
+                    this.$router.push({ name: 'Home' });
                 }
                 this.form.username = "";
                 this.form.email = "";
