@@ -40,16 +40,6 @@
 </template>
 
 <script>
-import { 
-    CreateQuiz
-
-} from '@/service/LibraryApi/QuizAPI.js';
-
-//import FolderAPI
-import { 
-    updateFolder, 
-    deleteFolder 
-} from '@/service/LibraryApi/FolderAPI';
 
 export default {
     name: 'FolderEditPop',
@@ -69,74 +59,33 @@ export default {
 
     methods: {
         async EditionDone() {
-            if((this.folderName != "" && this.folderName != this.folder.Folder_name) || (this.quizName != "" && this.quizDescription != "")){
-                // call backend API to update folder
-                
-                // call backend API to retrieve the record of updated folder
-                // fake data:
-                let newRecord;
+            if ((this.folderName != "" && this.folderName != this.folder.Folder_name) || (this.quizName != "" && this.quizDescription != "")) {
+                let newFolder;
                 if (this.folderName != "") {
-                    newRecord = {
+                    newFolder = {
                         Folder_id: this.folder.Folder_id,
                         Folder_name: this.folderName,
                         User_id: this.folder.User_id,
-                        Parent_folder_id: this.folder.Parent_folder_id
-                    }
-                }
-                await updateFolder(newRecord.Folder_id, newRecord);
-                if (this.quizName != "") {
-                    // call backend API to create quiz under this folder
-                    try {
-                        const quizData = {
-                            Quiz_name: this.quizName,
-                            Is_public: true,
-                            Folder_id: this.folder.Folder_id,
-                            Quiz_description: this.quizDescription,
-                        };
-                        const response = CreateQuiz(quizData);
-                        console.log("Quiz created with ID:", response.quizId);
-                        
-                        // call backend API to get created quiz
-                        // fake data:
-                        const quiz = {
-                            Quiz_id: response.quizId,
-                            Quiz_name: this.quizName,
-                            Quiz_description: this.quizDescription,
-                            Is_public: true,
-                            Folder_id: this.folder.Folder_id
-                        }
-    
-                        // append quizzes and show indicator in folder object
-                        if (this.folder.quizzes == null) {
-                            // to make sure to treat this.folder.quizzes as an array
-                            this.folder.quizzes = [];
-                        }
-    
-                        this.folder.quizzes.push(quiz);
-                        Object.assign(newRecord, {
-                            quizzes: this.folder.quizzes,
-                            show: false
-                        });
-                    } catch (error) {
-                        console.error("Failed to create quiz:", error);
-                    }
-                } else {
-                    if (this.folder.quizzes == null) {
-                        // append empty quiz to folder object
-                        Object.assign(newRecord, {
-                            quizzes: null,
-                            show: false
-                        });
-                    } else {
-                        // assign original quizzes back
-                        Object.assign(newRecord, {
-                            quizzes: this.folder.quizzes,
-                            show: false
-                        });
+                        Parent_folder_id: this.folder.Parent_folder_id,
+
+                        quizzes: this.folder.quizzes,
+                        show: this.folder.show
                     }
                 }
 
-                this.$emit("Edited", newRecord);
+                if (this.quizName != "") {
+                    // call backend API to create quiz under this folder
+                    const quizData = {
+                        Quiz_name: this.quizName,
+                        Is_public: true,
+                        Folder_id: this.folder.Folder_id,
+                        Quiz_description: this.quizDescription,
+                    };
+
+                    this.$emit("CreateQuiz", quizData);
+                }
+
+                this.$emit("Edited", newFolder);
             } else {
                 this.$emit("Cancel");
             }
@@ -145,7 +94,7 @@ export default {
         Delete() {
             const deletedFolderID = this.folder.Folder_id;
             // call backend API to delete folder
-            
+
             this.$emit("Deleted", deletedFolderID);
         },
 
@@ -306,6 +255,7 @@ export default {
 
     font-size: 2vw;
 }
+
 .quiz-description-input {
     display: block;
     margin: 5vh 1vw;

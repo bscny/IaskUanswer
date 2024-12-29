@@ -1,12 +1,11 @@
 <template>
-    <NavBar/>
-    <LeftBar    :folders="folders"
-                @CreateFolder="SetCreateFolder()"
-                @EditFolder="SetEditFolder($event)"
-                @DisplayQuestions="SetDisplay($event)" />
+    <NavBar />
+    <LeftBar :folders="folders" @CreateFolder="SetCreateFolder()" 
+                                @EditFolder="SetEditFolder($event)"
+                                @DisplayQuestions="SetDisplay($event)" />
 
     <div v-if="canCreateFolder">
-        <FolderCreatePop    @Cancel="CancelAction()"
+        <FolderCreatePop    @Cancel="CancelAction()" 
                             @Created="FolderCreated($event)" />
     </div>
 
@@ -14,12 +13,13 @@
         <FolderEditPop  :folder="curLookingFolder" 
                         @Cancel="CancelAction()" 
                         @Edited="FolderEdited($event)"
+                        @CreateQuiz="AddQuizToFolder($event)" 
                         @Deleted="FolderDeleted($event)" />
     </div>
 
     <div class="display-area" v-if="curLookingQuiz != null">
-        <DisplayQuestion    :quiz="curLookingQuiz"
-                            :questions="curLookingQuestions"
+        <DisplayQuestion    :quiz="curLookingQuiz" 
+                            :questions="curLookingQuestions" 
                             :editMode="false"
                             @EditingQuiz="EditQuiz()" />
     </div>
@@ -32,7 +32,7 @@ import FolderCreatePop from "@/components/UserLibrary/Library/FolderCreatePop.vu
 import FolderEditPop from "@/components/UserLibrary/Library/FolderEditPop.vue";
 import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
 
-import { 
+import {
     useQuizStore,
     useQuestionsStore,
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
@@ -42,18 +42,19 @@ import {
 } from '@/service/LibraryApi/QuestionAPI';
 
 import {
-    getQuizzesByUserFolder
+    getQuizzesByUserFolder,
+    CreateQuiz
 } from '@/service/LibraryApi/QuizAPI';
 
 //import FolderAPI
-import { 
+import {
     getSpecUserFolder,
-    createFolder, 
-    updateFolder, 
-    deleteFolder 
+    createFolder,
+    updateFolder,
+    deleteFolder
 } from '@/service/LibraryApi/FolderAPI';
 
-export default{
+export default {
     name: "UserLibrary",
     components: {
         NavBar,
@@ -63,8 +64,8 @@ export default{
         DisplayQuestion,
     },
 
-    data(){
-        return{
+    data() {
+        return {
             // variables for folder actions
             canCreateFolder: false,
             canEditFolder: false,
@@ -83,11 +84,11 @@ export default{
     },
 
     methods: {
-        SetCreateFolder(){
+        SetCreateFolder() {
             this.canCreateFolder = true;
         },
 
-        async FolderCreated(newFolder){
+        async FolderCreated(newFolder) {
             try {
                 const createdFolder = await createFolder(newFolder);
                 this.folders.push(createdFolder);
@@ -103,13 +104,13 @@ export default{
             }
         },
 
-        async SetEditFolder(folder){
+        async SetEditFolder(folder) {
             this.curLookingFolder = folder;
 
             this.canEditFolder = true;
         },
 
-        async FolderEdited(editedFolder){
+        async FolderEdited(editedFolder) {
             try {
                 await updateFolder(editedFolder.Folder_id, editedFolder);
                 const index = this.folders.findIndex(folder => folder.Folder_id === editedFolder.Folder_id);
@@ -127,7 +128,30 @@ export default{
             }
         },
 
-        async FolderDeleted(deletedFolderID){
+        async AddQuizToFolder(quizData) {
+            // add quiz data to current watching quiz
+            try {
+                await CreateQuiz(quizData);
+
+                // add this quiz to folder array for site rendering
+                for (let i = 0; i < this.folders.length; i++) {
+                    if (this.folders[i].Folder_id == this.curLookingFolder.Folder_id) {
+                        if (this.folders[i].quizzes == null) {
+                            // to make sure to treat this.folder.quizzes as an array
+                            this.folders[i].quizzes = [];
+                        }
+
+                        // append quiz
+                        this.folders[i].quizzes.push(quizData);
+                    }
+                }
+
+            } catch (error) {
+                console.error("failed to add quiz to folder");
+            }
+        },
+
+        async FolderDeleted(deletedFolderID) {
             try {
                 await deleteFolder(deletedFolderID);
                 for (let i = 0; i < this.folders.length; i++) {
@@ -142,13 +166,13 @@ export default{
             }
         },
 
-        async SetDisplay(quiz){
+        async SetDisplay(quiz) {
             this.curLookingQuiz = quiz;
             await this.FetchQuestion();
         },
 
-        EditQuiz(){
-            if(this.curLookingQuiz != null){
+        EditQuiz() {
+            if (this.curLookingQuiz != null) {
                 // store quiz and corresponding question to store
                 this.quizStore.quiz = this.curLookingQuiz;
                 this.questionsStore.questions = this.curLookingQuestions;
@@ -159,12 +183,12 @@ export default{
             });
         },
 
-        CancelAction(){
+        CancelAction() {
             this.canCreateFolder = false;
             this.canEditFolder = false;
         },
- 
-        async FetchQuestion(){
+
+        async FetchQuestion() {
             try {
                 const questions = await getQuestionsByQuiz(this.curLookingQuiz.Quiz_id);
                 // 假設 questions1 是從其他地方獲取的問題數據
@@ -172,7 +196,7 @@ export default{
 
                 // re-structure each question
                 const allQuestions = [...questions, ...questions1];
-                allQuestions.sort(function(a, b){
+                allQuestions.sort(function (a, b) {
                     return a.Q_number - b.Q_number;
                 });
 
@@ -182,7 +206,7 @@ export default{
             }
 
             // fill in blank... you are hard to deal with.....
-            
+
         },
         async SetDisplay(quiz) {
             this.curLookingQuiz = quiz;
@@ -198,14 +222,12 @@ export default{
 
     },
 
-
- 
     async created() {
         try {
-            const userId = JSON.parse(localStorage.getItem('userdata')).user.UserId;        
+            const userId = JSON.parse(localStorage.getItem('userdata')).user.UserId;
             this.folders = await getSpecUserFolder(userId);
-               //     // for each folder get quizes in it, get quizes from given folderId
-           
+            //     // for each folder get quizes in it, get quizes from given folderId
+
             for (const folder of this.folders) {
                 try {
                     const quizzes = await getQuizzesByUserFolder(folder.Folder_id);
@@ -222,10 +244,6 @@ export default{
             console.error("Failed to fetch folders:", error);
         }
     },
-    mounted(){
-        
-    },
-
 }
 </script>
 
@@ -233,5 +251,4 @@ export default{
 .display-area {
     margin: 10vh 5vw 10vh 14vw;
 }
-
 </style>
