@@ -17,14 +17,11 @@ faker = Faker()
 num_users = 15
 num_friendships = 20
 num_folders = 20
-num_quizzes = 20
-num_records = 5
+num_quizzes = 150
+num_records = 50
 num_fill_blank_questions = 40
 num_single_open_questions = 40
-num_tf_questions = 150
-num_fb_determinations = 5
-num_so_determinations = 5
-num_tf_determinations = 5
+num_tf_questions = 40
 
 
 # 建立檔案
@@ -109,12 +106,14 @@ with open(output_path, "w", encoding="utf-8") as f:
     # 插入 Fill_blank_question 資料
     f.write("-- 插入 Fill_blank_question 資料\n")
     f.write("INSERT INTO fill_blank_question (Body, Q_number, Answer, Points, Quiz_id) VALUES\n")
+    fb_questions = []
     for i in range(num_fill_blank_questions):
         body = faker.sentence()
         q_number = i + 1
         answer = faker.word()
         points = random.randint(5, 20)
         quiz_id = random.choice(quizzes)
+        fb_questions.append(i + 1)
         f.write(f"('{body}', {q_number}, '{answer}', {points}, {quiz_id})")
         if i < num_fill_blank_questions - 1:
             f.write(",\n")
@@ -124,6 +123,7 @@ with open(output_path, "w", encoding="utf-8") as f:
     # 插入 Single_open_question 資料
     f.write("-- 插入 Single_open_question 資料\n")
     f.write("INSERT INTO single_open_question (Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id) VALUES\n")
+    so_questions = []
     for i in range(num_single_open_questions):
         q_number = i + 1
         body = faker.sentence()
@@ -131,6 +131,7 @@ with open(output_path, "w", encoding="utf-8") as f:
         answer = faker.word()
         option_a, option_b, option_c = faker.word(), faker.word(), faker.word()
         quiz_id = random.choice(quizzes)
+        so_questions.append(i + 1)
         f.write(f"({q_number}, '{body}', {points}, '{answer}', '{option_a}', '{option_b}', '{option_c}', {quiz_id})")
         if i < num_single_open_questions - 1:
             f.write(",\n")
@@ -140,12 +141,14 @@ with open(output_path, "w", encoding="utf-8") as f:
     # 插入 TF_question 資料
     f.write("-- 插入 TF_question 資料\n")
     f.write("INSERT INTO tf_question (Body, Answer, Points, Q_number, Quiz_id) VALUES\n")
+    tf_questions = []
     for i in range(num_tf_questions):
         body = faker.sentence()
         answer = random.choice([True, False])
         points = random.randint(5, 20)
         q_number = i + 1
         quiz_id = random.choice(quizzes)
+        tf_questions.append(i + 1)
         f.write(f"('{body}', {answer}, {points}, {q_number}, {quiz_id})")
         if i < num_tf_questions - 1:
             f.write(",\n")
@@ -155,12 +158,11 @@ with open(output_path, "w", encoding="utf-8") as f:
     # 插入 FB_quiz_determination 資料
     f.write("-- 插入 FB_quiz_determination 資料\n")
     f.write("INSERT INTO fb_quiz_determination (FB_id, Record_id, Is_correct) VALUES\n")
-    for i in range(num_fb_determinations):
-        fb_id = random.randint(1, num_fill_blank_questions)
+    for fb_id in fb_questions:
         record_id = random.choice(records)
         is_correct = random.choice([True, False])
         f.write(f"({fb_id}, {record_id}, {is_correct})")
-        if i < num_fb_determinations - 1:
+        if fb_id < num_fill_blank_questions:
             f.write(",\n")
         else:
             f.write(";\n\n")
@@ -168,25 +170,23 @@ with open(output_path, "w", encoding="utf-8") as f:
     # 插入 SO_quiz_determination 資料
     f.write("-- 插入 SO_quiz_determination 資料\n")
     f.write("INSERT INTO so_quiz_determination (SO_id, Record_id, Is_correct) VALUES\n")
-    for i in range(num_so_determinations):
-        so_id = random.randint(1, num_single_open_questions)
+    for so_id in so_questions:
         record_id = random.choice(records)
         is_correct = random.choice([True, False])
         f.write(f"({so_id}, {record_id}, {is_correct})")
-        if i < num_so_determinations - 1:
+        if so_id < num_single_open_questions:
             f.write(",\n")
         else:
             f.write(";\n\n")
-    
+
     # 插入 TF_quiz_determination 資料
     f.write("-- 插入 TF_quiz_determination 資料\n")
     f.write("INSERT INTO tf_quiz_determination (TF_id, Record_id, Is_correct) VALUES\n")
-    for i in range(num_tf_determinations):
-        tf_id = random.randint(1, num_tf_questions)
+    for tf_id in tf_questions:
         record_id = random.choice(records)
         is_correct = random.choice([True, False])
         f.write(f"({tf_id}, {record_id}, {is_correct})")
-        if i < num_tf_determinations - 1:
+        if tf_id < num_tf_questions:
             f.write(",\n")
         else:
             f.write(";\n\n")
