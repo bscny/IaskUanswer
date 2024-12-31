@@ -13,7 +13,7 @@
             <button v-if="!authState.isAuthenticated" class="account-btn" @click=navSignup>Sign up</button>
             <button v-if="!authState.isAuthenticated" class="account-btn" @click=navLogin>Login</button>
             <div v-if="authState.isAuthenticated" class="account-username"> {{ getLoggedUsername() }} </div>
-            <button v-if="authState.isAuthenticated" class="account-btn" @click=logout> Log out </button>
+            <button v-if="authState.isAuthenticated" class="account-btn" @click=navLogout> Log out </button>
 
         </div>
     </nav>
@@ -49,6 +49,11 @@ export default {
         },
         navSignup() {
             this.$router.push("/Signup");
+        },
+        navLogout() {
+            console.log("logout")
+            logout();
+            this.$router.push("/");
         },
         getLoggedUsername() {
             let userdata = localStorage.getItem("userdata");
