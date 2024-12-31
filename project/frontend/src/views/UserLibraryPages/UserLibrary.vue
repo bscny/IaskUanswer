@@ -141,7 +141,7 @@ export default {
                         this.folders[i].quizzes.push(quizData);
                     }
                 }
-
+                await this.FetchFolders();
                 this.canEditFolder = false;
             } catch (error) {
                 console.error("failed to add quiz to folder");

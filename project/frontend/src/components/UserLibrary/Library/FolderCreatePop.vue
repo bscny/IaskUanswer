@@ -2,7 +2,7 @@
     <div class="BG">
         <div class="window">
             <button class="done-button" @click="CreationDone()">
-                Crate Folder
+                Create Folder
             </button>
 
             <button class="cancel-button" @click="Cancel()">

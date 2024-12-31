@@ -45,6 +45,7 @@ import {
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
 
 import {
+    getQuestionsByQuiz,
     createQuestion,
     updateQuestion,
     deleteQuestion
@@ -121,12 +122,12 @@ export default {
         },
 
         async QuestionCreated(newQuestion){
+            
             await createQuestion(newQuestion);
-
             // for site rendering assign newly pushed question its So_id
             this.questionsStore.questions.push(newQuestion);
             alert("Question Created!");
-
+            await this.FetchQuestion();
             this.canCreateQuestion = false; 
         },
 
@@ -158,13 +159,22 @@ export default {
             await deleteQuestion(deletedQuestionID);
 
             this.canEditQuestion = false; 
-        }
-    },
+        },
+        async FetchQuestion(){
+            try {
+                const questions = await getQuestionsByQuiz(this.quizStore.quiz.Quiz_id);
+                this.questionsStore.questions = questions;
+            } catch (error) {
+                console.error("Failed to fetch questions:", error);
+            }
+        },
 
     async created(){
         // fetch data
+        await this.FetchQuestion();
     },
 
+    }
 }
 </script>
 
