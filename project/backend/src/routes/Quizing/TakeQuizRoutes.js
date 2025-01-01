@@ -1,29 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-// const FolderControllers = require('@/controllers/Library/Folder/FolderController.js');
+const TakeQuizController = require('@/controllers/Quizing/TakeQuizController.js');
 
 // the route address start from:
-// http://localhost:3000/quiz
+// http://localhost:PORT/take-quiz
 
-//DisplayspecificFolder
-router.get("/FolderId/:FolderId", FolderControllers.DisplayspecificFolder);
-
-//DisplayspecificUserFolder
-router.get("/UserId/:UserId", FolderControllers.DisplayspecificUserFolder);
-
-//DisplayALLFolders
-router.get("/", FolderControllers.DisplayALLFolders);
-
-//CreateFolder
-router.post("/post-folder/", FolderControllers.CreateFolder);
-
-//UpdateFolder
-router.put("/put-folder/:FolderId", FolderControllers.UpdateFolder);
-
-//DeleteFolder
-router.delete("/delete-folder/:FolderId", FolderControllers.DeleteFolder);
-
-
+// frontend gives a quiz id and backend send a testsheet
+router.get("/get-testsheet/:Quiz_id", TakeQuizController.GetTestSheet);
 
 module.exports = router;

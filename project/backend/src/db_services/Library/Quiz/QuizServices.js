@@ -2,7 +2,7 @@ const db = require('@/database.js');
 
 // read services
 async function GetAllQuiz() {
-    const [records] = await db.query(`SELECT * FROM quiz`);
+    const [records] = await db.query(`SELECT * FROM quiz WHERE Is_public = true`);
     return records;
 }
 
@@ -17,7 +17,7 @@ async function GetSpecificFolderQuiz(FolderId) {
 }
 
 async function GetRandomQuizzes(number) {
-    const [records] = await db.query(`SELECT * FROM quiz ORDER BY RAND() LIMIT ?`, [number]);
+    const [records] = await db.query(`SELECT * FROM quiz WHERE Is_public = true ORDER BY RAND() LIMIT ?`, [number]);
     return records;
 }
 

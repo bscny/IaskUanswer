@@ -35,7 +35,10 @@ app.use("/Folder", FolderRoutes);
 app.use("/Quiz", QuizRoutes);
 app.use("/Question", QuestionRoutes);
 
-// for user take test
+// for user take quiz
+const TakeQuizRoutes = require("@/routes/Quizing/TakeQuizRoutes.js")
+
+app.use("/take-quiz", TakeQuizRoutes);
 
 // for user see past history
 
