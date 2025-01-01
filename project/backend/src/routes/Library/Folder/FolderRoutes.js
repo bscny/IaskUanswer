@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const FolderControllers = require('@/controllers/Folder/FolderController.js');
+const FolderControllers = require('@/controllers/Library/Folder/FolderController.js');
 
 //DisplayspecificFolder
 router.get("/FolderId/:FolderId", FolderControllers.DisplayspecificFolder);

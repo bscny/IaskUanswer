@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const QuestionControllers = require('@/controllers/Question/SO_QuestionController.js');
+const QuestionControllers = require('@/controllers/Library/Question/SO_QuestionController.js');
 
 // DisplaySpecificSOQuestion
 router.get("/soque/SOId/:SOId", QuestionControllers.DisplaySpecificSOQuestion);
