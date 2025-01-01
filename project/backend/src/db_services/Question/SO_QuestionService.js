@@ -16,6 +16,10 @@ async function GetSpecificQuizSOQuestion(QuizId) {
     return records;
 }
 
+async function GetRandomSOQuestion(number) {
+    const [records] = await db.query(`SELECT * FROM single_open_question ORDER BY RAND() LIMIT ?`, [number]);
+    return records;
+}
 // create services
 async function CreateSOQuestion(QuestionData) {
     const { Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, Quiz_id } = QuestionData;
@@ -39,6 +43,7 @@ module.exports = {
     GetAllSOQuestion,
     GetSpecificSOQuestion,
     GetSpecificQuizSOQuestion,
+    GetRandomSOQuestion,
     CreateSOQuestion,
     UpdateSOQuestion,
     DeleteSOQuestion,

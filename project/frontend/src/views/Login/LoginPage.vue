@@ -2,7 +2,7 @@
 
     <div>
         <NavBar/>
-        <Login/>
+        <Login @loginSuccess="handleLoginSuccess"/>
     </div>
     <div>
         
@@ -13,11 +13,21 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import Login from '@/components/SignView/Login.vue';
-export default{
+import { authState } from '@/service/AccountApi/accountAPI';
 
+
+export default {
     name: 'LoginPage',
-    components:{
+    components: {
         NavBar, Login
+    },
+    methods: {
+        handleLoginSuccess(userData) {
+            authState.isAuthenticated = true;
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userdata', JSON.stringify(userData));
+            this.$router.push({ name: 'Home' });
+        }
     }
 }
 </script>

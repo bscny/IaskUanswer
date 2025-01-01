@@ -16,6 +16,12 @@ async function DisplayALLQuizs(req, res) {
     res.send(quizzes);
 }
 
+async function DisplayRandomQuizzes(req, res) {
+    const number = parseInt(req.params.Number, 10);
+    const quizzes = await service.GetRandomQuizzes(number);
+    res.send(quizzes);
+}
+
 // Create services
 async function CreateQuiz(req, res) {
     const result = await service.CreateQuiz(req.body);
@@ -50,6 +56,7 @@ module.exports = {
     DisplaySpecificQuiz,
     DisplaySpecificFolderQuiz,
     DisplayALLQuizs,
+    DisplayRandomQuizzes,
     CreateQuiz,
     UpdateQuiz,
     DeleteQuiz,

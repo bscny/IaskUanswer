@@ -12,6 +12,9 @@ router.get("/FolderId/:FolderId", QuizControllers.DisplaySpecificFolderQuiz);
 //DisplayALLQUizs
 router.get("/", QuizControllers.DisplayALLQuizs);
 
+//GetrandomQuiz
+router.get("/random-quizzes/:Number", QuizControllers.DisplayRandomQuizzes);
+
 //CreateQuiz
 router.post("/post-quiz/", QuizControllers.CreateQuiz);
 

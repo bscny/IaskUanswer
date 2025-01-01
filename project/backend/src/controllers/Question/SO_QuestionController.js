@@ -32,6 +32,15 @@ async function DisplaySpecificQuizSOQuestion(req, res) {
     }
 }
 
+async function DisplayRandomSOQuestion(req, res) {
+    try {
+        const number = parseInt(req.params.Number, 10);
+        const questions = await service.GetRandomSOQuestion(number);
+        res.status(200).json(questions);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
 async function CreateSOQuestion(req, res) {
     try {
         const newQuestion = req.body;
@@ -72,6 +81,7 @@ module.exports = {
     DisplaySpecificSOQuestion,
     DisplayALLSOQuestion,
     DisplaySpecificQuizSOQuestion,
+    DisplayRandomSOQuestion,
     CreateSOQuestion,
     UpdateSOQuestion,
     DeleteSOQuestion

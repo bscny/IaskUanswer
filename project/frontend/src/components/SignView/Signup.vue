@@ -17,19 +17,20 @@
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" v-model="form.password" placeholder="Enter your password"
-                    required />
+                <input type="password" id="password" v-model="form.password" placeholder="Enter your password" required />
                 <span v-if="errors.password" class="error">{{ errors.password }}</span>
             </div>
 
             <button type="submit" :disabled="isSubmitting">Sign Up</button>
         </form>
+        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
     </div>
-
 </template>
 
 <script>
-import {signup} from '@/service/auth';
+import { 
+    signup 
+} from '@/service/AccountApi/accountAPI';
 
 export default {
     name: "Signup",
@@ -45,29 +46,27 @@ export default {
                 email: null,
                 password: null,
             },
-
-            isSubmitting: false // In canse of multiple submittion.
+            isSubmitting: false,
+            successMessage: null 
         };
     },
     methods: {
         validateForm() {
             let valid = true;
-            // Clear previous errors
             this.errors = { username: null, email: null, password: null };
 
             if (!this.form.username) {
                 this.errors.username = "Username is required.";
                 valid = false;
             } else if (!this.validUsername(this.form.username)) {
-                this.errors.username = "Special character is not required."
+                this.errors.username = "Special character is not required.";
                 valid = false;
             }
 
             if (!this.form.email) {
                 this.errors.email = "Email is required.";
                 valid = false;
-            } 
-            else if (!this.validEmail(this.form.email)) {
+            } else if (!this.validEmail(this.form.email)) {
                 this.errors.email = "Invalid email format.";
                 valid = false;
             }
@@ -85,36 +84,31 @@ export default {
         validUsername(username) {
             return !username.includes('@');
         },
-
         async submitForm() {
             if (!this.validateForm()) return;
-            console.log(`Submitting signup form: ${JSON.stringify(this.form)}`);
             this.isSubmitting = true;
-
+            
+            //call signup API，if success, redirect to homepage
             try {
                 const response = await signup(this.form);
-                if(response.status == 200){
-                    alert("Signup successful!\n");
-                    this.$router.push("/");
+                if (response.status === 200) {
+                    alert("Signup successful! Redirecting to homepage...");
+                    this.$router.push({ name: 'Home' });
                 }
-                
-                // Reset the form
                 this.form.username = "";
                 this.form.email = "";
                 this.form.password = "";
-
             } catch (error) {
                 if (error.response && error.response.data.errors) {
                     this.errors = error.response.data.errors;
                 } else {
                     alert("Something went wrong. Please try again.");
                 }
-
             } finally {
                 this.isSubmitting = false;
             }
-        },
-    },
+        }
+    }
 };
 </script>
 

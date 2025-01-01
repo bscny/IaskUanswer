@@ -23,7 +23,12 @@
 </template>
 
 <script>
-import { authState, login } from '@/service/auth';
+// call API to get user/check data
+import { 
+    authState,
+    login 
+} from '@/service/AccountApi/accountAPI';
+
 export default {
     name: "Login",
     data() {
@@ -41,6 +46,7 @@ export default {
 
         };
     },
+    // get user data from local storage so that user can login directly
     beforeCreate(){
         const userdata = localStorage.getItem("userdata");
         if(userdata){
@@ -51,8 +57,17 @@ export default {
     methods: {
         validateForm() {
             let valid = true;
-            // Clear previous errors
-            this.errors = { account: null, password: null };
+            if (!this.form.account) {
+                this.errors.account = "Account is required.";
+                valid = false;
+            }
+
+            if (!this.form.password) {
+                this.errors.password = "Password is required.";
+                valid = false;
+            }
+
+            
             return valid;
         },
 
@@ -62,12 +77,15 @@ export default {
 
             this.isSubmitting = true;
             try {
-
-                const response = await login(this.form);
-                console.log(response)
+                const userInfo = {
+                    Name: this.form.account, 
+                    Email: this.form.account, 
+                    Password: this.form.password
+                };     
+                // call API to get user/check data
+                const response = await login(userInfo);
                 if (response.status === 200) {
-                    alert("Login successful!\n");
-                    this.$router.push("/");
+                    this.$emit('loginSuccess', response.data);
                 }
 
                 // Reset the form

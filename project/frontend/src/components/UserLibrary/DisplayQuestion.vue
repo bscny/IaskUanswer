@@ -38,7 +38,7 @@
             {{ question.Body }}
         </div>
 
-        <div class="SO-option-grid" v-if="question.SO_id !== undefined">
+        <div class="SO-option-grid">
             <div class="options">
                 Ans: {{ question.Answer }}
             </div>
@@ -56,11 +56,11 @@
             </div>
         </div>
 
-        <div class="TF-option-grid" v-if="question.TF_id !== undefined">
+        <!-- <div class="TF-option-grid" v-if="question.TF_id !== undefined">
             <div>
                 
             </div>
-        </div>
+        </div> -->
 
     </ul>
 
@@ -124,6 +124,8 @@ export default {
     border: none;
     border-radius: 5px;
 
+    font-size: 3vh;
+
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -143,6 +145,8 @@ export default {
     color: white;
     border: none;
     border-radius: 5px;
+
+    font-size: 3vh;
     
     cursor: pointer;
     transition: background-color 0.3s;

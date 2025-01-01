@@ -10,14 +10,11 @@
 </template>
 
 <script>
-import Api from "@/service/Api";
 
 export default {
     name: "QuizGrid",
-    beforeCreate() {
-        Api.fake_getNQuizes("quizzes").then((response) => {
-            this.quizzes = response.data.quizzes;
-        });
+    props: {
+        quizzes: Array,
     },
     methods: {
         goToQuiz(id) {
@@ -27,7 +24,7 @@ export default {
     },
     data() {
         return {
-            quizzes: null
+
         }
     },
 };
@@ -39,13 +36,11 @@ export default {
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
     gap: 5%;
-    padding: 3rem;
-    margin: auto;
+    padding: 1.5rem;
     border-radius: 1rem;
     border-color: black;
     background-color: #f9f9f9;
 }
-
 
 .grid-item {
     background-color:rgb(57, 99, 109) ;
@@ -58,6 +53,11 @@ export default {
     text-align: center;
 }
 
+.grid-item:hover {
+    cursor: pointer;
+    background-color: #6092a1;
+}
+
 .grid-item-title {
     color: black;
     size: 1rem;
@@ -68,14 +68,12 @@ export default {
     border-radius: 12rem;
     
 }
+
 .grid-item-description{
     color: black;
     size: 1rem;
     font-size: 1.5rem;
     margin-left: 2rem;
     margin-right: 2rem;
-}
-.grid-item:hover {
-    background-color: #6092a1;
 }
 </style>

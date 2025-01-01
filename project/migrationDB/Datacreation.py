@@ -23,6 +23,7 @@ num_fill_blank_questions = 40
 num_single_open_questions = 40
 num_tf_questions = 40
 
+
 # 建立檔案
 with open(output_path, "w", encoding="utf-8") as f:
     # 插入 User 資料

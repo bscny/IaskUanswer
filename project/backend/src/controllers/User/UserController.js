@@ -1,5 +1,16 @@
 const service = require("@/db_services/User/UserService.js");
 
+async function UserLoginConfirmation(req, res) {
+   
+    const user = await service.UserLoginConfirmation(req.body);
+
+    if (user) {
+        res.status(200).json({ message: "Login successful", user });
+    } else {
+        res.status(401).json({ message: "Invalid identifier or password" });
+    }
+}
+
 async function DisplayUser(req, res) {
     const UserName = await service.GetSpecificUser(req.params.UserId);
 
@@ -13,9 +24,12 @@ async function DisplayALLUser(req, res) {
 }
 
 async function CreateUser(req, res) {
-    await service.CreateUser(req.body);
-
-    res.status(201).send(`create successfully`);
+    try {
+        const user = await service.CreateUser(req.body);
+        res.status(200).json({ message: "User created", user });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
 }
 
 async function UpdateUser(req, res) {
@@ -36,6 +50,7 @@ async function DeleteUser(req, res) {
 
 
 module.exports = {
+    UserLoginConfirmation,
     DisplayUser,
     DisplayALLUser,
     CreateUser,

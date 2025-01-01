@@ -1,5 +1,20 @@
 const db = require('@/database.js');
 
+async function UserLoginConfirmation(UserData) {
+    const { Name, Email, Password } = UserData;
+    const [records] = await db.query(
+        `SELECT * FROM user WHERE (Name = ? OR Email = ?) AND Password = ?`, 
+        [Name, Email, Password]
+    );
+    if (records.length > 0) {
+        return {
+            Name: records[0].Name,
+            UserId: records[0].User_id
+        };
+    } else {
+        return false;
+    }
+}
 // read services
 async function GetAllUser() {
     const [records] = await db.query(`SELECT * FROM user`);
@@ -18,7 +33,7 @@ async function GetSpecificUser(UserId) {
 async function CreateUser(UserData) {
     const { Name, Email, Password } = UserData;
     const result = await db.query(`INSERT INTO user (Name, Email, Password) VALUES (?, ?, ?)`, [Name, Email, Password]);
-    return result.insertId;
+    return result;
 }
 
 // update services
@@ -34,6 +49,7 @@ async function DeleteUser(UserId) {
 }
 
 module.exports = {
+    UserLoginConfirmation,
     GetAllUser,
     GetSpecificUser,
     CreateUser,

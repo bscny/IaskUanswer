@@ -28,7 +28,7 @@ async function CreateFolder(req, res) {
 
 //Update services
 async function UpdateFolder(req, res) {
-    await service.UpdateFolder(req.body, req.params.FolderId);
+    await service.UpdateFolder(req.params.FolderId, req.body);
 
     res.status(201).send(`update successfully`);
 }

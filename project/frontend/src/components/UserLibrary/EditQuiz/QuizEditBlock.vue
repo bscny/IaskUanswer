@@ -34,6 +34,8 @@
 </template>
 
 <script>
+
+
 export default {
     name: "QuizEditBlock",
     components: {},
@@ -51,24 +53,33 @@ export default {
     },
 
     methods: {
-        ToggleIsPublic(){
+        ToggleIsPublic() {
             this.originalIsPublic = !this.originalIsPublic;
         },
 
-        async DeleteQuiz(){
-            // call backend API to delete quiz
-
-            this.$emit("Deleted");
+        DeleteQuiz() {
+            // await deleteQuiz(this.quiz.Quiz_id);
+            this.$emit("Deleted", this.quiz.Quiz_id);
         },
 
-        async EditionDone(){
-            if (this.quiz.Quiz_name != "" && this.quiz.Quiz_name != this.originalName && 
-                this.quiz.Is_public != this.originalIsPublic && this.quiz.Quiz_description != this.originalDescription) {
-                // call backend API to update quiz
+        EditionDone() {
+            if (this.originalName != "" &&
+                (this.quiz.Quiz_name != this.originalName ||
+                    this.quiz.Is_public != this.originalIsPublic ||
+                    this.quiz.Quiz_description != this.originalDescription)) {
+                // can cahange data
+                const quizData = {
+                    Quiz_id: this.quiz.Quiz_id,
+                    Quiz_name: this.originalName,
+                    Is_public: this.originalIsPublic,
+                    Folder_id: this.quiz.Folder_id,
+                    Quiz_description: this.originalDescription,
+                };
 
+                this.$emit("Edited", quizData);
+            } else {
+                this.$emit("Cancel");
             }
-
-            this.$emit("Edited");
         },
     },
 }

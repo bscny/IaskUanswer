@@ -27,8 +27,12 @@
 
             <input class="points-input" type="number" v-model="points" />
 
-            <button class="done-button" @click="CreationDone()">
-                Create
+            <button class="done-button" @click="EditionDone()">
+                Save Changes
+            </button>
+
+            <button class="delete-button" @click="Delete()">
+                Delete it
             </button>
 
             <button class="cancel-button" @click="Cancel()">
@@ -41,22 +45,23 @@
 <script>
 
 export default {
-    name: 'QuestionCreatePop',
+    name: 'QuestionEditPop',
     components: {},
 
     props: {
         quiz: Object,
         questions: Array,
+        question: Object,
     },
 
     data() {
         return {
-            body: "",
-            ans: "",
-            optionA: "",
-            optionB: "",
-            optionC: "",
-            points: null,
+            body: this.question.Body,
+            ans: this.question.Answer,
+            optionA: this.question.OptionA,
+            optionB: this.question.OptionB,
+            optionC: this.question.OptionC,
+            points: this.question.Points,
         };
     },
 
@@ -65,29 +70,33 @@ export default {
             this.$emit("Cancel");
         },
 
-        CreationDone() {
+        EditionDone() {
             if (this.body != "" && this.ans != "" && this.optionA != "" &&
-                this.optionB != "" && this.optionC != "" && this.points != null) {
-                // call backend API to insert new question
+                this.optionB != "" && this.optionC != "" && this.points != null  
+                &&
+                !(this.body == this.question.Body && this.ans == this.question.Answer && this.optionA == this.question.OptionA &&
+                this.optionB == this.question.OptionB && this.optionC == this.question.OptionC && this.points == this.question.Points)) {
 
-                // call backend API to retrieve the newly created record
-                // fake data:
                 let newRecord = {
-                    SO_id: 10,
-                    Q_number: this.questions.length + 1,
+                    SO_id: this.question.SO_id,
+                    Q_number: this.question.Q_number,
                     Body: this.body, 
                     Points: this.points,
                     Answer: this.ans,
                     OptionA: this.optionA,
                     OptionB: this.optionB,
                     OptionC: this.optionC,
-                    Quiz_id: this.quiz.Quiz_id
+                    Quiz_id: this.question.Quiz_id
                 }
 
-                this.$emit("Created", newRecord);
+                this.$emit("Edited", newRecord);
             }else{
                 this.$emit("Cancel");
             }
+        },
+
+        Delete(){
+            this.$emit("Deleted", this.question.SO_id);
         }
     },
 }
@@ -219,6 +228,27 @@ export default {
     background-color: #288d2e;
 }
 
+.delete-button {
+    position: absolute;
+
+    right: 40vw;
+    bottom: 1px;
+
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: #db3232;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    font-size: 2vw;
+}
+
+.delete-button:hover {
+    background-color: #e21717;
+}
+
 .cancel-button {
     position: absolute;
 
@@ -226,7 +256,7 @@ export default {
     bottom: 1px;
 
     padding: 1vh 1.2vw 1vh 1.2vw;
-    background-color: #32a9be;
+    background-color: #3aabbe;
     color: white;
     border: none;
     border-radius: 5px;
@@ -237,6 +267,6 @@ export default {
 }
 
 .cancel-button:hover {
-    background-color: #12a3bd;
+    background-color: #0b9eb8;
 }
 </style>

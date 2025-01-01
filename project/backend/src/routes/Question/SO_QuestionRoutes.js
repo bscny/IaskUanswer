@@ -12,6 +12,9 @@ router.get("/soque/QuizId/:QuizId", QuestionControllers.DisplaySpecificQuizSOQue
 // DisplayAllSOQuestion
 router.get("/soque", QuestionControllers.DisplayALLSOQuestion);
 
+// DisplayRandomSOQuestion
+router.get("/soque/random-question/:Number", QuestionControllers.DisplayRandomSOQuestion);
+
 // CreateSOQuestion
 router.post("/soque/post", QuestionControllers.CreateSOQuestion);
 

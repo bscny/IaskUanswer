@@ -3,8 +3,9 @@
 
     <div class="header">
         <QuizEditBlock  :quiz="quizStore.quiz"
-                        @Edited="Done()"
-                        @Deleted="Done()" />
+                        @Edited="Done($event)"
+                        @Deleted="DeleteQuiz($event)"
+                        @Cancel="Cancel()" />
     </div>
 
     <div class="display-area">
@@ -33,15 +34,27 @@
 
 <script>
 import NavBar from "@/components/NavBar.vue";
-import QuizEditBlock from "@/components/UserLibrary/QuizEditBlock.vue";
+import QuizEditBlock from "@/components/UserLibrary/EditQuiz/QuizEditBlock.vue";
 import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
-import QuestionCreatePop from "@/components/UserLibrary/QuestionCreatePop.vue";
-import QuestionEditPop from "@/components/UserLibrary/QuestionEditPop.vue";
+import QuestionCreatePop from "@/components/UserLibrary/EditQuiz/QuestionCreatePop.vue";
+import QuestionEditPop from "@/components/UserLibrary/EditQuiz/QuestionEditPop.vue";
 
 import { 
     useQuizStore,
     useQuestionsStore,
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
+
+import {
+    getQuestionsByQuiz,
+    createQuestion,
+    updateQuestion,
+    deleteQuestion
+} from "@/service/LibraryApi/QuestionAPI.js"
+
+import {
+    updateQuiz,
+    deleteQuiz
+} from "@/service/LibraryApi/QuizAPI.js"
 
 export default {
     name: "EditQuiz",
@@ -73,9 +86,21 @@ export default {
             });
         },
 
-        Done(){
+        async Done(quizData){
             // dont need to store the data back to the store because router.push reload the UserLibrary page
-            // which means we only CRUD the data from UserLibrary without storing it back 
+            // which means we only CRUD the data from UserLibrary without storing it back
+
+            // update backend quiz
+            await updateQuiz(quizData);
+
+            this.$router.push({
+                name: 'UserLibrary'
+            });
+        },
+
+        async DeleteQuiz(Quiz_id){
+            await deleteQuiz(Quiz_id);
+
             this.$router.push({
                 name: 'UserLibrary'
             });
@@ -96,14 +121,18 @@ export default {
             this.canEditQuestion = false;
         },
 
-        QuestionCreated(newQuestion){
+        async QuestionCreated(newQuestion){
+            
+            await createQuestion(newQuestion);
+            // for site rendering assign newly pushed question its So_id
             this.questionsStore.questions.push(newQuestion);
             alert("Question Created!");
-
+            await this.FetchQuestion();
             this.canCreateQuestion = false; 
         },
 
-        QuestionEdited(editedQuestion){
+        async QuestionEdited(editedQuestion){
+            // for site rendering
             for(let i = 0; i < this.questionsStore.questions.length; i ++){
                 if(this.questionsStore.questions[i].Q_number == editedQuestion.Q_number){
                     this.questionsStore.questions[i] = editedQuestion;
@@ -111,21 +140,41 @@ export default {
             }
             alert("Change Saved!");
 
+            // update question in mysql
+            await updateQuestion(editedQuestion);
+
             this.canEditQuestion = false; 
         },
 
-        QuestionDeleted(deletedQuestionNumber){
+        async QuestionDeleted(deletedQuestionID){
+            // for site rendering
             for(let i = 0; i < this.questionsStore.questions.length; i ++){
-                if(this.questionsStore.questions[i].Q_number == deletedQuestionNumber){
+                if(this.questionsStore.questions[i].SO_id == deletedQuestionID){
                     this.questionsStore.questions.splice(i, 1);
                 }
             }
             alert("Deleted!!");
 
+            // delete from backend
+            await deleteQuestion(deletedQuestionID);
+
             this.canEditQuestion = false; 
-        }
+        },
+        async FetchQuestion(){
+            try {
+                const questions = await getQuestionsByQuiz(this.quizStore.quiz.Quiz_id);
+                this.questionsStore.questions = questions;
+            } catch (error) {
+                console.error("Failed to fetch questions:", error);
+            }
+        },
+
+    async created(){
+        // fetch data
+        await this.FetchQuestion();
     },
 
+    }
 }
 </script>
 
