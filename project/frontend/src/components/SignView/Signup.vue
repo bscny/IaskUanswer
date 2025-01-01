@@ -17,7 +17,8 @@
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" v-model="form.password" placeholder="Enter your password" required />
+                <input type="password" id="password" v-model="form.password" placeholder="Enter your password"
+                    required />
                 <span v-if="errors.password" class="error">{{ errors.password }}</span>
             </div>
 
@@ -28,8 +29,8 @@
 </template>
 
 <script>
-import { 
-    signup 
+import {
+    signup
 } from '@/service/AccountApi/accountAPI';
 
 export default {
@@ -47,7 +48,7 @@ export default {
                 password: null,
             },
             isSubmitting: false,
-            successMessage: null 
+            successMessage: null
         };
     },
     methods: {
@@ -87,13 +88,21 @@ export default {
         async submitForm() {
             if (!this.validateForm()) return;
             this.isSubmitting = true;
-            
+
             //call signup API，if success, redirect to homepage
             try {
                 const response = await signup(this.form);
                 if (response.status === 200) {
                     alert("Signup successful! Redirecting to homepage...");
-                    this.$router.push({ name: 'Home' });
+                    // emit user data
+                    const userData = {
+                        Name: this.form.username,
+                        UserId: JSON.parse(response.data)
+                    };
+
+                    console.error(userData);
+
+                    this.$emit('loginSuccess', userData);
                 }
                 this.form.username = "";
                 this.form.email = "";
