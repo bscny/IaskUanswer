@@ -58,6 +58,7 @@ export default {
 .question {
     margin-bottom: 20px;
     text-align: center;
+    font-size: 16px;
 }
 
 .correct {
@@ -87,7 +88,7 @@ button {
     cursor: pointer;
     margin: 5px;
     min-width: 150px;
-    margin-bottom: 60px;
+    margin-bottom: 55px;
     font-size: 16px;
 }
 
