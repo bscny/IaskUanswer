@@ -75,6 +75,30 @@ async function GetTestSheet(req, res) {
     }
 }
 
+async function Grading(answerSheet) {
+    // start grading
+    for (let i = 0; i < answerSheet.length; i ++){
+        // for each question
+        if(answerSheet[i].Choosed_ans == answerSheet[i].Answer){
+            // correct
+        }else{
+            // wrong
+        } 
+    }
+}
+
+async function PostAnswerSheet(req, res) {
+    const answerSheet = req.body;
+
+    if(answerSheet[0] == undefined){
+        res.status(500).send("wrong form of answer sheet submitted");
+        return
+    }
+
+    Grading(answerSheet);
+}
+
 module.exports = {
     GetTestSheet,
+    PostAnswerSheet
 };
