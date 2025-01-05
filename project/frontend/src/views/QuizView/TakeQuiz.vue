@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import QuizHeader from "@/components/QuizTaking/QuizHeader.vue";
-import QuizBody from "@/components/QuizTaking/QuizBody.vue";
-import AnswnerOption from "@/components/QuizTaking/AnswnerOption.vue";
+import QuizHeader from "@/components/TakeQuiz/QuizHeader.vue";
+import QuizBody from "@/components/TakeQuiz/QuizBody.vue";
+import AnswnerOption from "@/components/TakeQuiz/AnswnerOption.vue";
 import { getTestSheetByQuizID_fake } from "@/service/QuizApi/TestSheetAPI";
 import { useQuizStore } from "@/stores/Userlibrary/QuizQuestionStore";
-import SubmitPopup from "@/components/QuizTaking/SubmitPopup.vue";
+import SubmitPopup from "@/components/TakeQuiz/SubmitPopup.vue";
 
 export default {
     name: "TakeQuiz",
@@ -79,6 +79,8 @@ export default {
             // User wants to submit
             if(option){
                 console.log("Submit")
+
+                // TODO route to result page
             }
             
             this.showSubmitPopup = false;
