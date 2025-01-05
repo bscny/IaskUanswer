@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div>{{ body }}</div>
+        <div class="description">{{ body }}</div>
         
     </div>
 </template>
@@ -23,5 +23,11 @@ export default {
 .container{
     display: flex;
     justify-self: space-between;
-}   
+}  
+
+.description{
+    text-align: center;
+    padding: 3vh 3vw 3vh 3vw;
+    font-size: 48px;
+}
 </style>
