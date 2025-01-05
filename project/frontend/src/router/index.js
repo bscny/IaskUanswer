@@ -4,6 +4,7 @@ import HomePage from '@/views/Home/HomePage.vue'
 import SignupPage from '@/views/Signup/SignupPage.vue'
 import LoginPage from '@/views/Login/LoginPage.vue'
 import EditQuiz from '@/views/UserLibraryPages/EditQuiz.vue'
+import TakeQuiz from '@/views/QuizView/TakeQuiz.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
             name: 'EditQuiz',
             component: EditQuiz
         },
+        {
+            path: '/TakeQuiz',
+            name: 'TakeQuiz',
+            component: TakeQuiz
+        }
     ],
 })
 
