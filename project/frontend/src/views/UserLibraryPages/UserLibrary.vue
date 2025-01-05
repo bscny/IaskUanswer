@@ -20,7 +20,8 @@
         <DisplayQuestion    :quiz="curLookingQuiz" 
                             :questions="curLookingQuestions" 
                             :editMode="false"
-                            @EditingQuiz="EditQuiz()" />
+                            @EditingQuiz="EditQuiz()" 
+                            @TryingQuiz="TryCurrentQuiz()"/>
     </div>
 </template>
 
@@ -178,6 +179,19 @@ export default {
             this.$router.push({
                 name: 'EditQuiz',
             });
+        },
+
+        TryCurrentQuiz(){
+            console.log("quiz:", this.curLookingQuiz.Quiz_id)
+            console.log("question:", this.curLookingQuestions)
+            this.quizStore.quiz = this.curLookingQuiz;
+            this.$router.push({
+                name: "TakeQuiz",
+                query: {
+                    lastPath : this.$route.name
+                }
+
+            })
         },
 
         CancelAction() {
