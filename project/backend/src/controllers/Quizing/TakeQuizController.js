@@ -121,7 +121,7 @@ async function Grading(answerSheet, Quiz_id, Record_id) {
             });
 
             // save to MySql table so_quiz_determination
-            await DeterminationServices.CreateSODetermination(questions.SO_id, Record_id, isCorrect, answerSheet[i].Choosed_ans);
+            await DeterminationServices.CreateSODetermination(questions[i].SO_id, Record_id, isCorrect, answerSheet[i].Choosed_ans);
         }
     }
 
