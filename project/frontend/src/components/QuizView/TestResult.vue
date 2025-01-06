@@ -6,12 +6,18 @@
         <div class="button-container">
             <button class="toggle-details-button" @click="$emit('toggle-details')">{{ showDetails ? 'Hide Details' : 'Show Details' }}</button>
             <button class="back-button" @click="goToUserLibrary">Back to User Library</button>
+            <button class="history-button" @click="goToHistoryPage">Back to History Page</button>
         </div>
         <div v-if="showDetails" class="questions">
             <div v-for="(question, index) in questions" :key="index" class="question">
                 <h3>Question {{ index + 1 }}: {{ question.Body }}</h3>
-                <p>Your Answer: <span :class="{ correct: question.isCorrect, incorrect: !question.isCorrect }">{{ question.userAnswer }}</span></p>
-                <p>Correct Answer: {{ question.Answer }}</p>
+                <p>Get Points: {{ question.Is_correct ? `(${question.Points} / ${question.Points})` : `(0 / ${question.Points})` }}</p>
+                <p>Your Answer: 
+                    <span :class="{'correct-answer': question.Choosed_ans === question.Answer, 'incorrect-answer': question.Choosed_ans !== question.Answer}">
+                        {{ question.Choosed_ans }}
+                    </span>
+                </p>
+                <p>Correct Answer: <span class="correct-answer">{{ question.Answer }}</span></p>
             </div>
         </div>
     </div>
@@ -37,6 +43,9 @@ export default {
     methods: {
         goToUserLibrary() {
             this.$router.push({ name: 'UserLibrary' });
+        },
+        goToHistoryPage() {
+            this.$router.push({ name: 'HistoryPage' });
         }
     }
 }
@@ -46,12 +55,12 @@ export default {
 .result-page {
     margin: 20px;
     text-align: center;
-    position: relative; /* Add relative positioning to the container */
+    position: relative;
 }
 
 .score {
-    margin: 40px 0; /* Adjust the margin to move the Total Score down */
-    margin-top: 100px; /* Adjust the top value to move the Total Score vertically */
+    margin: 40px 0;
+    margin-top: 100px;
     left: 50%;
 }
 
@@ -61,17 +70,21 @@ export default {
     font-size: 16px;
 }
 
-.correct {
+.correct-answer {
     color: green;
 }
 
-.incorrect {
+.incorrect-answer {
     color: red;
+}
+
+.user-answer {
+    color: blue;
 }
 
 .button-container {
     display: flex;
-    justify-content: center; /* Center the buttons */
+    justify-content: center;
     margin-top: 30px;
     width: 100%;
     max-width: 400px;
@@ -97,13 +110,19 @@ button:hover {
 }
 
 .toggle-details-button {
-    /* Custom styles for the toggle details button */
-    margin-right: 50px; /* Example: Add margin to the right */
-    background-color: #28a745; /* Example: Change background color */
+    margin-right: 50px;
+    background-color: #28a745;
 }
 
 .back-button {
-    /* Custom styles for the back button */
-    background-color: #dc3545; 
+    background-color: #dc3545;
+}
+
+.history-button {
+    background-color: #ffc107;
+}
+
+.history-button:hover {
+    background-color: #e0a800;
 }
 </style>

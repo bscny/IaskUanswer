@@ -1,9 +1,18 @@
 <template>
     <div>
         <NavBar />
-        <h1>Test Records</h1>
-        <div v-for="record in records" :key="record.Record_id">
-            <TestRecord :record="record" @view-details="viewDetails(record.Record_id)" @delete="deleteRecord" />
+        <h1>History Page</h1>
+        <div v-if="records.length">
+            <TestRecord
+                v-for="record in records"
+                :key="record.Record_id"
+                :record="record"
+                @view-details="viewDetails"
+                @delete="deleteRecord"
+            />
+        </div>
+        <div v-else>
+            <p>No records found.</p>
         </div>
     </div>
 </template>
@@ -11,6 +20,7 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import TestRecord from '@/components/QuizView/TestRecord.vue';
+import { generateFakeRecords } from '@/service/QuizApi/RecordApi.js';
 
 export default {
     name: "HistoryPage",
@@ -24,33 +34,26 @@ export default {
         };
     },
     methods: {
+        async fetchRecords() {
+            try {
+                this.records = await generateFakeRecords();
+            } catch (error) {
+                console.error("Failed to fetch records:", error);
+                alert("Failed to fetch records. Please try again later.");
+            }
+        },
         viewDetails(recordId) {
-            this.$router.push({ name: 'ResultPage', params: { recordId } });
+            this.$router.push({ name: 'ResultPage', query: { recordId } });
         },
         deleteRecord(recordId) {
             const index = this.records.findIndex(r => r.Record_id === recordId);
             if (index !== -1) {
                 this.records.splice(index, 1);
-                this.saveRecords();
-            }
-        },
-        saveRecords() {
-            localStorage.setItem('records', JSON.stringify(this.records));
-        },
-        loadRecords() {
-            const records = localStorage.getItem('records');
-            if (records) {
-                this.records = JSON.parse(records);
-            } else {
-                this.records = [
-                    { Record_id: 1, Quiz_name: "Quiz 1", Total_points: 80, Quiz_Date: "2023-10-01" },
-                    { Record_id: 2, Quiz_name: "Quiz 2", Total_points: 90, Quiz_Date: "2023-10-02" }
-                ];
             }
         }
     },
-    created() {
-        this.loadRecords();
+    async created() {
+        await this.fetchRecords();
     }
 }
 </script>
