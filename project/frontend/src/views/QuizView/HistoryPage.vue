@@ -15,7 +15,7 @@
 import NavBar from '@/components/NavBar.vue';
 import TestRecord from '@/components/QuizView/TestRecord.vue';
 import CreateRecordPop from '@/components/QuizView/CreateRecordPop.vue';
-import EditRecordPop from '@/components/QuizView/EditRecordPop.vue';
+//import EditRecordPop from '@/components/QuizView/EditRecordPop.vue';
 
 export default {
     name: "HistoryPage",
@@ -23,7 +23,7 @@ export default {
         NavBar,
         TestRecord,
         CreateRecordPop,
-        EditRecordPop
+        //EditRecordPop
     },
     data() {
         return {

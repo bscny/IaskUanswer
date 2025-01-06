@@ -1,10 +1,10 @@
 <template>
     <div class="test-record">
-        <h3>{{ record.quiz_name }}</h3>
-        <p>Total Points: {{ record.total_points }}</p>
-        <p>Quiz Date: {{ record.quiz_date }}</p>
-        <button @click="$emit('edit', record)">Edit</button>
-        <button @click="$emit('delete', record.record_id)">Delete</button>
+        <h3>{{ record.Quiz_name }}</h3>
+        <p>Total Points: {{ record.Total_points }}</p>
+        <p>Quiz Date: {{ formatDate(record.Quiz_Date) }}</p>
+        <button class="edit-button" @click="$emit('edit', record)">Edit</button>
+        <button class="delete-button" @click="$emit('delete', record.Record_id)">Delete</button>
     </div>
 </template>
 
@@ -15,6 +15,12 @@ export default {
         record: {
             type: Object,
             required: true
+        }
+    },
+    methods: {
+        formatDate(date) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+            return new Date(date).toLocaleDateString(undefined, options);
         }
     }
 }
@@ -31,14 +37,28 @@ export default {
 button {
     margin: 5px;
     padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+.edit-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit-button:hover {
     background-color: #0056b3;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
 }
 </style>
