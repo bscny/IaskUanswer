@@ -100,8 +100,6 @@ export default {
                         UserId: JSON.parse(response.data)
                     };
 
-                    console.error(userData);
-
                     this.$emit('loginSuccess', userData);
                 }
                 this.form.username = "";
