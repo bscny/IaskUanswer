@@ -28,6 +28,7 @@ CREATE TABLE `fb_quiz_determination` (
   `FB_id` int NOT NULL,
   `Record_id` int NOT NULL,
   `Is_correct` tinyint(1) NOT NULL,
+  `Choosed_ans` varchar(500) NOT NULL,
   PRIMARY KEY (`FB_id`,`Record_id`),
   KEY `Record_id` (`Record_id`),
   CONSTRAINT `fb_quiz_determination_ibfk_1` FOREIGN KEY (`FB_id`) REFERENCES `fill_blank_question` (`FB_id`) ON DELETE CASCADE,
@@ -44,9 +45,9 @@ DROP TABLE IF EXISTS `fill_blank_question`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fill_blank_question` (
   `FB_id` int NOT NULL AUTO_INCREMENT,
-  `Body` varchar(250) NOT NULL,
+  `Body` varchar(900) NOT NULL,
   `Q_number` int NOT NULL,
-  `Answer` varchar(100) NOT NULL,
+  `Answer` varchar(500) NOT NULL,
   `Points` int NOT NULL,
   `Quiz_id` int NOT NULL,
   PRIMARY KEY (`FB_id`),
@@ -64,7 +65,7 @@ DROP TABLE IF EXISTS `folder`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `folder` (
   `Folder_id` int NOT NULL AUTO_INCREMENT,
-  `Folder_name` varchar(30) NOT NULL,
+  `Folder_name` varchar(100) NOT NULL,
   `User_id` int NOT NULL,
   `Parent_folder_id` int DEFAULT NULL,
   PRIMARY KEY (`Folder_id`),
@@ -101,10 +102,10 @@ DROP TABLE IF EXISTS `quiz`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quiz` (
   `Quiz_id` int NOT NULL AUTO_INCREMENT,
-  `Quiz_name` varchar(30) NOT NULL,
+  `Quiz_name` varchar(100) NOT NULL,
   `Is_public` tinyint(1) NOT NULL DEFAULT '0',
   `Folder_id` int DEFAULT NULL,
-  `Quiz_description` varchar(150) NOT NULL,
+  `Quiz_description` varchar(500) NOT NULL,
   PRIMARY KEY (`Quiz_id`),
   KEY `Folder_id` (`Folder_id`),
   CONSTRAINT `quiz_ibfk_1` FOREIGN KEY (`Folder_id`) REFERENCES `folder` (`Folder_id`) ON DELETE CASCADE
@@ -142,12 +143,12 @@ DROP TABLE IF EXISTS `single_open_question`;
 CREATE TABLE `single_open_question` (
   `SO_id` int NOT NULL AUTO_INCREMENT,
   `Q_number` int NOT NULL,
-  `Body` varchar(250) NOT NULL,
+  `Body` varchar(900) NOT NULL,
   `Points` int NOT NULL,
-  `Answer` varchar(250) NOT NULL,
-  `OptionA` varchar(50) DEFAULT NULL,
-  `OptionB` varchar(50) DEFAULT NULL,
-  `OptionC` varchar(50) DEFAULT NULL,
+  `Answer` varchar(500) NOT NULL,
+  `OptionA` varchar(500) DEFAULT NULL,
+  `OptionB` varchar(500) DEFAULT NULL,
+  `OptionC` varchar(500) DEFAULT NULL,
   `Quiz_id` int NOT NULL,
   PRIMARY KEY (`SO_id`),
   KEY `Quiz_id` (`Quiz_id`),
@@ -166,6 +167,7 @@ CREATE TABLE `so_quiz_determination` (
   `SO_id` int NOT NULL,
   `Record_id` int NOT NULL,
   `Is_correct` tinyint(1) NOT NULL,
+  `Choosed_ans` varchar(500) NOT NULL,
   PRIMARY KEY (`SO_id`,`Record_id`),
   KEY `Record_id` (`Record_id`),
   CONSTRAINT `so_quiz_determination_ibfk_1` FOREIGN KEY (`SO_id`) REFERENCES `single_open_question` (`SO_id`) ON DELETE CASCADE,
@@ -182,7 +184,7 @@ DROP TABLE IF EXISTS `tf_question`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tf_question` (
   `TF_id` int NOT NULL AUTO_INCREMENT,
-  `Body` varchar(250) NOT NULL,
+  `Body` varchar(500) NOT NULL,
   `Answer` tinyint(1) NOT NULL,
   `Points` int NOT NULL,
   `Q_number` int NOT NULL,
@@ -220,9 +222,9 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `User_id` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(30) NOT NULL,
+  `Name` varchar(100) NOT NULL,
   `Email` varchar(100) NOT NULL,
-  `Password` varchar(30) NOT NULL,
+  `Password` varchar(512) NOT NULL,
   PRIMARY KEY (`User_id`),
   UNIQUE KEY `Email` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
