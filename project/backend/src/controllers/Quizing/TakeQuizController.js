@@ -1,6 +1,6 @@
 const QuestionServices = require("@/db_services/Library/Question/SO_QuestionService.js");
-const RecordServices = require("@/db_services/Quizing/RecordService.js")
-const DeterminationServices = require("@/db_services/Quizing/DeterminationService.js")
+const RecordServices = require("@/db_services/Quizing/RecordService.js");
+const DeterminationServices = require("@/db_services/Quizing/DeterminationService.js");
 
 // take a quiz id and return a testsheet
 async function CreateTestSheet(Quiz_id) {

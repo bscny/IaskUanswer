@@ -36,11 +36,14 @@ app.use("/Quiz", QuizRoutes);
 app.use("/Question", QuestionRoutes);
 
 // for user take quiz
-const TakeQuizRoutes = require("@/routes/Quizing/TakeQuizRoutes.js")
+const TakeQuizRoutes = require("@/routes/Quizing/TakeQuizRoutes.js");
 
 app.use("/take-quiz", TakeQuizRoutes);
 
 // for user see past history
+const QuizResultRoutes = require("@/routes/Quizing/QuizResultRoutes.js");
+
+app.use("/quiz-result", QuizResultRoutes);
 
 // routes end-------------------------------------------------------------------------------------
 

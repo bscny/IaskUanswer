@@ -8,7 +8,7 @@ async function GetAllQuiz() {
 
 async function GetSpecificQuiz(QuizId) {
     const [records] = await db.query(`SELECT * FROM quiz WHERE Quiz_id = ?`, [QuizId]);
-    return records;
+    return records[0];
 }
 
 async function GetSpecificFolderQuiz(FolderId) {
