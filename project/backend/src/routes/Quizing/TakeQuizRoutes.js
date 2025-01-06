@@ -15,21 +15,35 @@ const TakeQuizController = require('@/controllers/Quizing/TakeQuizController.js'
 //              "Q_number": 1,
 //              "Body": "am i gay",
 //              "Points": 10,
-//              "Answer": "no ",
-//              "OptionA": "y",
-//              "OptionB": "y",
-//              "OptionC": "no ",
-//              "OptionD": "y"
+//              "Answer": "example option3",
+//              "OptionA": "example option1",
+//              "OptionB": "example option2",
+//              "OptionC": "example option3",
+//              "OptionD": "example option4"
 //          },
 //      ]
 //
 router.get("/get-testSheet/:Quiz_id", TakeQuizController.GetTestSheet);
 
 // frontend gives an answer sheet and backend send the newly created quiz record id
-// axios are expected to get a number:
+// backend suppose to get an obj (answer sheet in the order of Q_number):
+//      {
+//          "User_id": 1,
+//          "Quiz_id": 1,
+//          "Answer_sheet": [
+//              {
+//                  "SO_id": 1,
+//                  "Q_number": 1,
+//                  "Points": 10,
+//                  "Choosed_ans": "example choosed answer",
+//              },
+//          ]
+//      }
 //
-//  1
+// axios are expected to get a ID(string) (CAUTION!!! need to use JSON.parse to parse the string to integer):
 //
-router.post("/post-answerSheet", TakeQuizController.PostAnswerSheet)
+//      1
+//
+router.post("/post-answerSheet", TakeQuizController.PostAnswerSheet);
 
 module.exports = router;

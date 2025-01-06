@@ -1,8 +1,10 @@
 const QuestionServices = require("@/db_services/Library/Question/SO_QuestionService.js");
+const RecordServices = require("@/db_services/Quizing/RecordService.js")
+const DeterminationServices = require("@/db_services/Quizing/DeterminationService.js")
 
 // take a quiz id and return a testsheet
 async function CreateTestSheet(Quiz_id) {
-    const questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id);
+    const questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future 
 
     if(questions[0] == undefined){
         // the quizhas no question created
@@ -75,27 +77,76 @@ async function GetTestSheet(req, res) {
     }
 }
 
-async function Grading(answerSheet) {
+async function Grading(answerSheet, Quiz_id, Record_id) {
+    // get each questions' answer first
+    let questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future
+
+    if(questions[0] == undefined){
+        // the quizhas no question created
+        return null;
+    }
+    
+    // sort the question according to their q num first
+    questions.sort(function(questionA, questionB){
+        return questionA.Q_number - questionB.Q_number;
+    });
+
     // start grading
+    let testResult = []; // will stores this array to redis in the future
+
     for (let i = 0; i < answerSheet.length; i ++){
-        // for each question
-        if(answerSheet[i].Choosed_ans == answerSheet[i].Answer){
+        // for each question sort by to Q_number
+        let isCorrect = false;
+        
+        if(answerSheet[i].Choosed_ans == questions[i].Answer){
             // correct
+            isCorrect = true;
         }else{
             // wrong
-        } 
+            isCorrect = false;
+        }
+
+        if(answerSheet[i].SO_id != undefined){
+            // make sure dealing with SO question
+            testResult.push({
+                Q_number: questions[i].Q_number,
+                Body: questions[i].Body,
+                Answer: questions[i].Answer,
+                // after using redis, this part will be the same as the question's options
+                // right now i just use fixed position
+                OptionA: questions[i].Answer,
+                OptionB: questions[i].OptionA,
+                OptionC: questions[i].OptionB,
+                OptionD: questions[i].OptionC,
+                Points: questions[i].Points,
+                Choosed_ans: answerSheet[i].Choosed_ans
+            });
+
+            // save to MySql table so_quiz_determination
+            DeterminationServices.CreateSODetermination(questions.SO_id, Record_id, isCorrect);
+        }
     }
 }
 
 async function PostAnswerSheet(req, res) {
-    const answerSheet = req.body;
+    const answer = req.body;
 
-    if(answerSheet[0] == undefined){
+    if(answer.User_id == undefined){
         res.status(500).send("wrong form of answer sheet submitted");
-        return
+        return;
     }
 
-    Grading(answerSheet);
+    // Create a Quiz Record with no Total_points
+    const newRecordID = await RecordServices.CreateQuizRecord(0, answer.User_id, answer.Quiz_id);
+
+    if(newRecordID == undefined){
+        res.status(500).send("something wrong while creating record");
+        return;
+    }
+    
+    Grading(answer.Answer_sheet, answer.Quiz_id, newRecordID);
+
+    res.status(200).send(JSON.stringify(newRecordID))
 }
 
 module.exports = {
