@@ -27,6 +27,23 @@ router.get("/all-records/:User_id", QuizResultController.GetRecordsByUserID);
 // axios are expected to get nothing(only status code):
 router.delete("/delete-quiz-record/:Record_id", QuizResultController.DeleteRecordByRecordID);
 
+// frontend gives a Record_id and backend sends every questions' result
+// axios are expected to get an array of obj:
+//      [
+//          {
+//              "Q_number": 1,
+//              "Body": "hahaha",
+//              "Answer": "hahaha",
+//              "OptionA": "hah",
+//              "OptionB": "h",
+//              "OptionC": "a",
+//              "Points": 10,
+//              "Is_correct": 1,
+//              "Choosed_ans": "hahaha",
+//              "OptionD": "hahaha"
+//          },
+//      ]
+//
 router.get("/all-questions/:Record_id", QuizResultController.GetAllQuestionsInRecord);
 
 module.exports = router;
