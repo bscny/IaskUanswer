@@ -5,15 +5,15 @@
             <form @submit.prevent="submitForm">
                 <div class="form-group">
                     <label for="quiz_name">Quiz Name</label>
-                    <input type="text" id="quiz_name" v-model="quiz_name" required />
+                    <input type="text" id="quiz_name" v-model="Quiz_name" required />
                 </div>
                 <div class="form-group">
                     <label for="total_points">Total Points</label>
-                    <input type="number" id="total_points" v-model="total_points" required />
+                    <input type="number" id="total_points" v-model="Total_points" required />
                 </div>
                 <div class="form-group">
                     <label for="quiz_date">Quiz Date</label>
-                    <input type="date" id="quiz_date" v-model="quiz_date" required />
+                    <input type="date" id="quiz_date" v-model="Quiz_Date" required />
                 </div>
                 <button type="submit">Create</button>
                 <button type="button" @click="$emit('cancel')">Cancel</button>
@@ -27,17 +27,17 @@ export default {
     name: "CreateRecordPop",
     data() {
         return {
-            quiz_name: "",
-            total_points: 0,
-            quiz_date: new Date().toISOString().substr(0, 10)
+            Quiz_name: "",
+            Total_points: 0,
+            Quiz_Date: new Date().toISOString().substr(0, 10)
         };
     },
     methods: {
         submitForm() {
             const newRecord = {
-                quiz_name: this.quiz_name,
-                total_points: this.total_points,
-                quiz_date: this.quiz_date
+                Quiz_name: this.Quiz_name,
+                Total_points: this.Total_points,
+                Quiz_Date: this.Quiz_Date
             };
             this.$emit('create', newRecord);
         }

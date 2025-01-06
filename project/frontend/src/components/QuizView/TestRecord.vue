@@ -2,7 +2,7 @@
     <div class="test-record">
         <h3>{{ record.Quiz_name }}</h3>
         <p>Total Points: {{ record.Total_points }}</p>
-        <p>Quiz Date: {{ formatDate(record.Quiz_Date) }}</p>
+        <p>Quiz Date: {{ record.Quiz_Date }}</p>
         <button class="edit-button" @click="$emit('edit', record)">Edit</button>
         <button class="delete-button" @click="$emit('delete', record.Record_id)">Delete</button>
     </div>
@@ -15,12 +15,6 @@ export default {
         record: {
             type: Object,
             required: true
-        }
-    },
-    methods: {
-        formatDate(date) {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-            return new Date(date).toLocaleDateString(undefined, options);
         }
     }
 }

@@ -2,8 +2,8 @@
     <div>
         <NavBar />
         <h1>Test Records</h1>
-        <div v-for="record in records" :key="record.record_id">
-            <TestRecord :record="record" @edit="showEditPopup" @delete="deleteRecord" />
+        <div v-for="record in records" :key="record.Record_id">
+            <TestRecord :record="record" @edit="openEditPopup" @delete="deleteRecord" />
         </div>
         <button @click="showCreatePopup = true">Create New Record</button>
         <CreateRecordPop v-if="showCreatePopup" @create="createRecord" @cancel="showCreatePopup = false" />
@@ -15,7 +15,7 @@
 import NavBar from '@/components/NavBar.vue';
 import TestRecord from '@/components/QuizView/TestRecord.vue';
 import CreateRecordPop from '@/components/QuizView/CreateRecordPop.vue';
-//import EditRecordPop from '@/components/QuizView/EditRecordPop.vue';
+import EditRecordPop from '@/components/QuizView/EditRecordPop.vue';
 
 export default {
     name: "HistoryPage",
@@ -23,7 +23,7 @@ export default {
         NavBar,
         TestRecord,
         CreateRecordPop,
-        //EditRecordPop
+        EditRecordPop
     },
     data() {
         return {
@@ -35,17 +35,17 @@ export default {
     },
     methods: {
         createRecord(newRecord) {
-            newRecord.record_id = Date.now(); // Simulate auto-increment ID
+            newRecord.Record_id = Date.now(); // Simulate auto-increment ID
             this.records.push(newRecord);
             this.saveRecords();
             this.showCreatePopup = false;
         },
-        showEditPopup(record) {
+        openEditPopup(record) {
             this.currentRecord = record;
             this.showEditPopup = true;
         },
         editRecord(updatedRecord) {
-            const index = this.records.findIndex(r => r.record_id === updatedRecord.record_id);
+            const index = this.records.findIndex(r => r.Record_id === updatedRecord.Record_id);
             if (index !== -1) {
                 this.records.splice(index, 1, updatedRecord);
                 this.saveRecords();
@@ -53,7 +53,7 @@ export default {
             this.showEditPopup = false;
         },
         deleteRecord(recordId) {
-            const index = this.records.findIndex(r => r.record_id === recordId);
+            const index = this.records.findIndex(r => r.Record_id === recordId);
             if (index !== -1) {
                 this.records.splice(index, 1);
                 this.saveRecords();
@@ -68,8 +68,8 @@ export default {
                 this.records = JSON.parse(records);
             } else {
                 this.records = [
-                    { record_id: 1, quiz_name: "Quiz 1", total_points: 80, quiz_date: "2023-10-01" },
-                    { record_id: 2, quiz_name: "Quiz 2", total_points: 90, quiz_date: "2023-10-02" }
+                    { Record_id: 1, Quiz_name: "Quiz 1", Total_points: 80, Quiz_Date: "2023-10-01" },
+                    { Record_id: 2, Quiz_name: "Quiz 2", Total_points: 90, Quiz_Date: "2023-10-02" }
                 ];
             }
         }
