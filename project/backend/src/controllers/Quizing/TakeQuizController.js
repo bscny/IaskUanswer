@@ -7,7 +7,7 @@ async function CreateTestSheet(Quiz_id) {
     const questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future 
 
     if(questions[0] == undefined){
-        // the quizhas no question created
+        // the quiz has no question created
         return null;
     }
     
@@ -80,11 +80,6 @@ async function GetTestSheet(req, res) {
 async function Grading(answerSheet, Quiz_id, Record_id) {
     // get each questions' answer first
     let questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future
-
-    if(questions[0] == undefined){
-        // the quizhas no question created
-        return null;
-    }
     
     // sort the question according to their q num first
     questions.sort(function(questionA, questionB){
@@ -93,6 +88,7 @@ async function Grading(answerSheet, Quiz_id, Record_id) {
 
     // start grading
     let testResult = []; // will stores this array to redis in the future
+    let totalPoints = 0;
 
     for (let i = 0; i < answerSheet.length; i ++){
         // for each question sort by to Q_number
@@ -101,6 +97,7 @@ async function Grading(answerSheet, Quiz_id, Record_id) {
         if(answerSheet[i].Choosed_ans == questions[i].Answer){
             // correct
             isCorrect = true;
+            totalPoints += questions[i].Points;
         }else{
             // wrong
             isCorrect = false;
@@ -119,13 +116,16 @@ async function Grading(answerSheet, Quiz_id, Record_id) {
                 OptionC: questions[i].OptionB,
                 OptionD: questions[i].OptionC,
                 Points: questions[i].Points,
+                Is_correct: isCorrect,
                 Choosed_ans: answerSheet[i].Choosed_ans
             });
 
             // save to MySql table so_quiz_determination
-            DeterminationServices.CreateSODetermination(questions.SO_id, Record_id, isCorrect);
+            await DeterminationServices.CreateSODetermination(questions.SO_id, Record_id, isCorrect, answerSheet[i].Choosed_ans);
         }
     }
+
+    return totalPoints;
 }
 
 async function PostAnswerSheet(req, res) {
@@ -136,7 +136,7 @@ async function PostAnswerSheet(req, res) {
         return;
     }
 
-    // Create a Quiz Record with no Total_points
+    // Create a Quiz_record with no Total_points
     const newRecordID = await RecordServices.CreateQuizRecord(0, answer.User_id, answer.Quiz_id);
 
     if(newRecordID == undefined){
@@ -144,9 +144,12 @@ async function PostAnswerSheet(req, res) {
         return;
     }
     
-    Grading(answer.Answer_sheet, answer.Quiz_id, newRecordID);
+    let score = await Grading(answer.Answer_sheet, answer.Quiz_id, newRecordID);
 
-    res.status(200).send(JSON.stringify(newRecordID))
+    // update the Total_points of the newly created Quiz_record
+    await RecordServices.UpdateQuizRecordTotalPoints(newRecordID, score);
+
+    res.status(200).send(JSON.stringify(newRecordID));
 }
 
 module.exports = {
