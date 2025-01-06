@@ -85,6 +85,7 @@ export default {
                 // call API to get user/check data
                 const response = await login(userInfo);
                 if (response.status === 200) {
+                    console.error(response.data);
                     this.$emit('loginSuccess', response.data);
                 }
 
