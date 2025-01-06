@@ -3,7 +3,7 @@
         <h3>{{ record.Quiz_name }}</h3>
         <p>Total Points: {{ record.Total_points }}</p>
         <p>Quiz Date: {{ record.Quiz_Date }}</p>
-        <button class="edit-button" @click="$emit('edit', record)">Edit</button>
+        <button class="view-details-button" @click="$emit('view-details', record.Record_id)">View Details</button>
         <button class="delete-button" @click="$emit('delete', record.Record_id)">Delete</button>
     </div>
 </template>
@@ -38,12 +38,12 @@ button {
     transition: background-color 0.3s ease;
 }
 
-.edit-button {
+.view-details-button {
     background-color: #007bff;
     color: white;
 }
 
-.edit-button:hover {
+.view-details-button:hover {
     background-color: #0056b3;
 }
 
