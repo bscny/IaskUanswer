@@ -29,9 +29,10 @@ export default {
         calculateTotalScore(questions, soQuizDetermination) {
             let totalScore = 0;
             soQuizDetermination.forEach(determination => {
-                const question = questions.find(q => q.so_id === determination.so_id);
+                const question = questions.find(q => q.SO_id === determination.SO_id);
                 if (question) {
-                    question.isCorrect = determination.is_correct === 1;
+                    question.isCorrect = determination.Is_correct === 1;
+                    question.userAnswer = determination.Choosed_ans; // 使用 Choosed_ans
                     if (question.isCorrect) {
                         totalScore += question.Points; // Add the points of the correct answer
                     }
@@ -43,23 +44,23 @@ export default {
     created() {
         // Fake data for demonstration
         const quizRecord = {
-            record_id: 1,
-            total_points: 10,
-            quiz_date: "2024-12-18 13:40:53",
-            user_id: 1,
-            quiz_id: 1
+            Record_id: 1,
+            Total_points: 10,
+            Quiz_Date: "2024-12-18 13:40:53",
+            User_id: 1,
+            Quiz_id: 1
         };
 
         const soQuizDetermination = [
-            { so_id: 1, record_id: 1, is_correct: 1 },
-            { so_id: 2, record_id: 1, is_correct: 0 },
-            { so_id: 3, record_id: 1, is_correct: 0 }
+            { SO_id: 1, Record_id: 1, Is_correct: 1, Choosed_ans: "Paris" },
+            { SO_id: 2, Record_id: 1, Is_correct: 0, Choosed_ans: "3" },
+            { SO_id: 3, Record_id: 1, Is_correct: 0, Choosed_ans: "Atlantic Ocean" }
         ];
 
         const questions = [
-            { so_id: 1, Body: "What is the capital of France?", Answer: "Paris", userAnswer: "Paris", Points: 5 },
-            { so_id: 2, Body: "What is 2 + 2?", Answer: "4", userAnswer: "3", Points: 3 },
-            { so_id: 3, Body: "What is the largest ocean on Earth?", Answer: "Pacific Ocean", userAnswer: "Atlantic Ocean", Points: 2 }
+            { SO_id: 1, Body: "What is the capital of France?", Answer: "Paris", Points: 5 },
+            { SO_id: 2, Body: "What is 2 + 2?", Answer: "4", Points: 3 },
+            { SO_id: 3, Body: "What is the largest ocean on Earth?", Answer: "Pacific Ocean", Points: 2 }
         ];
 
         // Calculate total score based on fake data
