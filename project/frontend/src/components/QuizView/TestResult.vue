@@ -4,20 +4,24 @@
             <h1>Total Score: {{ totalScore }}</h1>
         </div>
         <div class="button-container">
-            <button class="toggle-details-button" @click="$emit('toggle-details')">{{ showDetails ? 'Hide Details' : 'Show Details' }}</button>
             <button class="back-button" @click="goToUserLibrary">Back to User Library</button>
             <button class="history-button" @click="goToHistoryPage">Back to History Page</button>
+            <button class="show-wrong-button" @click="toggleShowWrongOnly">{{ showWrongOnly ? 'Show All' : 'Show Wrong Only' }}</button>
         </div>
-        <div v-if="showDetails" class="questions">
-            <div v-for="(question, index) in questions" :key="index" class="question">
-                <h3>Question {{ index + 1 }}: {{ question.Body }}</h3>
+        <div class="questions">
+            <div v-for="(question, index) in filteredQuestions" :key="index" class="question">
+                <h3>Question {{ question.Q_number }}: {{ question.Body }}</h3>
+                <p>Option A: {{ question.OptionA }}</p>
+                <p>Option B: {{ question.OptionB }}</p>
+                <p>Option C: {{ question.OptionC }}</p>
+                <p>Option D: {{ question.OptionD }}</p>
                 <p>Get Points: {{ question.Is_correct ? `(${question.Points} / ${question.Points})` : `(0 / ${question.Points})` }}</p>
                 <p>Your Answer: 
                     <span :class="{'correct-answer': question.Choosed_ans === question.Answer, 'incorrect-answer': question.Choosed_ans !== question.Answer}">
                         {{ question.Choosed_ans }}
                     </span>
                 </p>
-                <p>Correct Answer: <span class="correct-answer">{{ question.Answer }}</span></p>
+                <p v-if="!question.Is_correct">Correct Answer: <span class="correct-answer">{{ question.Answer }}</span></p>
             </div>
         </div>
     </div>
@@ -34,10 +38,19 @@ export default {
         questions: {
             type: Array,
             required: true
-        },
-        showDetails: {
-            type: Boolean,
-            required: true
+        }
+    },
+    data() {
+        return {
+            showWrongOnly: false
+        };
+    },
+    computed: {
+        filteredQuestions() {
+            if (this.showWrongOnly) {
+                return this.questions.filter(question => !question.Is_correct);
+            }
+            return this.questions;
         }
     },
     methods: {
@@ -46,6 +59,9 @@ export default {
         },
         goToHistoryPage() {
             this.$router.push({ name: 'HistoryPage' });
+        },
+        toggleShowWrongOnly() {
+            this.showWrongOnly = !this.showWrongOnly;
         }
     }
 }
@@ -67,7 +83,7 @@ export default {
 .question {
     margin-bottom: 20px;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .correct-answer {
@@ -109,11 +125,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-.toggle-details-button {
-    margin-right: 50px;
-    background-color: #28a745;
-}
-
 .back-button {
     background-color: #dc3545;
 }
@@ -124,5 +135,13 @@ button:hover {
 
 .history-button:hover {
     background-color: #e0a800;
+}
+
+.show-wrong-button {
+    background-color: #ff9800;
+}
+
+.show-wrong-button:hover {
+    background-color: #e68900;
 }
 </style>
