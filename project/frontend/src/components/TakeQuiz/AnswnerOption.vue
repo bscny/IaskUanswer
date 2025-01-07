@@ -24,7 +24,6 @@ export default {
     methods: {
         
         answerSelected(option) {
-            console.log("Option:", option);
             this.$emit("answerSelected", option)
         }
     }

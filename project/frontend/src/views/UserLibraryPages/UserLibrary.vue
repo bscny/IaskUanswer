@@ -182,13 +182,14 @@ export default {
         },
 
         TryCurrentQuiz(){
-            console.log("quiz:", this.curLookingQuiz.Quiz_id)
-            console.log("question:", this.curLookingQuestions)
+
             this.quizStore.quiz = this.curLookingQuiz;
+            const userID = JSON.parse(localStorage.getItem("userdata")).user.UserId;
             this.$router.push({
                 name: "TakeQuiz",
                 query: {
-                    lastPath : this.$route.name
+                    lastPath : this.$route.name,
+                    userID : userID
                 }
 
             })

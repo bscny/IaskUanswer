@@ -57,6 +57,15 @@ async function getTestSheetByQuizID_fake(quizId) {
 
 }
 
+async function submitTestSheet_fake(sheet) {
+    return {
+        data: {
+            recordID: 123
+        },
+        status:200
+    };
+}
 export {
-    getTestSheetByQuizID_fake
+    getTestSheetByQuizID_fake,
+    submitTestSheet_fake
 }
