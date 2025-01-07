@@ -1,5 +1,6 @@
 <template>
     <nav class="leftbar">
+        <button class="history-button" @click="goToHistoryPage">Test Records</button>
         <button class="create-folder-button"  @click="CreateFolder()">
             Create Folder
         </button>
@@ -41,6 +42,9 @@ export default{
     },
 
     methods: {
+        goToHistoryPage() {
+            this.$router.push({ name: 'HistoryPage' });
+        },
         CreateFolder(){
             this.$emit("CreateFolder");
         },
@@ -81,6 +85,22 @@ export default{
     border-radius: 5px;
 
     background-color: rgb(160, 148, 148);
+}
+
+.history-button {
+    display: block;
+    margin: 2.5vh 0 0 0;
+    padding: 0.8vh 1vw 0.8vh 1vw;
+    background-color: hsl(39,100%,65%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.history-button:hover {
+    background-color: #0056b3;
 }
 
 .create-folder-button {
