@@ -120,8 +120,6 @@ export default {
 
             this.showSubmitPopup = false;
         },
-        submitQuiz() { },
-
         restartQuiz() {
             this.currentQuestionIndex = 0;
             this.score = 0;
