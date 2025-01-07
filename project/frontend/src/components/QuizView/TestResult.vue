@@ -10,18 +10,12 @@
         </div>
         <div class="questions">
             <div v-for="(question, index) in filteredQuestions" :key="index" class="question">
-                <h3>Question {{ question.Q_number }}: {{ question.Body }}</h3>
-                <p>Option A: {{ question.OptionA }}</p>
-                <p>Option B: {{ question.OptionB }}</p>
-                <p>Option C: {{ question.OptionC }}</p>
-                <p>Option D: {{ question.OptionD }}</p>
                 <p>Get Points: {{ question.Is_correct ? `(${question.Points} / ${question.Points})` : `(0 / ${question.Points})` }}</p>
-                <p>Your Answer: 
-                    <span :class="{'correct-answer': question.Choosed_ans === question.Answer, 'incorrect-answer': question.Choosed_ans !== question.Answer}">
-                        {{ question.Choosed_ans }}
-                    </span>
-                </p>
-                <p v-if="!question.Is_correct">Correct Answer: <span class="correct-answer">{{ question.Answer }}</span></p>
+                <h3>Question {{ question.Q_number }}: {{ question.Body }}</h3>
+                <p :class="{'correct-answer': question.Answer === question.OptionA, 'incorrect-answer': question.Choosed_ans === question.OptionA && !question.Is_correct}">A: {{ question.OptionA }}</p>
+                <p :class="{'correct-answer': question.Answer === question.OptionB, 'incorrect-answer': question.Choosed_ans === question.OptionB && !question.Is_correct}">B: {{ question.OptionB }}</p>
+                <p :class="{'correct-answer': question.Answer === question.OptionC, 'incorrect-answer': question.Choosed_ans === question.OptionC && !question.Is_correct}">C: {{ question.OptionC }}</p>
+                <p :class="{'correct-answer': question.Answer === question.OptionD, 'incorrect-answer': question.Choosed_ans === question.OptionD && !question.Is_correct}">D: {{ question.OptionD }}</p>
             </div>
         </div>
     </div>
@@ -78,12 +72,13 @@ export default {
     margin: 40px 0;
     margin-top: 100px;
     left: 50%;
+    font-size: 25px;
 }
 
 .question {
     margin-bottom: 20px;
     text-align: center;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .correct-answer {
