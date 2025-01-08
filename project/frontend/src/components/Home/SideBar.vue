@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <h2 class="nav">
-            Navigation list:
+            Dashboard:
         </h2>
 
         <ul class="options">
@@ -34,7 +34,7 @@ export default {
     flex-direction: column;
     align-items: start;
     justify-content: start;
-    width: 10.2vw;
+    width: 10.42vw;
     background-color: rgb(134, 134, 134);
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -42,13 +42,16 @@ export default {
 }
 
 .nav {
-    font-size: 1.3em;
-    margin-bottom: 1em;
+	position: relative;
+    font-size: 1.7em;
+    margin-bottom: 0.1em;
+	margin-left: 0px;
+	margin-right: 20px;
 }
 
 .options {
     list-style: none;
-    font-size: 2.1vh;
+    font-size: 2.8vh;
     padding: 0;
 }
 
