@@ -1,4 +1,4 @@
-const service = require("@/db_services/Question/SO_QuestionService.js");
+const service = require("@/db_services/Library/Question/SO_QuestionService.js");
 
 async function DisplaySpecificSOQuestion(req, res) {
     try {

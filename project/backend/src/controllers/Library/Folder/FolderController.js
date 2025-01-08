@@ -1,4 +1,4 @@
-const service = require("@/db_services/Folder/FolderServices.js");
+const service = require("@/db_services/Library/Folder/FolderServices.js");
 
 //Read services
 async function DisplayspecificUserFolder(req, res) {

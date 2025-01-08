@@ -1,4 +1,4 @@
-const service = require("@/db_services/Quiz/QuizServices.js");
+const service = require("@/db_services/Library/Quiz/QuizServices.js");
 
 // Read services
 async function DisplaySpecificQuiz(req, res) {
