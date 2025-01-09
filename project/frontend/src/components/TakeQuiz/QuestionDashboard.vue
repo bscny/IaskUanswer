@@ -73,4 +73,5 @@ export default {
     background-color: #ccc;
     cursor: not-allowed;
 }
+
 </style>
