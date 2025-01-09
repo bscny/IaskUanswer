@@ -18,7 +18,7 @@
 import QuizHeader from "@/components/TakeQuiz/QuizHeader.vue";
 import QuizBody from "@/components/TakeQuiz/QuizBody.vue";
 import AnswnerOption from "@/components/TakeQuiz/AnswnerOption.vue";
-import { getTestSheetByQuizID_fake, submitTestSheet_fake } from "@/service/QuizApi/TestSheetAPI";
+import { getTestSheetByQuizID, submitTestSheet_fake } from "@/service/QuizApi/TestSheetAPI";
 import { useQuizStore } from "@/stores/Userlibrary/QuizQuestionStore";
 import SubmitPopup from "@/components/TakeQuiz/SubmitPopup.vue";
 import QuestionDashboard from "@/components/TakeQuiz/QuestionDashboard.vue";
@@ -54,9 +54,8 @@ export default {
             this.userID = this.$route.query.userID;
             this.currentQuestionIndex = 0;
 
-            // TODO replace fake service
-            this.testSheet = await getTestSheetByQuizID_fake(this.quizID);
-
+            this.testSheet = await getTestSheetByQuizID(this.quizID);
+            console.log('testsheet:',this.testSheet)
             this.answerSheet = this.testSheet.map(v => ({
                 SO_id: v.so_id,
                 Q_number: v.q_number,
@@ -160,7 +159,7 @@ export default {
             try {
                 const currentQuestion = this.testSheet[this.currentQuestionIndex];
                 return Object.entries(currentQuestion)
-                    .filter(([key, value]) => key.includes("option"))
+                    .filter(([key, value]) => key.includes("Option"))
                     .map(([key, value]) => value);
             } catch (e) {
                 console.error(e);
