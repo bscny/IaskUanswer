@@ -142,7 +142,7 @@ export default {
     computed: {
         currentBodyDescription() {
             try {
-                return this.testSheet[this.currentQuestionIndex].body;
+                return this.testSheet[this.currentQuestionIndex].Body;
             } catch (e) {
                 return "Undefined";
             }

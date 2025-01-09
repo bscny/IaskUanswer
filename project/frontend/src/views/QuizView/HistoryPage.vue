@@ -20,10 +20,7 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import TestRecord from '@/components/QuizView/TestRecord.vue';
-import { 
-    getUserRecords,
-    deleteRecordByRecordID
-} from '@/service/QuizApi/QuizRecordAPI.js';
+import { getUserRecords, deleteRecordByRecordID } from '@/service/QuizApi/QuizRecordAPI.js';
 
 export default {
     name: "HistoryPage",
