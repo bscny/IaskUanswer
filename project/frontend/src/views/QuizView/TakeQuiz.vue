@@ -4,6 +4,9 @@
             data-v-inspector="src/views/QuizView/TakeQuiz.vue:3:9" />
         <QuestionDashboard :questions="testSheet" :currentQuestionIndex="currentQuestionIndex" @navigateToQuestion="navigateToQuestion" />
         <QuizBody :body="currentBodyDescription" />
+        <div class="submit-container">
+            <button class="submit-button" @click="checkAndSubmit">Submit</button>
+        </div>
         <AnswnerOption :options="currentOptions" @answerSelected="handleAnswer($event)" />
     </div>
     <SubmitPopup v-if="showSubmitPopup" @submitOption="handleSubmit($event)" />
@@ -38,7 +41,8 @@ export default {
             answerSheet: [],
             questionCount: 0,
             lastPath: "/",
-            showSubmitPopup: false
+            showSubmitPopup: false,
+            incompleteQuestions: []
         };
     },
 
@@ -51,17 +55,13 @@ export default {
             // TODO replace fake service
             this.testSheet = await getTestSheetByQuizID_fake(this.quizID);
 
-            this.answerSheet.questions = []
-            Object.entries(this.testSheet).forEach(([k, v]) => {
-                // TODO generalize id usage
-                let question = {}
-                question.SO_id = v.so_id;
-                question.Q_number = v.q_number;
-                question.Points = v.points;
-                question['Choosed_ans'] = '';
+            this.answerSheet = this.testSheet.map(v => ({
+                SO_id: v.so_id,
+                Q_number: v.q_number,
+                Points: v.points,
+                Choosed_ans: ''
+            }));
 
-                this.answerSheet.push(question)
-            })
             this.questionCount = this.testSheet.length;
             this.lastPath = this.$route.query.lastPath;
         } catch (e) {
@@ -72,14 +72,12 @@ export default {
     methods: {
         handleAnswer(option) {
             // set the chosen answer
-            this.answerSheet[this.currentQuestionIndex].answer = option
-            // end of the quiz
-            if (this.currentQuestionIndex + 1 === this.questionCount) {
-                this.showSubmitPopup = true;
-                return;
-            }
+            this.answerSheet[this.currentQuestionIndex].Choosed_ans = option;
 
-            this.currentQuestionIndex++;
+            // move to the next question if not the last one
+            if (this.currentQuestionIndex + 1 < this.questionCount) {
+                this.currentQuestionIndex++;
+            }
         },
 
         async handleSubmit(doSubmit) {
@@ -129,6 +127,18 @@ export default {
 
         navigateToQuestion(index) {
             this.currentQuestionIndex = index;
+        },
+
+        checkAndSubmit() {
+            this.incompleteQuestions = this.answerSheet
+                .filter(q => !q.Choosed_ans)
+                .map(q => q.Q_number);
+
+            if (this.incompleteQuestions.length > 0) {
+                alert(`Please complete the following questions before submitting: ${this.incompleteQuestions.join(', ')}`);
+            } else {
+                this.showSubmitPopup = true;
+            }
         }
     },
 
@@ -173,5 +183,24 @@ export default {
     background-color: bisque;
     width: 100vw;
     height: 100vh;
+}
+
+.submit-container {
+    margin: 20px;
+    align-self: flex-start;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.submit-button:hover {
+    background-color: #218838;
 }
 </style>
