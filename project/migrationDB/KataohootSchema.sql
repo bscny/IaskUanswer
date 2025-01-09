@@ -206,6 +206,7 @@ CREATE TABLE `tf_quiz_determination` (
   `TF_id` int NOT NULL,
   `Record_id` int NOT NULL,
   `Is_correct` tinyint(1) NOT NULL,
+  `Choosed_ans` varchar(500) NOT NULL,
   PRIMARY KEY (`TF_id`,`Record_id`),
   KEY `Record_id` (`Record_id`),
   CONSTRAINT `tf_quiz_determination_ibfk_1` FOREIGN KEY (`TF_id`) REFERENCES `tf_question` (`TF_id`) ON DELETE CASCADE,
