@@ -4,6 +4,8 @@ import HomePage from '@/views/Home/HomePage.vue'
 import SignupPage from '@/views/Signup/SignupPage.vue'
 import LoginPage from '@/views/Login/LoginPage.vue'
 import EditQuiz from '@/views/UserLibraryPages/EditQuiz.vue'
+import ResultPage from '@/views/QuizView/ResultPage.vue'
+import HistoryPage from '@/views/QuizView/HistoryPage.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +35,17 @@ const router = createRouter({
             name: 'EditQuiz',
             component: EditQuiz
         },
+        {
+            path: '/QuizView/ResultPage',
+            name: 'ResultPage',
+            component: ResultPage
+        },
+        {
+            path: '/QuizView/HistoryPage',
+            name: 'HistoryPage',
+            component: HistoryPage
+        }
+
     ],
 })
 
