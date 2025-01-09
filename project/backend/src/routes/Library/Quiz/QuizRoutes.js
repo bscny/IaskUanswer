@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const QuizControllers = require('@/controllers/Quiz/QuizController.js');
+const QuizControllers = require('@/controllers/Library/Quiz/QuizController.js');
 
 //DisplayspecificQuiz
 router.get("/QuizId/:QuizId", QuizControllers.DisplaySpecificQuiz);

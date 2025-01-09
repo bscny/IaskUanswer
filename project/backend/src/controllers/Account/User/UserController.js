@@ -1,4 +1,4 @@
-const service = require("@/db_services/User/UserService.js");
+const service = require("@/db_services/Account/User/UserService.js");
 
 async function UserLoginConfirmation(req, res) {
    
