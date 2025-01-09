@@ -1,6 +1,6 @@
 <template>
     <div class="flex-buttons-titles" v-if="!editMode">
-        <button class="quiz-button">
+        <button class="quiz-button" @click="TryQuiz">
             Try Quiz
         </button>
 
@@ -27,13 +27,13 @@
                 <div class="points">
                     {{ question.Points }} points
                 </div>
-                
+
                 <button class="edit-question-button" v-if="editMode" @click="EditQuestion(question)">
                     edit
                 </button>
             </div>
         </div>
-        
+
         <div class="body">
             {{ question.Body }}
         </div>
@@ -79,7 +79,7 @@ export default {
     name: "DisplayQuestion",
     components: {},
 
-    props:{
+    props: {
         quiz: Object,
         questions: Array,
         editMode: Boolean,
@@ -90,19 +90,22 @@ export default {
 
         };
     },
-
     methods: {
-        EditQuiz(){
+        EditQuiz() {
             this.$emit("EditingQuiz");
         },
-
-        EditQuestion(question){
+        TryQuiz() {
+            this.$emit("TryingQuiz");
+        },
+        EditQuestion(question) {
             this.$emit("EditingQuestion", question);
         },
 
-        CreateQuestion(){
+        CreateQuestion() {
             this.$emit("CreatingQuestion");
         },
+
+
     },
 }
 </script>
@@ -147,7 +150,7 @@ export default {
     border-radius: 5px;
 
     font-size: 3vh;
-    
+
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -165,7 +168,7 @@ export default {
 
 .question-flexbox {
     display: flex;
-    
+
     flex-direction: column;
     align-items: center;
     justify-content: start;
@@ -173,13 +176,13 @@ export default {
     border-top: solid;
     border-width: 2px;
     border-color: black;
-    
+
     /* margin: 6vh 0 0 17vw; */
 }
 
 .question-params-flexbox {
     display: flex;
-    
+
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -216,7 +219,7 @@ export default {
     color: white;
     border: none;
     border-radius: 5px;
-    
+
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -251,7 +254,7 @@ export default {
     border: none;
     border-radius: 5px;
     font-size: 1.2vw;
-    
+
     cursor: pointer;
     transition: background-color 0.3s;
 }

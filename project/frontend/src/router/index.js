@@ -4,6 +4,7 @@ import HomePage from '@/views/Home/HomePage.vue'
 import SignupPage from '@/views/Signup/SignupPage.vue'
 import LoginPage from '@/views/Login/LoginPage.vue'
 import EditQuiz from '@/views/UserLibraryPages/EditQuiz.vue'
+import TakeQuiz from '@/views/QuizView/TakeQuiz.vue'
 import ResultPage from '@/views/QuizView/ResultPage.vue'
 import HistoryPage from '@/views/QuizView/HistoryPage.vue'
 
@@ -35,6 +36,12 @@ const router = createRouter({
             name: 'EditQuiz',
             component: EditQuiz
         },
+
+        {
+            path: '/TakeQuiz',
+            name: 'TakeQuiz',
+            component: TakeQuiz
+        },
         {
             path: '/QuizView/ResultPage',
             name: 'ResultPage',
@@ -45,7 +52,6 @@ const router = createRouter({
             name: 'HistoryPage',
             component: HistoryPage
         }
-
     ],
 })
 
