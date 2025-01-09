@@ -1,13 +1,12 @@
 <template>
-
     <div class="container" data-v-inspector="src/views/QuizView/TakeQuiz.vue:2:5">
         <QuizHeader :currentQuestionIndex="currentQuestionIndex" :questionCount="questionCount" @exit="backToLastPage()"
             data-v-inspector="src/views/QuizView/TakeQuiz.vue:3:9" />
+        <QuestionDashboard :questions="testSheet" :currentQuestionIndex="currentQuestionIndex" @navigateToQuestion="navigateToQuestion" />
         <QuizBody :body="currentBodyDescription" />
         <AnswnerOption :options="currentOptions" @answerSelected="handleAnswer($event)" />
     </div>
     <SubmitPopup v-if="showSubmitPopup" @submitOption="handleSubmit($event)" />
-
 </template>
 
 <script>
@@ -17,6 +16,7 @@ import AnswnerOption from "@/components/TakeQuiz/AnswnerOption.vue";
 import { getTestSheetByQuizID_fake, submitTestSheet_fake } from "@/service/QuizApi/TestSheetAPI";
 import { useQuizStore } from "@/stores/Userlibrary/QuizQuestionStore";
 import SubmitPopup from "@/components/TakeQuiz/SubmitPopup.vue";
+import QuestionDashboard from "@/components/TakeQuiz/QuestionDashboard.vue";
 
 export default {
     name: "TakeQuiz",
@@ -25,7 +25,8 @@ export default {
         QuizHeader,
         QuizBody,
         AnswnerOption,
-        SubmitPopup
+        SubmitPopup,
+        QuestionDashboard
     },
 
     data() {
@@ -69,9 +70,7 @@ export default {
     },
 
     methods: {
-
         handleAnswer(option) {
-
             // set the chosen answer
             this.answerSheet[this.currentQuestionIndex].answer = option
             // end of the quiz
@@ -81,28 +80,21 @@ export default {
             }
 
             this.currentQuestionIndex++;
-
-
         },
 
         async handleSubmit(doSubmit) {
-
             // User wants to submit
             if (doSubmit) {
-
                 try {
                     // TODO replace fake service
                     const response = await submitTestSheet_fake({
                         User_id: this.userID,
                         Quiz_id: this.quizID,
                         Answer_sheet: this.answerSheet
-                    }
-                    );
+                    });
 
                     const recordId = response.data.recordID;
                     if (response.status == 200) {
-
-                        
                         console.log("Submit Successfully. recordID=", recordId);
 
                         // Uncomment the following code when integrating.
@@ -113,13 +105,14 @@ export default {
                         //     }
                         // })
                     }
-                }catch(e){
+                } catch (e) {
                     console.error(e);
                 }
             }
 
             this.showSubmitPopup = false;
         },
+
         restartQuiz() {
             this.currentQuestionIndex = 0;
             this.score = 0;
@@ -132,6 +125,10 @@ export default {
             } catch (e) {
                 this.$router.push('/');
             }
+        },
+
+        navigateToQuestion(index) {
+            this.currentQuestionIndex = index;
         }
     },
 
@@ -139,8 +136,7 @@ export default {
         currentBodyDescription() {
             try {
                 return this.testSheet[this.currentQuestionIndex].body;
-            }
-            catch (e) {
+            } catch (e) {
                 return "Undefined";
             }
         },
@@ -158,8 +154,7 @@ export default {
                 console.error(e);
                 return [];
             }
-        },
-
+        }
     },
 
     watch: {
