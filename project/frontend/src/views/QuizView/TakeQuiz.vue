@@ -1,13 +1,15 @@
 <template>
-
     <div class="container" data-v-inspector="src/views/QuizView/TakeQuiz.vue:2:5">
         <QuizHeader :currentQuestionIndex="currentQuestionIndex" :questionCount="questionCount" @exit="backToLastPage()"
             data-v-inspector="src/views/QuizView/TakeQuiz.vue:3:9" />
+        <QuestionDashboard :questions="testSheet" :currentQuestionIndex="currentQuestionIndex" @navigateToQuestion="navigateToQuestion" />
         <QuizBody :body="currentBodyDescription" />
-        <AnswnerOption :options="currentOptions" @answerSelected="handleAnswer($event)" />
+        <div class="submit-container">
+            <button class="submit-button" @click="checkAndSubmit">Submit</button>
+        </div>
+        <AnswnerOption :options="currentOptions" :selectedOption="currentSelectedOption" @answerSelected="handleAnswer($event)" />
     </div>
     <SubmitPopup v-if="showSubmitPopup" @submitOption="handleSubmit($event)" />
-
 </template>
 
 <script>
@@ -17,6 +19,7 @@ import AnswnerOption from "@/components/TakeQuiz/AnswnerOption.vue";
 import { getTestSheetByQuizID_fake, submitTestSheet_fake } from "@/service/QuizApi/TestSheetAPI";
 import { useQuizStore } from "@/stores/Userlibrary/QuizQuestionStore";
 import SubmitPopup from "@/components/TakeQuiz/SubmitPopup.vue";
+import QuestionDashboard from "@/components/TakeQuiz/QuestionDashboard.vue";
 
 export default {
     name: "TakeQuiz",
@@ -25,7 +28,8 @@ export default {
         QuizHeader,
         QuizBody,
         AnswnerOption,
-        SubmitPopup
+        SubmitPopup,
+        QuestionDashboard
     },
 
     data() {
@@ -37,7 +41,8 @@ export default {
             answerSheet: [],
             questionCount: 0,
             lastPath: "/",
-            showSubmitPopup: false
+            showSubmitPopup: false,
+            incompleteQuestions: []
         };
     },
 
@@ -50,17 +55,13 @@ export default {
             // TODO replace fake service
             this.testSheet = await getTestSheetByQuizID_fake(this.quizID);
 
-            this.answerSheet.questions = []
-            Object.entries(this.testSheet).forEach(([k, v]) => {
-                // TODO generalize id usage
-                let question = {}
-                question.SO_id = v.so_id;
-                question.Q_number = v.q_number;
-                question.Points = v.points;
-                question['Choosed_ans'] = '';
+            this.answerSheet = this.testSheet.map(v => ({
+                SO_id: v.so_id,
+                Q_number: v.q_number,
+                Points: v.points,
+                Choosed_ans: ''
+            }));
 
-                this.answerSheet.push(question)
-            })
             this.questionCount = this.testSheet.length;
             this.lastPath = this.$route.query.lastPath;
         } catch (e) {
@@ -69,40 +70,29 @@ export default {
     },
 
     methods: {
-
         handleAnswer(option) {
-
             // set the chosen answer
-            this.answerSheet[this.currentQuestionIndex].answer = option
-            // end of the quiz
-            if (this.currentQuestionIndex + 1 === this.questionCount) {
-                this.showSubmitPopup = true;
-                return;
+            this.answerSheet[this.currentQuestionIndex].Choosed_ans = option;
+
+            // move to the next question if not the last one
+            if (this.currentQuestionIndex + 1 < this.questionCount) {
+                this.currentQuestionIndex++;
             }
-
-            this.currentQuestionIndex++;
-
-
         },
 
         async handleSubmit(doSubmit) {
-
             // User wants to submit
             if (doSubmit) {
-
                 try {
                     // TODO replace fake service
                     const response = await submitTestSheet_fake({
                         User_id: this.userID,
                         Quiz_id: this.quizID,
                         Answer_sheet: this.answerSheet
-                    }
-                    );
+                    });
 
                     const recordId = response.data.recordID;
                     if (response.status == 200) {
-
-                        
                         console.log("Submit Successfully. recordID=", recordId);
 
                         // Uncomment the following code when integrating.
@@ -113,13 +103,14 @@ export default {
                         //     }
                         // })
                     }
-                }catch(e){
+                } catch (e) {
                     console.error(e);
                 }
             }
 
             this.showSubmitPopup = false;
         },
+
         restartQuiz() {
             this.currentQuestionIndex = 0;
             this.score = 0;
@@ -132,6 +123,22 @@ export default {
             } catch (e) {
                 this.$router.push('/');
             }
+        },
+
+        navigateToQuestion(index) {
+            this.currentQuestionIndex = index;
+        },
+
+        checkAndSubmit() {
+            this.incompleteQuestions = this.answerSheet
+                .filter(q => !q.Choosed_ans)
+                .map(q => q.Q_number);
+
+            if (this.incompleteQuestions.length > 0) {
+                alert(`Please complete the following questions before submitting: ${this.incompleteQuestions.join(', ')}`);
+            } else {
+                this.showSubmitPopup = true;
+            }
         }
     },
 
@@ -139,8 +146,7 @@ export default {
         currentBodyDescription() {
             try {
                 return this.testSheet[this.currentQuestionIndex].body;
-            }
-            catch (e) {
+            } catch (e) {
                 return "Undefined";
             }
         },
@@ -159,7 +165,9 @@ export default {
                 return [];
             }
         },
-
+        currentSelectedOption() {
+            return this.answerSheet[this.currentQuestionIndex].Choosed_ans;
+        }
     },
 
     watch: {
@@ -178,5 +186,24 @@ export default {
     background-color: bisque;
     width: 100vw;
     height: 100vh;
+}
+
+.submit-container {
+    margin: 20px;
+    align-self: flex-start;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.submit-button:hover {
+    background-color: #218838;
 }
 </style>
