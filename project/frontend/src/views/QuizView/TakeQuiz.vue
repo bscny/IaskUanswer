@@ -2,12 +2,14 @@
     <div class="container" data-v-inspector="src/views/QuizView/TakeQuiz.vue:2:5">
         <QuizHeader :currentQuestionIndex="currentQuestionIndex" :questionCount="questionCount" @exit="backToLastPage()"
             data-v-inspector="src/views/QuizView/TakeQuiz.vue:3:9" />
-        <QuestionDashboard :questions="testSheet" :currentQuestionIndex="currentQuestionIndex" @navigateToQuestion="navigateToQuestion" />
+        <QuestionDashboard :questions="testSheet" :currentQuestionIndex="currentQuestionIndex"
+            @navigateToQuestion="navigateToQuestion" />
         <QuizBody :body="currentBodyDescription" />
         <div class="submit-container">
             <button class="submit-button" @click="checkAndSubmit">Submit</button>
         </div>
-        <AnswnerOption :options="currentOptions" :selectedOption="currentSelectedOption" @answerSelected="handleAnswer($event)" />
+        <AnswnerOption :options="currentOptions" :selectedOption="currentSelectedOption"
+            @answerSelected="handleAnswer($event)" />
     </div>
     <SubmitPopup v-if="showSubmitPopup" @submitOption="handleSubmit($event)" />
 </template>

@@ -50,10 +50,11 @@ export default {
     padding: 2vh 2vw 2vh 2vw;
 }
 
-.popup-inner > h2 {
+.popup-inner>h2 {
     text-align: center;
 }
-.popup-inner > button {
+
+.popup-inner>button {
 
     margin: 1vw;
     padding: 1vh 1vw 1vh 1vw;
