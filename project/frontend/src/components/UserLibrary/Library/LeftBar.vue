@@ -41,6 +41,7 @@ export default{
     },
 
     methods: {
+        
         CreateFolder(){
             this.$emit("CreateFolder");
         },
@@ -82,6 +83,7 @@ export default{
 
     background-color: rgb(160, 148, 148);
 }
+
 
 .create-folder-button {
     display: block;
