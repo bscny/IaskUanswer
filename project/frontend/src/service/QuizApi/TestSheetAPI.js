@@ -5,15 +5,11 @@ async function getTestSheetByQuizID(quizId) {
     return response.data;
 }
 
-async function submitTestSheet_fake(sheet) {
-    return {
-        data: {
-            recordID: 123
-        },
-        status:200
-    };
+async function submitTestSheet(sheet) {
+    const response = await api.post('/take-quiz/post-answerSheet', sheet);
+    return response.data;
 }
 export {
     getTestSheetByQuizID,
-    submitTestSheet_fake
+    submitTestSheet
 }
