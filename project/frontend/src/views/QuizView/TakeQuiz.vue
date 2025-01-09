@@ -7,7 +7,7 @@
         <div class="submit-container">
             <button class="submit-button" @click="checkAndSubmit">Submit</button>
         </div>
-        <AnswnerOption :options="currentOptions" @answerSelected="handleAnswer($event)" />
+        <AnswnerOption :options="currentOptions" :selectedOption="currentSelectedOption" @answerSelected="handleAnswer($event)" />
     </div>
     <SubmitPopup v-if="showSubmitPopup" @submitOption="handleSubmit($event)" />
 </template>
@@ -164,6 +164,9 @@ export default {
                 console.error(e);
                 return [];
             }
+        },
+        currentSelectedOption() {
+            return this.answerSheet[this.currentQuestionIndex].Choosed_ans;
         }
     },
 

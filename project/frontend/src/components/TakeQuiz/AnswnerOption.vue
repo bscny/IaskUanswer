@@ -1,6 +1,13 @@
 <template>
     <div class="option-container">
-        <button v-for="(option, i) in options" :key="i" @click="answerSelected(option)" class="option" :class="{ 'selected': selectedOption === option }" :style="{ 'background-color': this.color[i]}">
+        <button
+            v-for="(option, i) in options"
+            :key="i"
+            @click="answerSelected(option)"
+            class="option"
+            :class="{ 'selected': selectedOption === option }"
+            :style="{ 'background-color': this.color[i] }"
+        >
             {{ option }}
         </button>
     </div>
@@ -9,24 +16,24 @@
 <script>
 export default {
     name: "AnswnerOption",
-    data() {
-        return {
-            color: ['#ff6666', '#6666ff', '#ffff66', '#66ff66'],
-            selectedOption: null
-        }
-    },
-
     props: {
         options: {
             type: Array,
             required: true,
             default: []
+        },
+        selectedOption: {
+            type: String,
+            default: null
         }
     },
-
+    data() {
+        return {
+            color: ['#ff6666', '#6666ff', '#ffff66', '#66ff66']
+        }
+    },
     methods: {
         answerSelected(option) {
-            this.selectedOption = option;
             this.$emit("answerSelected", option);
         }
     }
