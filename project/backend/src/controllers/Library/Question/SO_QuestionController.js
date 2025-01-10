@@ -1,9 +1,11 @@
-const service = require("@/db_services/Library/Question/SO_QuestionService.js");
+const Service = require("@/db_services/Library/Question/QuestionServices.js");
+const SoServices = require("@/db_services/Library/Question/SO_QuestionService.js");
+const TfServices = require("@/db_services/Library/Question/TF_QuestionServices.js");
 
 async function DisplaySpecificSOQuestion(req, res) {
     try {
         const { SOId } = req.params;
-        const question = await service.GetSpecificSOQuestion(SOId);
+        const question = await SoServices.GetSpecificSOQuestion(SOId);
         if (question.length === 0) {
             return res.status(404).json({ message: "Question not found" });
         }
@@ -15,7 +17,7 @@ async function DisplaySpecificSOQuestion(req, res) {
 
 async function DisplayALLSOQuestion(req, res) {
     try {
-        const questions = await service.GetAllSOQuestion();
+        const questions = await SoServices.GetAllSOQuestion();
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -25,7 +27,7 @@ async function DisplayALLSOQuestion(req, res) {
 async function DisplaySpecificQuizSOQuestion(req, res) {
     try {
         const { QuizId } = req.params;
-        const questions = await service.GetSpecificQuizSOQuestion(QuizId);
+        const questions = await SoServices.GetSpecificQuizSOQuestion(QuizId);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -35,7 +37,7 @@ async function DisplaySpecificQuizSOQuestion(req, res) {
 async function DisplayRandomSOQuestion(req, res) {
     try {
         const number = parseInt(req.params.Number, 10);
-        const questions = await service.GetRandomSOQuestion(number);
+        const questions = await SoServices.GetRandomSOQuestion(number);
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -44,7 +46,7 @@ async function DisplayRandomSOQuestion(req, res) {
 async function CreateSOQuestion(req, res) {
     try {
         const newQuestion = req.body;
-        const questionId = await service.CreateSOQuestion(newQuestion);
+        const questionId = await SoServices.CreateSOQuestion(newQuestion);
         res.status(201).json({ message: "Question created", questionId });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -55,7 +57,7 @@ async function UpdateSOQuestion(req, res) {
     try {
         const { SOId } = req.params;
         const updatedData = req.body;
-        await service.UpdateSOQuestion(updatedData, SOId);
+        await SoServices.UpdateSOQuestion(updatedData, SOId);
         res.status(200).json({ message: "Question updated" });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -65,7 +67,19 @@ async function UpdateSOQuestion(req, res) {
 async function DeleteSOQuestion(req, res) {
     try {
         const { SOId } = req.params;
-        const result = await service.DeleteSOQuestion(SOId);
+        // before delete, update all Q_number grater than target
+        let soTypeQuestions = await Service.GetSOQuestionsAfterGivenSOQue(SOId);
+        let tfTypeQuestions = await Service.GetTFQuestionsAfterGivenSOQue(SOId);
+
+        for(let i = 0; i < soTypeQuestions.length; i ++){
+            await SoServices.UpdateSOQuestionQnum(soTypeQuestions[i].SO_id, soTypeQuestions[i].Q_number - 1);
+        }
+
+        for(let i = 0; i < tfTypeQuestions.length; i ++){
+            await TfServices.UpdateTFQuestionQnum(tfTypeQuestions[i].TF_id, tfTypeQuestions[i].Q_number - 1);
+        }
+        
+        const result = await SoServices.DeleteSOQuestion(SOId);
         if (result.affectedRows === 0) {
             res.status(404).send(`no question with ID: ${SOId}`);
         } else {

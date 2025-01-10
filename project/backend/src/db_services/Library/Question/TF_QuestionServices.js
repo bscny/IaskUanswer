@@ -31,6 +31,13 @@ async function UpdateTFQuestion(QuestionData, TF_id) {
                     [Q_number, Body, Points, Answer, TF_id]);
 }
 
+async function UpdateTFQuestionQnum(TF_id, Q_number) {
+    await db.query(`UPDATE tf_question 
+                    SET Q_number = ?
+                    WHERE TF_id = ?`, 
+                    [Q_number, TF_id]);
+}
+
 // delete services
 async function DeleteTFQuestion(TF_id) {
     const [result] = await db.query(`DELETE FROM tf_question WHERE TF_id = ?`, [TF_id]);
@@ -42,5 +49,6 @@ module.exports = {
     GetSpecificQuizTFQuestion,
     CreateTFQuestion,
     UpdateTFQuestion,
+    UpdateTFQuestionQnum,
     DeleteTFQuestion,
 };

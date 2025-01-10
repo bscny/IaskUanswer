@@ -166,17 +166,20 @@ export default {
             for (let i = 0; i < this.questionsStore.questions.length; i++) {
                 if (this.questionsStore.questions[i].Q_number == deletedQuestion.Q_number) {
                     this.questionsStore.questions.splice(i, 1);
+                    i --; // in order to update the Q_number after 
+                }else if(this.questionsStore.questions[i].Q_number > deletedQuestion.Q_number){
+                    this.questionsStore.questions[i].Q_number --;
                 }
             }
-            alert("Deleted!!");
-
+            
             // delete from backend
             if(deletedQuestion.SO_id != undefined){
                 await deleteQuestion(deletedQuestion.SO_id);
             }else if(deletedQuestion.TF_id != undefined){
                 await DeleteTFQuestion(deletedQuestion.TF_id);
             }
-
+            
+            alert("Deleted!!");
             this.canEditQuestion = false;
         },
 
