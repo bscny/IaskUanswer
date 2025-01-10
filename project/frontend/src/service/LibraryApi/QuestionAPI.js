@@ -22,9 +22,23 @@ async function deleteQuestion(questionId) {
     return response.data;
 }
 
+// newly added apu for TF question
+async function CreateTFQuestion(questionData) {
+    const response = await api.post('/Question/tfque/post', questionData);
+
+    if(response.status == 500){
+        alert("something wrong... try later");
+        return null;
+    }
+
+    return response.data;  // a created ID
+}
+
 export{
     getQuestionsByQuiz,
     createQuestion,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
+
+    CreateTFQuestion,
 }

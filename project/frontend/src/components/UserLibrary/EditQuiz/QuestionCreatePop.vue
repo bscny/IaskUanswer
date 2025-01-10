@@ -47,11 +47,11 @@
             </p2>
 
             <div class="TF-select-flexbox">
-                <button class="TF-button" :class="{'selected': ansTF == true}">
+                <button class="TF-button" :class="{'selected': ansTF == true}" @click="SetAnsTF()">
                     True
                 </button>
 
-                <button class="TF-button" :class="{'selected': ansTF == true}">
+                <button class="TF-button" :class="{'selected': ansTF == false}" @click="ResetAnsTF()">
                     False
                 </button>
             </div>
@@ -102,28 +102,52 @@ export default {
     },
 
     methods: {
+        SetAnsTF(){
+            this.ansTF = true;
+        },
+
+        ResetAnsTF(){
+            this.ansTF = false;
+        },
+
         Cancel() {
             this.$emit("Cancel");
         },
 
         CreationDone() {
-            if (this.body != "" && this.ans != "" && this.optionA != "" &&
-                this.optionB != "" && this.optionC != "" && this.points != null) {
-                
-                let newRecord = {
-                    Q_number: this.questions.length + 1,
-                    Body: this.body, 
-                    Points: this.points,
-                    Answer: this.ans,
-                    OptionA: this.optionA,
-                    OptionB: this.optionB,
-                    OptionC: this.optionC,
-                    Quiz_id: this.quiz.Quiz_id
+            if(this.createType == 'SO'){
+                if (this.body != "" && this.ans != "" && this.optionA != "" &&
+                    this.optionB != "" && this.optionC != "" && this.points != null) {
+                    
+                    let newRecord = {
+                        Q_number: this.questions.length + 1,
+                        Body: this.body, 
+                        Points: this.points,
+                        Answer: this.ans,
+                        OptionA: this.optionA,
+                        OptionB: this.optionB,
+                        OptionC: this.optionC,
+                        Quiz_id: this.quiz.Quiz_id
+                    }
+    
+                    this.$emit("Created", newRecord);
+                }else{
+                    this.$emit("Cancel");
                 }
-
-                this.$emit("Created", newRecord);
-            }else{
-                this.$emit("Cancel");
+            }else if(this.createType == 'TF'){
+                if (this.body != "" && this.points != null) {
+                    let newRecord = {
+                        Q_number: this.questions.length + 1,
+                        Body: this.body, 
+                        Points: this.points,
+                        Answer: this.ansTF,
+                        Quiz_id: this.quiz.Quiz_id
+                    }
+    
+                    this.$emit("Created", newRecord);
+                }else{
+                    this.$emit("Cancel");
+                }
             }
         }
     },
@@ -242,7 +266,23 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-    width: 30%;
+    width: 20%;
+}
+
+.TF-button {
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: #535353;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    font-size: 2vw;
+}
+
+.TF-button:hover {
+    background-color: #9c9c9c;
 }
 
 .TF-button.selected {
@@ -257,16 +297,8 @@ export default {
     font-size: 2vw;
 }
 
-.TF-button {
-    padding: 1vh 1.2vw 1vh 1.2vw;
-    background-color: #535353;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    font-size: 2vw;
+.TF-button.selected:hover {
+    background-color: #2fad44;
 }
 
 .done-button {

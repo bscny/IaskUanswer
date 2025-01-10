@@ -49,7 +49,8 @@ import {
     getQuestionsByQuiz,
     createQuestion,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
+    CreateTFQuestion
 } from "@/service/LibraryApi/QuestionAPI.js"
 
 import {
@@ -125,13 +126,17 @@ export default {
         },
 
         async QuestionCreated(newQuestion) {
-
-            await createQuestion(newQuestion);
-            // for site rendering assign newly pushed question its So_id
-            this.questionsStore.questions.push(newQuestion);
-            alert("Question Created!");
+            if(this.createType == "SO"){
+                await createQuestion(newQuestion);
+                // for site rendering assign newly pushed question its So_id
+                // this.questionsStore.questions.push(newQuestion);
+            }else if(this.createType == "TF"){
+                await CreateTFQuestion(newQuestion);
+            }
+            
             await this.FetchQuestion();
             this.canCreateQuestion = false;
+            alert("Question Created!");
         },
 
         async QuestionEdited(editedQuestion) {
