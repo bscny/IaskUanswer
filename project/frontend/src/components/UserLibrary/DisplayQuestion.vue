@@ -1,75 +1,94 @@
 <template>
-    <div class="flex-buttons-titles" v-if="!editMode">
-        <button class="quiz-button" @click="TryQuiz">
-            Try Quiz
-        </button>
-
-        <div class="quiz-name">
-            {{ quiz.Quiz_name }}
-        </div>
-
-        <button class="edit-quiz-button" @click="EditQuiz()">
-            Edit Quiz
-        </button>
-    </div>
-
-    <div class="description" v-if="!editMode">
-        Description: {{ quiz.Quiz_description }}
-    </div>
-
-    <ul class="question-flexbox" v-for="question in questions" :key="question.Q_number">
-        <div class="question-params-flexbox">
-            <div class="q-number">
-                {{ question.Q_number }}.
+    <div class="container">
+        <div class="flex-buttons-titles" v-if="!editMode">
+            <button class="quiz-button" @click="TryQuiz">
+                Try Quiz
+            </button>
+    
+            <div class="quiz-name">
+                {{ quiz.Quiz_name }}
             </div>
-
-            <div class="points-edit-fiexbox">
-                <div class="points">
-                    {{ question.Points }} points
+    
+            <button class="edit-quiz-button" @click="EditQuiz()">
+                Edit Quiz
+            </button>
+        </div>
+    
+        <div class="description" v-if="!editMode">
+            Description: {{ quiz.Quiz_description }}
+        </div>
+    
+        <ul class="question-flexbox" v-for="question in questions" :key="question.Q_number">
+            <div class="question-params-flexbox">
+                <div class="q-number">
+                    {{ question.Q_number }}.
                 </div>
-
-                <button class="edit-question-button" v-if="editMode" @click="EditQuestion(question)">
-                    edit
-                </button>
+    
+                <div class="points-edit-fiexbox">
+                    <div class="points">
+                        {{ question.Points }} points
+                    </div>
+    
+                    <button class="edit-question-button" v-if="editMode" @click="EditQuestion(question)">
+                        edit
+                    </button>
+                </div>
             </div>
+    
+            <div class="body">
+                {{ question.Body }}
+            </div>
+    
+            <div class="option-grid" v-if="question.SO_id !== undefined">
+                <div class="options">
+                    Ans: {{ question.Answer }}
+                </div>
+    
+                <div class="options">
+                    {{ question.OptionA }}
+                </div>
+    
+                <div class="options">
+                    {{ question.OptionB }}
+                </div>
+    
+                <div class="options">
+                    {{ question.OptionC }}
+                </div>
+            </div>
+    
+            <!-- <div class="option-grid" v-if="question.TF_id !== undefined">
+                <div class="options-TF">
+                    Ans: {{ question.OptionB }}
+                </div>
+    
+                <div class="options-TF">
+                    {{ question.OptionC }}
+                </div>
+            </div> -->
+    
+        </ul>
+    
+        <div class="create-question-flexbox" v-if="editMode">
+            <button class="create-question-button" @click="Toggle()">
+                Create Question
+            </button>
+    
+            <div class="create-menu" v-if="showCreateMenu">
+                <div class="list" @click="CreateQuestion('TF')">
+                    create a true/false question
+                </div>
+    
+                <div class="list" @click="CreateQuestion('SO')">
+                    create a single open question
+                </div>
+            </div>
+    
         </div>
-
-        <div class="body">
-            {{ question.Body }}
+    
+        <div class="extra-space">
+    
         </div>
-
-        <div class="SO-option-grid">
-            <div class="options">
-                Ans: {{ question.Answer }}
-            </div>
-
-            <div class="options">
-                {{ question.OptionA }}
-            </div>
-
-            <div class="options">
-                {{ question.OptionB }}
-            </div>
-
-            <div class="options">
-                {{ question.OptionC }}
-            </div>
-        </div>
-
-        <!-- <div class="TF-option-grid" v-if="question.TF_id !== undefined">
-            <div>
-                
-            </div>
-        </div> -->
-
-    </ul>
-
-    <button class="create-question-button" v-if="editMode" @click="CreateQuestion()">
-        Create Question
-    </button>
-
-    <div class="extra-space">
-
     </div>
 </template>
 
@@ -87,7 +106,7 @@ export default {
 
     data() {
         return {
-
+            showCreateMenu: false,
         };
     },
     methods: {
@@ -101,16 +120,29 @@ export default {
             this.$emit("EditingQuestion", question);
         },
 
-        CreateQuestion() {
-            this.$emit("CreatingQuestion");
+        Toggle(){
+            this.showCreateMenu = !this.showCreateMenu;
         },
 
-
+        CreateQuestion(type) {
+            this.$emit("CreatingQuestion", type);  // type is a string with either TF or SO
+        },
     },
 }
 </script>
 
 <style scoped>
+.container {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+}
+
 .flex-buttons-titles {
     display: flex;
     flex-direction: row;
@@ -118,6 +150,7 @@ export default {
     align-items: center;
 
     margin: 0 0 2vh 0;
+    width: 100%;
 }
 
 .quiz-button {
@@ -164,6 +197,8 @@ export default {
     margin-bottom: 2vh;
     font-size: 2vw;
     text-decoration: underline;
+
+    align-self: flex-start;
 }
 
 .question-flexbox {
@@ -172,6 +207,8 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: start;
+
+    width: 100%;
 
     border-top: solid;
     border-width: 2px;
@@ -228,10 +265,15 @@ export default {
     background-color: #ce43a4;
 }
 
-.SO-option-grid {
+.option-grid {
     display: grid;
 
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 5vh 5vh;
+    gap: 1vh 1vw;
+
+    justify-items: center;
+    align-items: center;
 
     width: 100%;
     margin: 4vh 0 2vh 0;
@@ -239,15 +281,25 @@ export default {
 
 .options {
     font-size: 2vw;
-    margin: auto;
-    margin-top: 1.5vh;
+}
+
+.options-TF {
+    font-size: 2vw;
+    grid-row: span 2;
+}
+
+.create-question-flexbox {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    
+    margin-top: 10vh;
+    width: 50%;
 }
 
 .create-question-button {
-    display: block;
-
-    margin: auto;
-    margin-top: 10vh;
     padding: 1vh 1.2vw 1vh 1.2vw;
     background-color: rgb(177, 187, 240);
     color: white;
@@ -261,6 +313,34 @@ export default {
 
 .create-question-button:hover {
     background-color: #ccc7eb;
+}
+
+.create-menu {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    padding: 0 1vw;
+    background-color: rgb(87, 87, 87);
+    border-radius: 5px;
+}
+
+.list {
+    color: white;
+    border: none;
+    font-size: 1.5vw;
+    padding: 1vh 0;
+
+    width: 100%;
+
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.list:hover {
+    background-color: rgb(151, 151, 151);
 }
 
 .extra-space {

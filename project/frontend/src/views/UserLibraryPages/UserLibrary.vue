@@ -18,7 +18,7 @@
 
     <div class="display-area" v-if="curLookingQuiz != null">
         <DisplayQuestion    :quiz="curLookingQuiz" 
-                            :questions="curLookingQuestions" 
+                            :questions="curLookingQuestions"
                             :editMode="false"
                             @EditingQuiz="EditQuiz()" 
                             @TryingQuiz="TryCurrentQuiz()"/>

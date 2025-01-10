@@ -1,6 +1,6 @@
 <template>
     <div class="BG">
-        <div class="window">
+        <div class="window" v-if="createType == 'SO'">
             <p1 class="category">
                 Question:
             </p1>
@@ -35,6 +35,41 @@
                 Cancel
             </button>
         </div>
+        <div class="window" v-else-if="createType == 'TF'">
+            <p1 class="category">
+                Question:
+            </p1>
+
+            <input class="body-input" type="text" v-model="body" />
+
+            <p2 class="category">
+                Answer:
+            </p2>
+
+            <div class="TF-select-flexbox">
+                <button class="TF-button" :class="{'selected': ansTF == true}">
+                    True
+                </button>
+
+                <button class="TF-button" :class="{'selected': ansTF == true}">
+                    False
+                </button>
+            </div>
+
+            <p4 class="category">
+                points:
+            </p4>
+
+            <input class="points-input" type="number" v-model="points" />
+
+            <button class="done-button" @click="CreationDone()">
+                Create
+            </button>
+
+            <button class="cancel-button" @click="Cancel()">
+                Cancel
+            </button>
+        </div>
     </div>
 </template>
 
@@ -49,7 +84,8 @@ export default {
         questions: {
             type: Array,
             default: () => []
-        }
+        },
+        createType: String,
     },
 
     data() {
@@ -60,6 +96,8 @@ export default {
             optionB: "",
             optionC: "",
             points: null,
+
+            ansTF: true
         };
     },
 
@@ -185,7 +223,7 @@ export default {
 
     font-size: 2vw;
     padding: 0.5vh 0.5vw;
-    width: 70vw;
+    width: 10vw;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -195,6 +233,40 @@ export default {
     border-color: #4caf50;
     outline: none;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.TF-select-flexbox {
+    display: flex;
+
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 30%;
+}
+
+.TF-button.selected {
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: #02a51d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    font-size: 2vw;
+}
+
+.TF-button {
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: #535353;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    font-size: 2vw;
 }
 
 .done-button {
