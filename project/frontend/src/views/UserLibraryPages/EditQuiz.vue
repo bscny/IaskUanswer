@@ -50,7 +50,10 @@ import {
     createQuestion,
     updateQuestion,
     deleteQuestion,
-    CreateTFQuestion
+    CreateTFQuestion,
+    GetQuestionsByQuizID,
+    UpdateTFQuestion,
+    DeleteTFQuestion,
 } from "@/service/LibraryApi/QuestionAPI.js"
 
 import {
@@ -149,29 +152,37 @@ export default {
             alert("Change Saved!");
 
             // update question in mysql
-            await updateQuestion(editedQuestion);
+            if(editedQuestion.SO_id != undefined){
+                await updateQuestion(editedQuestion);
+            }else if(editedQuestion.TF_id != undefined){
+                await UpdateTFQuestion(editedQuestion);
+            }
 
             this.canEditQuestion = false;
         },
 
-        async QuestionDeleted(deletedQuestionID) {
+        async QuestionDeleted(deletedQuestion) {
             // for site rendering
             for (let i = 0; i < this.questionsStore.questions.length; i++) {
-                if (this.questionsStore.questions[i].SO_id == deletedQuestionID) {
+                if (this.questionsStore.questions[i].Q_number == deletedQuestion.Q_number) {
                     this.questionsStore.questions.splice(i, 1);
                 }
             }
             alert("Deleted!!");
 
             // delete from backend
-            await deleteQuestion(deletedQuestionID);
+            if(deletedQuestion.SO_id != undefined){
+                await deleteQuestion(deletedQuestion.SO_id);
+            }else if(deletedQuestion.TF_id != undefined){
+                await DeleteTFQuestion(deletedQuestion.TF_id);
+            }
 
             this.canEditQuestion = false;
         },
 
         async FetchQuestion() {
             try {
-                const questions = await getQuestionsByQuiz(this.quizStore.quiz.Quiz_id);
+                const questions = await GetQuestionsByQuizID(this.quizStore.quiz.Quiz_id);
                 this.questionsStore.questions = questions;
             } catch (error) {
                 console.error("Failed to fetch questions:", error);

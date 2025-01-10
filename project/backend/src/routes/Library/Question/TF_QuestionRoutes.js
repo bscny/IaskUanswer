@@ -13,9 +13,9 @@ const QuestionControllers = require('@/controllers/Library/Question/TF_QuestionC
 router.post("/post", QuestionControllers.CreateTFQuestion);
 
 // UpdateSOQuestion
-// router.put("/put/:SOId", QuestionControllers.UpdateSOQuestion);
+router.put("/put/:TF_id", QuestionControllers.UpdateTFQuestion);
 
 // DeleteSOQuestion
-// router.delete("/delete/:SOId", QuestionControllers.DeleteSOQuestion);
+router.delete("/delete/:TF_id", QuestionControllers.DeleteTFQuestion);
 
 module.exports = router;

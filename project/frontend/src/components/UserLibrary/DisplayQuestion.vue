@@ -57,15 +57,14 @@
                 </div>
             </div>
     
-            <!-- <div class="option-grid" v-if="question.TF_id !== undefined">
-                <div class="options-TF">
-                    Ans: {{ question.OptionB }}
+            <div class="option-grid" v-if="question.TF_id !== undefined">
+                <div class="options-TF" v-if="question.Answer == true">
+                    Ans: True
                 </div>
-    
-                <div class="options-TF">
-                    {{ question.OptionC }}
+                <div class="options-TF" v-else>
+                    Ans: False
                 </div>
-            </div> -->
+            </div>
     
         </ul>
     
@@ -286,6 +285,7 @@ export default {
 .options-TF {
     font-size: 2vw;
     grid-row: span 2;
+    grid-column: span 2;
 }
 
 .create-question-flexbox {

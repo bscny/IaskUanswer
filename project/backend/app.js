@@ -31,11 +31,13 @@ const FolderRoutes = require("@/routes/Library/Folder/FolderRoutes.js");
 const QuizRoutes = require("@/routes/Library/Quiz/QuizRoutes.js");
 const SOQuestionRoutes = require("@/routes/Library/Question/SO_QuestionRoutes.js");
 const TFQuestionRoutes = require("@/routes/Library/Question/TF_QuestionRoutes.js");
+const QuestionRoutes = require("@/routes/Library/Question/QuestionRoutes.js");
 
 app.use("/Folder", FolderRoutes);
 app.use("/Quiz", QuizRoutes);
 app.use("/Question/soque", SOQuestionRoutes);
 app.use("/Question/tfque", TFQuestionRoutes);
+app.use("/Question", QuestionRoutes)
 
 // for user take quiz
 const TakeQuizRoutes = require("@/routes/Quizing/TakeQuizRoutes.js");

@@ -22,16 +22,43 @@ async function deleteQuestion(questionId) {
     return response.data;
 }
 
-// newly added apu for TF question
+// newly added api for TF question
+async function GetQuestionsByQuizID(Quiz_id) {
+    const response = await api.get(`/Question/quizId/${Quiz_id}`);
+
+    if(response.status != 200){
+        alert("something wrong... try later");
+        return null;
+    }
+
+    return response.data;
+}
+
 async function CreateTFQuestion(questionData) {
     const response = await api.post('/Question/tfque/post', questionData);
 
-    if(response.status == 500){
+    if(response.status != 200){
         alert("something wrong... try later");
         return null;
     }
 
     return response.data;  // a created ID
+}
+
+async function UpdateTFQuestion(questionData) {
+    const response = await api.put(`/Question/tfque/put/${questionData.TF_id}`, questionData);
+
+    if(response.status != 200){
+        alert("something wrong... try later");
+    }
+}
+
+async function DeleteTFQuestion(TF_id) {
+    const response = await api.delete(`/Question/tfque/delete/${TF_id}`);
+
+    if(response.status != 200){
+        alert("something wrong... try later");
+    }
 }
 
 export{
@@ -40,5 +67,8 @@ export{
     updateQuestion,
     deleteQuestion,
 
+    GetQuestionsByQuizID,
     CreateTFQuestion,
+    UpdateTFQuestion,
+    DeleteTFQuestion
 }

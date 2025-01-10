@@ -38,7 +38,8 @@ import {
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
 
 import {
-    getQuestionsByQuiz
+    getQuestionsByQuiz,
+    GetQuestionsByQuizID
 } from '@/service/LibraryApi/QuestionAPI';
 
 import {
@@ -225,17 +226,9 @@ export default {
 
         async FetchQuestion() {
             try {
-                const questions = await getQuestionsByQuiz(this.curLookingQuiz.Quiz_id);
-                // 假設 questions1 是從其他地方獲取的問題數據
-                const questions1 = [];
+                const questions = await GetQuestionsByQuizID(this.curLookingQuiz.Quiz_id);
 
-                // re-structure each question
-                const allQuestions = [...questions, ...questions1];
-                allQuestions.sort(function (a, b) {
-                    return a.Q_number - b.Q_number;
-                });
-
-                this.curLookingQuestions = allQuestions;
+                this.curLookingQuestions = questions;
             } catch (error) {
                 console.error("Failed to fetch questions:", error);
             }
@@ -243,6 +236,7 @@ export default {
             // fill in blank... you are hard to deal with.....
 
         },
+        
         async SetDisplay(quiz) {
             this.curLookingQuiz = quiz;
             await this.FetchQuestion();
