@@ -57,9 +57,9 @@ export default {
             this.testSheet = await getTestSheetByQuizID(this.quizID);
             console.log('testsheet:', this.testSheet)
             this.answerSheet = this.testSheet.map(v => ({
-                SO_id: v.so_id,
-                Q_number: v.q_number,
-                Points: v.points,
+                SO_id: v.SO_id,
+                Q_number: v.Q_number,
+                Points: v.Points,
                 Choosed_ans: ''
             }));
 

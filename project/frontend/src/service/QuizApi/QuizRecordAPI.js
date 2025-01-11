@@ -11,17 +11,6 @@ async function getUserRecords(userId) {
     }
 }
 
-// get the record by record ID
-async function getRecordByRecordID(recordId) {
-    try {
-        const response = await api.get(`/quiz-result/${recordId}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Failed to fetch record with ID ${recordId}:`, error);
-        throw error;
-    }
-}
-
 // delete the record by record ID
 async function deleteRecordByRecordID(recordId) {
     try {
@@ -32,20 +21,7 @@ async function deleteRecordByRecordID(recordId) {
     }
 }
 
-// get all questions in this record
-async function getAllQuestionsInRecord(recordId) {
-    try {
-        const response = await api.get(`/quiz-result/all-questions/${recordId}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Failed to fetch questions for record with ID ${recordId}:`, error);
-        throw error;
-    }
-}
-
 export {
     getUserRecords,
-    getRecordByRecordID,
     deleteRecordByRecordID,
-    getAllQuestionsInRecord
 }
