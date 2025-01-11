@@ -108,7 +108,6 @@ export default {
                         name: 'ResultPage',
                         query: {
                             recordId: recordID,
-                            completionTime: completionTime
                         }
                     })
 
