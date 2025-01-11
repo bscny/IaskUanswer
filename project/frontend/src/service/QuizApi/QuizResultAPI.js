@@ -11,7 +11,17 @@ async function getAllQuestionsInRecord(recordId) {
         throw error;
     }
 }
-
+async function GetSpecificRecord(recordId) {
+    try {
+        const response = await api.get(`/quiz-result/${recordId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to fetch record with ID ${recordId}:`, error);
+        throw error;
+    }
+    
+}
 export {
-    getAllQuestionsInRecord
+    getAllQuestionsInRecord,
+    GetSpecificRecord
 }

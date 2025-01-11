@@ -1,14 +1,21 @@
 <template>
     <div>
         <NavBar />
-        <TestResult v-if="renderFlag" :questions="questions" :totalScore="totalScore" :showDetails="showDetails" @toggle-details="toggleDetails" />
+        <div class="score">
+            <h1>Total Score: {{ totalScore }}</h1>
+        </div>
+        <TestResult v-if="renderFlag" :questions="questions" :totalScore="totalScore" :showDetails="showDetails" :QuizDate="Date" @toggle-details="toggleDetails" />
     </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue';
 import TestResult from '@/components/QuizView/TestResult.vue';
-import { getAllQuestionsInRecord } from '@/service/QuizApi/QuizResultAPI.js';
+import { 
+    getAllQuestionsInRecord,
+    GetSpecificRecord
+ } from '@/service/QuizApi/QuizResultAPI.js';
+
 
 export default {
     name: "ResultPage",
@@ -21,6 +28,7 @@ export default {
             questions: [],
             totalScore: 0,
             showDetails: false,
+            Date: '', // 初始化為空字符串
 
             renderFlag: false,
         };
@@ -38,11 +46,20 @@ export default {
             } catch (error) {
                 console.error("Failed to fetch questions:", error);
             }
+        },
+        async fetchRecordDate(recordId) {
+            try {
+                const record = await GetSpecificRecord(recordId);
+                this.Date = record.Quiz_Date;
+            } catch (error) {
+                console.error("Failed to fetch record:", error);
+            }
         }
     },
     async created() {
         const recordId = this.$route.query.recordId;
         await this.fetchQuestions(recordId);
+        await this.fetchRecordDate(recordId); // 確保在創建時獲取 Quiz_Date
     }
 }
 </script>
@@ -54,10 +71,18 @@ export default {
 
 .score {
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.completion-time {
+    margin-left: 20px;
+    font-size: 16px;
+    color: gray;
 }
 
 .question {
-    margin-bottom: 20px;
+    margin-bottom: 1px;
 }
 
 .correct {

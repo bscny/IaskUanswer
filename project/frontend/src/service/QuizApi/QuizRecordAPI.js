@@ -2,13 +2,8 @@ import api from '@/service/ApiClient';
 
 // get all records by this user
 async function getUserRecords(userId) {
-    try {
-        const response = await api.get(`/quiz-result/all-records/${userId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Failed to fetch all records:", error);
-        throw error;
-    }
+    const response = await api.get(`/quiz-result/all-records/${userId}`);
+    return response.data;
 }
 
 // delete the record by record ID

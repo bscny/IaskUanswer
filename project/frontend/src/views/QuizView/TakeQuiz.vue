@@ -107,7 +107,8 @@ export default {
                     this.$router.push({
                         name: 'ResultPage',
                         query: {
-                            recordId: recordID
+                            recordId: recordID,
+                            completionTime: completionTime
                         }
                     })
 

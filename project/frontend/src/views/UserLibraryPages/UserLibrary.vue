@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import NavBar from "@/components/NavBar.vue"
+import NavBar from "@/components/NavBar.vue";
 import LeftBar from "@/components/UserLibrary/Library/LeftBar.vue";
 import FolderCreatePop from "@/components/UserLibrary/Library/FolderCreatePop.vue";
 import FolderEditPop from "@/components/UserLibrary/Library/FolderEditPop.vue";
@@ -182,18 +182,21 @@ export default {
             });
         },
 
-        TryCurrentQuiz(){
+        async TryCurrentQuiz() {
+            if (!this.curLookingQuestions || this.curLookingQuestions.length === 0) {
+                alert("This quiz has no questions. Please create questions first.");
+                return;
+            }
 
             this.quizStore.quiz = this.curLookingQuiz;
             const userID = JSON.parse(localStorage.getItem("userdata")).user.UserId;
             this.$router.push({
                 name: "TakeQuiz",
                 query: {
-                    lastPath : this.$route.name,
-                    userID : userID
+                    lastPath: this.$route.name,
+                    userID: userID
                 }
-
-            })
+            });
         },
 
         CancelAction() {
