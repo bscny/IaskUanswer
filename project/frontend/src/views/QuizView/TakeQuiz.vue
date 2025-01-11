@@ -57,13 +57,7 @@ export default {
             this.currentQuestionIndex = 0;
 
             this.testSheet = await getTestSheetByQuizID(this.quizID);
-            console.log('testsheet:', this.testSheet)
-            // this.answerSheet = this.testSheet.map(v => ({
-            //     SO_id: v.SO_id,
-            //     Q_number: v.Q_number,
-            //     Points: v.Points,
-            //     Choosed_ans: ''
-            // }));
+
             for(let i = 0; i < this.testSheet.length; i ++){
                 let que = {
                     Q_number: this.testSheet[i].Q_number,
@@ -109,8 +103,6 @@ export default {
                         Quiz_id: this.quizID,
                         Answer_sheet: this.answerSheet
                     });
-
-
 
                     this.$router.push({
                         name: 'ResultPage',
