@@ -8,7 +8,7 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import TestResult from '@/components/QuizView/TestResult.vue';
-import { generateFakeQuestions } from '@/service/QuizApi/ResultApi.js';
+import { getAllQuestionsInRecord } from '@/service/QuizApi/QuizResultAPI.js';
 
 export default {
     name: "ResultPage",
@@ -29,7 +29,7 @@ export default {
         },
         async fetchQuestions(recordId) {
             try {
-                this.questions = await generateFakeQuestions(recordId);
+                this.questions = await getAllQuestionsInRecord(recordId);
                 this.totalScore = this.questions.reduce((total, question) => total + (question.Is_correct ? question.Points : 0), 0);
             } catch (error) {
                 console.error("Failed to fetch questions:", error);
@@ -42,7 +42,6 @@ export default {
     }
 }
 </script>
-
 
 <style scoped>
 .result-page {

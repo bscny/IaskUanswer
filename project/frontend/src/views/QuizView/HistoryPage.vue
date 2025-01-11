@@ -20,7 +20,10 @@
 <script>
 import NavBar from '@/components/NavBar.vue';
 import TestRecord from '@/components/QuizView/TestRecord.vue';
-import { generateFakeRecords } from '@/service/QuizApi/RecordApi.js';
+import { 
+    getUserRecords,
+    deleteRecordByRecordID
+} from '@/service/QuizApi/QuizRecordAPI.js';
 
 export default {
     name: "HistoryPage",
@@ -36,7 +39,9 @@ export default {
     methods: {
         async fetchRecords() {
             try {
-                this.records = await generateFakeRecords();
+                const userData = JSON.parse(localStorage.getItem('userdata'));
+                const userId = userData.user.UserId;
+                this.records = await getUserRecords(userId);
             } catch (error) {
                 console.error("Failed to fetch records:", error);
                 alert("Failed to fetch records. Please try again later.");
@@ -45,10 +50,13 @@ export default {
         viewDetails(recordId) {
             this.$router.push({ name: 'ResultPage', query: { recordId } });
         },
-        deleteRecord(recordId) {
-            const index = this.records.findIndex(r => r.Record_id === recordId);
-            if (index !== -1) {
-                this.records.splice(index, 1);
+        async deleteRecord(recordId) {
+            try {
+                await deleteRecordByRecordID(recordId);
+                this.records = this.records.filter(record => record.Record_id !== recordId);
+            } catch (error) {
+                console.error("Failed to delete record:", error);
+                alert("Failed to delete record. Please try again later.");
             }
         }
     },

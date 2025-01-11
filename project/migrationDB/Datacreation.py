@@ -14,14 +14,14 @@ os.makedirs(os.path.dirname(output_path), exist_ok=True)
 faker = Faker()
 
 # 設定生成資料數量
-num_users = 15
-num_friendships = 20
-num_folders = 20
-num_quizzes = 150
-num_records = 50
-num_fill_blank_questions = 40
-num_single_open_questions = 40
-num_tf_questions = 40
+num_users = 5
+num_friendships = 10
+num_folders = 10
+num_quizzes = 20
+num_records = 120
+num_fill_blank_questions = 10
+num_single_open_questions = 100
+num_tf_questions = 10
 
 
 # 建立檔案
@@ -157,36 +157,39 @@ with open(output_path, "w", encoding="utf-8") as f:
 
     # 插入 FB_quiz_determination 資料
     f.write("-- 插入 FB_quiz_determination 資料\n")
-    f.write("INSERT INTO fb_quiz_determination (FB_id, Record_id, Is_correct) VALUES\n")
-    for fb_id in fb_questions:
+    f.write("INSERT INTO fb_quiz_determination (FB_id, Record_id, Is_correct, Choosed_ans) VALUES\n")
+    for i, fb_id in enumerate(fb_questions):
         record_id = random.choice(records)
         is_correct = random.choice([True, False])
-        f.write(f"({fb_id}, {record_id}, {is_correct})")
-        if fb_id < num_fill_blank_questions:
+        choosed_ans = faker.word()
+        f.write(f"({fb_id}, {record_id}, {is_correct}, '{choosed_ans}')")
+        if i < num_fill_blank_questions - 1:
             f.write(",\n")
         else:
             f.write(";\n\n")
     
     # 插入 SO_quiz_determination 資料
     f.write("-- 插入 SO_quiz_determination 資料\n")
-    f.write("INSERT INTO so_quiz_determination (SO_id, Record_id, Is_correct) VALUES\n")
-    for so_id in so_questions:
+    f.write("INSERT INTO so_quiz_determination (SO_id, Record_id, Is_correct, Choosed_ans) VALUES\n")
+    for i, so_id in enumerate(so_questions):
         record_id = random.choice(records)
         is_correct = random.choice([True, False])
-        f.write(f"({so_id}, {record_id}, {is_correct})")
-        if so_id < num_single_open_questions:
+        choosed_ans = faker.word()
+        f.write(f"({so_id}, {record_id}, {is_correct}, '{choosed_ans}')")
+        if i < num_single_open_questions - 1:
             f.write(",\n")
         else:
             f.write(";\n\n")
 
     # 插入 TF_quiz_determination 資料
     f.write("-- 插入 TF_quiz_determination 資料\n")
-    f.write("INSERT INTO tf_quiz_determination (TF_id, Record_id, Is_correct) VALUES\n")
-    for tf_id in tf_questions:
+    f.write("INSERT INTO tf_quiz_determination (TF_id, Record_id, Is_correct, Choosed_ans) VALUES\n")
+    for i, tf_id in enumerate(tf_questions):
         record_id = random.choice(records)
         is_correct = random.choice([True, False])
-        f.write(f"({tf_id}, {record_id}, {is_correct})")
-        if tf_id < num_tf_questions:
+        choosed_ans = random.choice(['True', 'False'])
+        f.write(f"({tf_id}, {record_id}, {is_correct}, '{choosed_ans}')")
+        if i < num_tf_questions - 1:
             f.write(",\n")
         else:
             f.write(";\n\n")
