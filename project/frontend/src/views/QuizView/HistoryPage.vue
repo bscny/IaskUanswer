@@ -35,14 +35,10 @@ export default {
     },
     methods: {
         async fetchRecords() {
-            try {
-                const userData = JSON.parse(localStorage.getItem('userdata'));
-                const userId = userData.user.UserId;
-                this.records = await getUserRecords(userId);
-            } catch (error) {
-                console.error("Failed to fetch records:", error);
-                alert("Failed to fetch records. Please try again later.");
-            }
+            const userData = JSON.parse(localStorage.getItem('userdata'));
+            const userId = userData.user.UserId;
+            this.records = await getUserRecords(userId);
+            
         },
         viewDetails(recordId) {
             this.$router.push({ name: 'ResultPage', query: { recordId} });

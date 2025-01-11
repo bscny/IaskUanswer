@@ -21,10 +21,10 @@ async function GetRecordByRecordID(req, res) {
 async function GetRecordsByUserID(req, res) {
     let result = await RecordServices.GetQuizRecordsByUser(req.params.User_id);
 
-    if(result[0] == undefined){
-        res.status(500).send("Error getting Quiz Records by User_id");
-        return;
-    }
+    // if(result[0] == undefined){
+    //     res.status(500).send("Error getting Quiz Records by User_id");
+    //     return;
+    // }
 
     // add quiz name to each data
     for(let i = 0; i < result.length; i ++){
@@ -71,6 +71,5 @@ module.exports = {
     DeleteRecordByRecordID,
     GetRecordByRecordID,
     GetRecordsByUserID,
-
     GetAllQuestionsInRecord,
 };
