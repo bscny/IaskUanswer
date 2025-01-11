@@ -28,7 +28,6 @@ CREATE TABLE `fb_quiz_determination` (
   `FB_id` int NOT NULL,
   `Record_id` int NOT NULL,
   `Is_correct` tinyint(1) NOT NULL,
-  `Choosed_ans` varchar(500) NOT NULL,
   PRIMARY KEY (`FB_id`,`Record_id`),
   KEY `Record_id` (`Record_id`),
   CONSTRAINT `fb_quiz_determination_ibfk_1` FOREIGN KEY (`FB_id`) REFERENCES `fill_blank_question` (`FB_id`) ON DELETE CASCADE,
