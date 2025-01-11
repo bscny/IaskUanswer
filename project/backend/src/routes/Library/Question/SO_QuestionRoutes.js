@@ -3,26 +3,29 @@ const router = express.Router();
 
 const QuestionControllers = require('@/controllers/Library/Question/SO_QuestionController.js');
 
+// the route address start from:
+// http://localhost:PORT/Question/soque
+
 // DisplaySpecificSOQuestion
-router.get("/soque/SOId/:SOId", QuestionControllers.DisplaySpecificSOQuestion);
+router.get("/SOId/:SOId", QuestionControllers.DisplaySpecificSOQuestion);
 
 // DisplaySpecificQuizSOQuestion
-router.get("/soque/QuizId/:QuizId", QuestionControllers.DisplaySpecificQuizSOQuestion);
+router.get("/QuizId/:QuizId", QuestionControllers.DisplaySpecificQuizSOQuestion);
 
 // DisplayAllSOQuestion
-router.get("/soque", QuestionControllers.DisplayALLSOQuestion);
+router.get("/", QuestionControllers.DisplayALLSOQuestion);
 
 // DisplayRandomSOQuestion
-router.get("/soque/random-question/:Number", QuestionControllers.DisplayRandomSOQuestion);
+router.get("/random-question/:Number", QuestionControllers.DisplayRandomSOQuestion);
 
 // CreateSOQuestion
-router.post("/soque/post", QuestionControllers.CreateSOQuestion);
+router.post("/post", QuestionControllers.CreateSOQuestion);
 
 // UpdateSOQuestion
-router.put("/soque/put/:SOId", QuestionControllers.UpdateSOQuestion);
+router.put("/put/:SOId", QuestionControllers.UpdateSOQuestion);
 
 // DeleteSOQuestion
-router.delete("/soque/delete/:SOId", QuestionControllers.DeleteSOQuestion);
+router.delete("/delete/:SOId", QuestionControllers.DeleteSOQuestion);
 
 
 

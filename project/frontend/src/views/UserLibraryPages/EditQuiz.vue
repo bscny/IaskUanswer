@@ -2,23 +2,24 @@
     <NavBar />
 
     <div class="header">
-        <QuizEditBlock  :quiz="quizStore.quiz"
-                        @Edited="Done($event)"
-                        @Deleted="DeleteQuiz($event)"
-                        @Cancel="Cancel()" />
+        <QuizEditBlock v-if="quizStore.quiz != undefined"   :quiz="quizStore.quiz"
+                                                            @Edited="Done($event)"
+                                                            @Deleted="DeleteQuiz($event)"
+                                                            @Cancel="Cancel()" />
     </div>
 
     <div class="display-area">
-        <DisplayQuestion    :quiz="quizStore.quiz"
-                            :questions="questionsStore.questions"
-                            :editMode="true"
-                            @EditingQuestion="SetEditQuestion($event)"
-                            @CreatingQuestion="SetCreateQuestion()" />
+        <DisplayQuestion v-if="quizStore.quiz != undefined" :quiz="quizStore.quiz"
+                                                            :questions="questionsStore.questions"
+                                                            :editMode="true"
+                                                            @EditingQuestion="SetEditQuestion($event)"
+                                                            @CreatingQuestion="SetCreateQuestion($event)" />
     </div>
 
     <div v-if="canCreateQuestion">
         <QuestionCreatePop  :quiz="quizStore.quiz"
                             :questions="questionsStore.questions"
+                            :createType="createType"
                             @Cancel="CancelQuestionAction()"
                             @Created="QuestionCreated($event)" />
     </div>
@@ -26,10 +27,10 @@
     <div v-if="canEditQuestion">
         <QuestionEditPop    :question="curLookingQuestion"
                             @Cancel="CancelQuestionAction()"
-                            @Edited="QuestionEdited($event)" 
+                            @Edited="QuestionEdited($event)"
                             @Deleted="QuestionDeleted($event)" />
     </div>
-    
+
 </template>
 
 <script>
@@ -39,7 +40,7 @@ import DisplayQuestion from "@/components/UserLibrary/DisplayQuestion.vue";
 import QuestionCreatePop from "@/components/UserLibrary/EditQuiz/QuestionCreatePop.vue";
 import QuestionEditPop from "@/components/UserLibrary/EditQuiz/QuestionEditPop.vue";
 
-import { 
+import {
     useQuizStore,
     useQuestionsStore,
 } from "@/stores/Userlibrary/QuizQuestionStore.js";
@@ -48,7 +49,11 @@ import {
     getQuestionsByQuiz,
     createQuestion,
     updateQuestion,
-    deleteQuestion
+    deleteQuestion,
+    CreateTFQuestion,
+    GetQuestionsByQuizID,
+    UpdateTFQuestion,
+    DeleteTFQuestion,
 } from "@/service/LibraryApi/QuestionAPI.js"
 
 import {
@@ -70,6 +75,7 @@ export default {
         return {
             // variables for question controll
             canCreateQuestion: false,
+            createType: null,
             canEditQuestion: false,
             curLookingQuestion: null,
 
@@ -86,7 +92,7 @@ export default {
             });
         },
 
-        async Done(quizData){
+        async Done(quizData) {
             // dont need to store the data back to the store because router.push reload the UserLibrary page
             // which means we only CRUD the data from UserLibrary without storing it back
 
@@ -98,7 +104,7 @@ export default {
             });
         },
 
-        async DeleteQuiz(Quiz_id){
+        async DeleteQuiz(Quiz_id) {
             await deleteQuiz(Quiz_id);
 
             this.$router.push({
@@ -106,80 +112,101 @@ export default {
             });
         },
 
-        SetEditQuestion(question){
+        SetEditQuestion(question) {
             this.curLookingQuestion = question;
 
             this.canEditQuestion = true;
         },
 
-        SetCreateQuestion(){
+        SetCreateQuestion(type) {
             this.canCreateQuestion = true;
+            this.createType = type; // a string of TF or SO
         },
 
-        CancelQuestionAction(){
+        CancelQuestionAction() {
             this.canCreateQuestion = false;
             this.canEditQuestion = false;
         },
 
-        async QuestionCreated(newQuestion){
+        async QuestionCreated(newQuestion) {
+            if(this.createType == "SO"){
+                await createQuestion(newQuestion);
+                // for site rendering assign newly pushed question its So_id
+                // this.questionsStore.questions.push(newQuestion);
+            }else if(this.createType == "TF"){
+                await CreateTFQuestion(newQuestion);
+            }
             
-            await createQuestion(newQuestion);
-            // for site rendering assign newly pushed question its So_id
-            this.questionsStore.questions.push(newQuestion);
-            alert("Question Created!");
             await this.FetchQuestion();
-            this.canCreateQuestion = false; 
+            this.canCreateQuestion = false;
+            alert("Question Created!");
         },
 
-        async QuestionEdited(editedQuestion){
+        async QuestionEdited(editedQuestion) {
             // for site rendering
-            for(let i = 0; i < this.questionsStore.questions.length; i ++){
-                if(this.questionsStore.questions[i].Q_number == editedQuestion.Q_number){
+            for (let i = 0; i < this.questionsStore.questions.length; i++) {
+                if (this.questionsStore.questions[i].Q_number == editedQuestion.Q_number) {
                     this.questionsStore.questions[i] = editedQuestion;
                 }
             }
             alert("Change Saved!");
 
             // update question in mysql
-            await updateQuestion(editedQuestion);
+            if(editedQuestion.SO_id != undefined){
+                await updateQuestion(editedQuestion);
+            }else if(editedQuestion.TF_id != undefined){
+                await UpdateTFQuestion(editedQuestion);
+            }
 
-            this.canEditQuestion = false; 
+            this.canEditQuestion = false;
         },
 
-        async QuestionDeleted(deletedQuestionID){
+        async QuestionDeleted(deletedQuestion) {
             // for site rendering
-            for(let i = 0; i < this.questionsStore.questions.length; i ++){
-                if(this.questionsStore.questions[i].SO_id == deletedQuestionID){
+            for (let i = 0; i < this.questionsStore.questions.length; i++) {
+                if (this.questionsStore.questions[i].Q_number == deletedQuestion.Q_number) {
                     this.questionsStore.questions.splice(i, 1);
+                    i --; // in order to update the Q_number after 
+                }else if(this.questionsStore.questions[i].Q_number > deletedQuestion.Q_number){
+                    this.questionsStore.questions[i].Q_number --;
                 }
             }
-            alert("Deleted!!");
-
+            
             // delete from backend
-            await deleteQuestion(deletedQuestionID);
-
-            this.canEditQuestion = false; 
+            if(deletedQuestion.SO_id != undefined){
+                await deleteQuestion(deletedQuestion.SO_id);
+            }else if(deletedQuestion.TF_id != undefined){
+                await DeleteTFQuestion(deletedQuestion.TF_id);
+            }
+            
+            alert("Deleted!!");
+            this.canEditQuestion = false;
         },
-        async FetchQuestion(){
+
+        async FetchQuestion() {
             try {
-                const questions = await getQuestionsByQuiz(this.quizStore.quiz.Quiz_id);
+                const questions = await GetQuestionsByQuizID(this.quizStore.quiz.Quiz_id);
                 this.questionsStore.questions = questions;
             } catch (error) {
                 console.error("Failed to fetch questions:", error);
             }
         },
-
-    async created(){
-        // fetch data
-        await this.FetchQuestion();
     },
 
-    }
+    async created() {
+        if (this.quizStore.quiz == undefined) {
+            this.$router.push({
+                name: "UserLibrary"
+            });
+
+            return;
+        }
+    },
 }
 </script>
 
 <style scoped>
-.header{
+.header {
     display: block;
     margin: 10vh 5vw 5vh 5vw;
 }

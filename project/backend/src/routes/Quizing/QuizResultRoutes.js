@@ -42,6 +42,13 @@ router.delete("/delete-quiz-record/:Record_id", QuizResultController.DeleteRecor
 //              "Choosed_ans": "hahaha",
 //              "OptionD": "hahaha"
 //          },
+//          {
+//              "Q_number": 2,
+//              "Body": "hahaha",
+//              "Answer": 1,
+//              "Points": 10,
+//              "Is_correct": 1,
+//          }
 //      ]
 //
 router.get("/all-questions/:Record_id", QuizResultController.GetAllQuestionsInRecord);

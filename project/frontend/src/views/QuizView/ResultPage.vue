@@ -4,7 +4,7 @@
         <div class="score">
             <h1>Total Score: {{ totalScore }}</h1>
         </div>
-        <TestResult :questions="questions" :totalScore="totalScore" :showDetails="showDetails" :QuizDate="Date" @toggle-details="toggleDetails" />
+        <TestResult v-if="renderFlag" :questions="questions" :totalScore="totalScore" :showDetails="showDetails" :QuizDate="Date" @toggle-details="toggleDetails" />
     </div>
 </template>
 
@@ -28,7 +28,9 @@ export default {
             questions: [],
             totalScore: 0,
             showDetails: false,
-            Date: '' // 初始化為空字符串
+            Date: '', // 初始化為空字符串
+
+            renderFlag: false,
         };
     },
     methods: {
@@ -37,9 +39,10 @@ export default {
         },
         async fetchQuestions(recordId) {
             try {
-                const questions = await getAllQuestionsInRecord(recordId);
-                this.questions = questions;
-                this.totalScore = questions.reduce((total, question) => total + (question.Is_correct ? question.Points : 0), 0);
+                this.questions = await getAllQuestionsInRecord(recordId);
+                this.totalScore = this.questions.reduce((total, question) => total + (question.Is_correct ? question.Points : 0), 0);
+
+                this.renderFlag = true;
             } catch (error) {
                 console.error("Failed to fetch questions:", error);
             }

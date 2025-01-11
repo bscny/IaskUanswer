@@ -33,6 +33,13 @@ async function UpdateSOQuestion(QuestionData, QuestionId) {
     await db.query(`UPDATE single_open_question SET Q_number = ?, Body = ?, Points = ?, Answer = ?, OptionA = ?, OptionB = ?, OptionC = ? WHERE so_id = ?`, [Q_number, Body, Points, Answer, OptionA, OptionB, OptionC, QuestionId]);
 }
 
+async function UpdateSOQuestionQnum(SO_id, Q_number) {
+    await db.query(`UPDATE single_open_question 
+                    SET Q_number = ?
+                    WHERE SO_id = ?`, 
+                    [Q_number, SO_id]);
+}
+
 // delete services
 async function DeleteSOQuestion(QuestionId) {
     const [result] = await db.query(`DELETE FROM single_open_question WHERE so_id = ?`, [QuestionId]);
@@ -46,5 +53,6 @@ module.exports = {
     GetRandomSOQuestion,
     CreateSOQuestion,
     UpdateSOQuestion,
+    UpdateSOQuestionQnum,
     DeleteSOQuestion,
 };

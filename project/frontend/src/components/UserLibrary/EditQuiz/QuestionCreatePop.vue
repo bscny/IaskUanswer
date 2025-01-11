@@ -1,6 +1,6 @@
 <template>
     <div class="BG">
-        <div class="window">
+        <div class="window" v-if="createType == 'SO'">
             <p1 class="category">
                 Question:
             </p1>
@@ -35,6 +35,41 @@
                 Cancel
             </button>
         </div>
+        <div class="window" v-else-if="createType == 'TF'">
+            <p1 class="category">
+                Question:
+            </p1>
+
+            <input class="body-input" type="text" v-model="body" />
+
+            <p2 class="category">
+                Answer:
+            </p2>
+
+            <div class="TF-select-flexbox">
+                <button class="TF-button" :class="{'selected': ansTF == true}" @click="SetAnsTF()">
+                    True
+                </button>
+
+                <button class="TF-button" :class="{'selected': ansTF == false}" @click="ResetAnsTF()">
+                    False
+                </button>
+            </div>
+
+            <p4 class="category">
+                points:
+            </p4>
+
+            <input class="points-input" type="number" v-model="points" />
+
+            <button class="done-button" @click="CreationDone()">
+                Create
+            </button>
+
+            <button class="cancel-button" @click="Cancel()">
+                Cancel
+            </button>
+        </div>
     </div>
 </template>
 
@@ -49,7 +84,8 @@ export default {
         questions: {
             type: Array,
             default: () => []
-        }
+        },
+        createType: String,
     },
 
     data() {
@@ -60,32 +96,85 @@ export default {
             optionB: "",
             optionC: "",
             points: null,
+
+            ansTF: true
         };
     },
 
     methods: {
+        SetAnsTF(){
+            this.ansTF = true;
+        },
+
+        ResetAnsTF(){
+            this.ansTF = false;
+        },
+
         Cancel() {
             this.$emit("Cancel");
         },
 
+        checkSameOption(){
+            return (this.optionA == this.optionB || this.optionA == this.optionC || this.optionA == this.ans
+                || this.optionB == this.optionC || this.optionB == this.ans || this.optionC == this.ans
+            );
+        },
+
+        checkValidPoint(){
+            if(this.points <= 0){
+                return false;
+            }
+        },
+
         CreationDone() {
-            if (this.body != "" && this.ans != "" && this.optionA != "" &&
-                this.optionB != "" && this.optionC != "" && this.points != null) {
-                
-                let newRecord = {
-                    Q_number: this.questions.length + 1,
-                    Body: this.body, 
-                    Points: this.points,
-                    Answer: this.ans,
-                    OptionA: this.optionA,
-                    OptionB: this.optionB,
-                    OptionC: this.optionC,
-                    Quiz_id: this.quiz.Quiz_id
+            if(this.createType == 'SO'){
+                if (this.checkSameOption() == true){
+                    alert("Cant have same options!");
+                    return;
                 }
 
-                this.$emit("Created", newRecord);
-            }else{
-                this.$emit("Cancel");
+                if (this.checkValidPoint() == false){
+                    alert("Cant have minus point!");
+                    return;
+                }
+
+                if ((this.body != "" && this.ans != "" && this.optionA != "" &&
+                    this.optionB != "" && this.optionC != "" && this.points != null)) {
+                    
+                    let newRecord = {
+                        Q_number: this.questions.length + 1,
+                        Body: this.body, 
+                        Points: this.points,
+                        Answer: this.ans,
+                        OptionA: this.optionA,
+                        OptionB: this.optionB,
+                        OptionC: this.optionC,
+                        Quiz_id: this.quiz.Quiz_id
+                    }
+    
+                    this.$emit("Created", newRecord);
+                }else{
+                    this.$emit("Cancel");
+                }
+            }else if(this.createType == 'TF'){
+                if (this.checkValidPoint() == false){
+                    alert("Cant have minus point!");
+                    return;
+                }
+
+                if (this.body != "" && this.points != null) {
+                    let newRecord = {
+                        Q_number: this.questions.length + 1,
+                        Body: this.body, 
+                        Points: this.points,
+                        Answer: this.ansTF,
+                        Quiz_id: this.quiz.Quiz_id
+                    }
+    
+                    this.$emit("Created", newRecord);
+                }else{
+                    this.$emit("Cancel");
+                }
             }
         }
     },
@@ -185,7 +274,7 @@ export default {
 
     font-size: 2vw;
     padding: 0.5vh 0.5vw;
-    width: 70vw;
+    width: 10vw;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -195,6 +284,48 @@ export default {
     border-color: #4caf50;
     outline: none;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.TF-select-flexbox {
+    display: flex;
+
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 20%;
+}
+
+.TF-button {
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: #535353;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    font-size: 2vw;
+}
+
+.TF-button:hover {
+    background-color: #9c9c9c;
+}
+
+.TF-button.selected {
+    padding: 1vh 1.2vw 1vh 1.2vw;
+    background-color: #02a51d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    font-size: 2vw;
+}
+
+.TF-button.selected:hover {
+    background-color: #2fad44;
 }
 
 .done-button {

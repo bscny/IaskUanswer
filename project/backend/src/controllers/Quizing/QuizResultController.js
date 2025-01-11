@@ -43,25 +43,59 @@ async function DeleteRecordByRecordID(req, res) {
 }
 
 async function GetAllQuestionsInRecord(req, res) {
-    // get all so question after the quiz
-    let result = await DeterminationServices.GetAllSOQuestionResult(req.params.Record_id);
+    // get all question after the quiz
+    let soResult = await DeterminationServices.GetAllSOQuestionResult(req.params.Record_id);
+    let tfResult = await DeterminationServices.GetAllTFQuestionResult(req.params.Record_id);
 
-    if(result[0] == undefined){
-        res.status(500).send("Error getting SO questions' results by Record_id");
-        console.log(result);
+    if(soResult[0] == undefined && tfResult[0] == undefined){
+        res.status(500).send("Error getting questions' results by Record_id");
         return;
     }
 
-    // sort all SO question results according to Q_number
-    result.sort(function(questionA, questionB){
+    // sort all question results according to Q_number
+    soResult.sort(function(questionA, questionB){
         return questionA.Q_number - questionB.Q_number;
     });
 
-    // arrange each queation's options
-    for(let i = 0; i < result.length; i ++){
+    tfResult.sort(function(questionA, questionB){
+        return questionA.Q_number - questionB.Q_number;
+    });
+
+    // arrange each SO queation's options
+    for(let i = 0; i < soResult.length; i ++){
         // assign optionD with the correct answer first,
         // after using redis, this step is not needed
-        result[i].OptionD = result[i].Answer;
+        soResult[i].OptionD = soResult[i].Answer;
+    }
+
+    // merge 2 type of questions by Q_number
+    let result = [];
+
+    let soIndex = 0;
+    let tfIndex = 0;
+
+    while(soIndex < soResult.length && tfIndex < tfResult.length){
+        if(soResult[soIndex].Q_number < tfResult[tfIndex].Q_number){
+            result.push(soResult[soIndex]);
+
+            soIndex ++;
+        }else{
+            result.push(tfResult[tfIndex]);
+
+            tfIndex ++;
+        }
+    }
+
+    while(soIndex < soResult.length){
+        result.push(soResult[soIndex]);
+
+        soIndex ++;
+    }
+
+    while(tfIndex < tfResult.length){
+        result.push(tfResult[tfIndex]);
+
+        tfIndex ++;
     }
 
     res.status(200).send(result);
