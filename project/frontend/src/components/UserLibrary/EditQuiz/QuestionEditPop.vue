@@ -117,8 +117,30 @@ export default {
             this.ansTF = false;
         },
 
+        checkSameOption(){
+            return (this.optionA == this.optionB || this.optionA == this.optionC || this.optionA == this.ans
+                || this.optionB == this.optionC || this.optionB == this.ans || this.optionC == this.ans
+            );
+        },
+
+        checkValidPoint(){
+            if(this.points <= 0){
+                return false;
+            }
+        },
+
         EditionDone() {
             if (this.question.SO_id != undefined){
+                if (this.checkSameOption() == true){
+                    alert("Cant have same options!");
+                    return;
+                }
+
+                if (this.checkValidPoint() == false){
+                    alert("Cant have minus point!");
+                    return;
+                }
+
                 if (this.body != "" && this.ans != "" && this.optionA != "" &&
                     this.optionB != "" && this.optionC != "" && this.points != null  
                     &&
@@ -142,6 +164,11 @@ export default {
                     this.$emit("Cancel");
                 }
             } else if (this.question.TF_id != undefined){
+                if (this.checkValidPoint() == false){
+                    alert("Cant have minus point!");
+                    return;
+                }
+
                 if ((this.body != "" && this.points != null)
                     &&
                     !(this.body == this.question.body && this.ansTF == this.question.Answer && this.points == this.question.Points)) {

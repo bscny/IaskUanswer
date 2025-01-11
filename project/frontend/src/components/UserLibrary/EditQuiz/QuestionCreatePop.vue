@@ -114,10 +114,32 @@ export default {
             this.$emit("Cancel");
         },
 
+        checkSameOption(){
+            return (this.optionA == this.optionB || this.optionA == this.optionC || this.optionA == this.ans
+                || this.optionB == this.optionC || this.optionB == this.ans || this.optionC == this.ans
+            );
+        },
+
+        checkValidPoint(){
+            if(this.points <= 0){
+                return false;
+            }
+        },
+
         CreationDone() {
             if(this.createType == 'SO'){
-                if (this.body != "" && this.ans != "" && this.optionA != "" &&
-                    this.optionB != "" && this.optionC != "" && this.points != null) {
+                if (this.checkSameOption() == true){
+                    alert("Cant have same options!");
+                    return;
+                }
+
+                if (this.checkValidPoint() == false){
+                    alert("Cant have minus point!");
+                    return;
+                }
+
+                if ((this.body != "" && this.ans != "" && this.optionA != "" &&
+                    this.optionB != "" && this.optionC != "" && this.points != null)) {
                     
                     let newRecord = {
                         Q_number: this.questions.length + 1,
@@ -135,6 +157,11 @@ export default {
                     this.$emit("Cancel");
                 }
             }else if(this.createType == 'TF'){
+                if (this.checkValidPoint() == false){
+                    alert("Cant have minus point!");
+                    return;
+                }
+
                 if (this.body != "" && this.points != null) {
                     let newRecord = {
                         Q_number: this.questions.length + 1,
