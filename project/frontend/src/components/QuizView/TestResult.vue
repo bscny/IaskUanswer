@@ -1,7 +1,8 @@
 <template>
     <div class="result-page">
         <div class="score">
-            <h1>Total Score: {{ totalScore }}</h1>
+            <h1 class="total-score">Total Score: {{ totalScore }}</h1>
+            <h5 class="quiz-date">Completed at: {{ QuizDate }}</h5> 
         </div>
         <div class="button-container">
             <button class="back-button" @click="goToUserLibrary">Back to User Library</button>
@@ -31,6 +32,10 @@ export default {
         },
         questions: {
             type: Array,
+            required: true
+        },
+        QuizDate: {
+            type: String,
             required: true
         }
     },
@@ -73,6 +78,19 @@ export default {
     margin-top: 100px;
     left: 50%;
     font-size: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quiz-date {
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+.total-score {
+    text-align: center;
+    margin-left: 600px;
 }
 
 .question {

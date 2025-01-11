@@ -91,12 +91,13 @@ export default {
                         Answer_sheet: this.answerSheet
                     });
 
-
+                    const completionTime = new Date().toLocaleString();
 
                     this.$router.push({
                         name: 'ResultPage',
                         query: {
-                            recordId: recordID
+                            recordId: recordID,
+                            completionTime: completionTime
                         }
                     })
 
