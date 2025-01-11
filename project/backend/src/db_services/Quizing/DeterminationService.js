@@ -23,9 +23,19 @@ async function GetAllSOQuestionResult(Record_id) {
     return result;
 }
 
+async function GetAllTFQuestionResult(Record_id) {
+    const [result] = await db.query(`select Q.Q_number, Q.Body, Q.Answer, Q.Points, T.Is_correct
+                                     from tf_quiz_determination as T, tf_question as Q
+                                     where T.Record_id = ? and T.TF_id = Q.TF_id;`,
+    [Record_id]);
+
+    return result;
+}
+
 module.exports = {
     CreateSODetermination,
     CreateTFDetermination,
     
     GetAllSOQuestionResult,
+    GetAllTFQuestionResult,
 }

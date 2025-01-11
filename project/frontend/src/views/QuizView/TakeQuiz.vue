@@ -139,7 +139,7 @@ export default {
 
         checkAndSubmit() {
             this.incompleteQuestions = this.answerSheet
-                .filter(q => !q.Choosed_ans)
+                .filter(q => q.Choosed_ans === null)
                 .map(q => q.Q_number);
 
             if (this.incompleteQuestions.length > 0) {

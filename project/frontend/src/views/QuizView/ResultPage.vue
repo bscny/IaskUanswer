@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavBar />
-        <TestResult :questions="questions" :totalScore="totalScore" :showDetails="showDetails" @toggle-details="toggleDetails" />
+        <TestResult v-if="renderFlag" :questions="questions" :totalScore="totalScore" :showDetails="showDetails" @toggle-details="toggleDetails" />
     </div>
 </template>
 
@@ -20,7 +20,9 @@ export default {
         return {
             questions: [],
             totalScore: 0,
-            showDetails: false
+            showDetails: false,
+
+            renderFlag: false,
         };
     },
     methods: {
@@ -31,6 +33,8 @@ export default {
             try {
                 this.questions = await getAllQuestionsInRecord(recordId);
                 this.totalScore = this.questions.reduce((total, question) => total + (question.Is_correct ? question.Points : 0), 0);
+
+                this.renderFlag = true;
             } catch (error) {
                 console.error("Failed to fetch questions:", error);
             }

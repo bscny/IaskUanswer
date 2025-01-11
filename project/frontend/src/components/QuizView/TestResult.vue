@@ -12,10 +12,21 @@
             <div v-for="(question, index) in filteredQuestions" :key="index" class="question">
                 <p>Get Points: {{ question.Is_correct ? `(${question.Points} / ${question.Points})` : `(0 / ${question.Points})` }}</p>
                 <h3>Question {{ question.Q_number }}: {{ question.Body }}</h3>
-                <p :class="{'correct-answer': question.Answer === question.OptionA, 'incorrect-answer': question.Choosed_ans === question.OptionA && !question.Is_correct}">A: {{ question.OptionA }}</p>
-                <p :class="{'correct-answer': question.Answer === question.OptionB, 'incorrect-answer': question.Choosed_ans === question.OptionB && !question.Is_correct}">B: {{ question.OptionB }}</p>
-                <p :class="{'correct-answer': question.Answer === question.OptionC, 'incorrect-answer': question.Choosed_ans === question.OptionC && !question.Is_correct}">C: {{ question.OptionC }}</p>
-                <p :class="{'correct-answer': question.Answer === question.OptionD, 'incorrect-answer': question.Choosed_ans === question.OptionD && !question.Is_correct}">D: {{ question.OptionD }}</p>
+                <div v-if="question.OptionA != undefined">
+                    <p :class="{'correct-answer': question.Answer === question.OptionA, 'incorrect-answer': question.Choosed_ans === question.OptionA && !question.Is_correct}">A: {{ question.OptionA }}</p>
+                    <p :class="{'correct-answer': question.Answer === question.OptionB, 'incorrect-answer': question.Choosed_ans === question.OptionB && !question.Is_correct}">B: {{ question.OptionB }}</p>
+                    <p :class="{'correct-answer': question.Answer === question.OptionC, 'incorrect-answer': question.Choosed_ans === question.OptionC && !question.Is_correct}">C: {{ question.OptionC }}</p>
+                    <p :class="{'correct-answer': question.Answer === question.OptionD, 'incorrect-answer': question.Choosed_ans === question.OptionD && !question.Is_correct}">D: {{ question.OptionD }}</p>
+                </div>
+                <div v-else>
+                    <p :class="{'correct-answer': question.Answer == true, 'incorrect-answer': question.Is_correct == false && question.Answer == false}">
+                        True
+                    </p>
+
+                    <p :class="{'correct-answer': question.Answer == false, 'incorrect-answer': question.Is_correct == false && question.Answer == true}">
+                        False
+                    </p>
+                </div>
             </div>
         </div>
     </div>
