@@ -1,35 +1,33 @@
-const QuestionServices = require("@/db_services/Library/Question/SO_QuestionService.js");
+const SoQuestionServices = require("@/db_services/Library/Question/SO_QuestionService.js");
+const tfQuestionServices = require("@/db_services/Library/Question/TF_QuestionServices.js");
 const RecordServices = require("@/db_services/Quizing/RecordService.js");
 const DeterminationServices = require("@/db_services/Quizing/DeterminationService.js");
 
 // take a quiz id and return a testsheet
 async function CreateTestSheet(Quiz_id) {
-    const questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future 
+    let soQuestions = await SoQuestionServices.GetSpecificQuizSOQuestion(Quiz_id);
+    let tfQuestions = await tfQuestionServices.GetSpecificQuizTFQuestion(Quiz_id);
 
-    if(questions[0] == undefined){
+    if(soQuestions[0] == undefined && tfQuestions[0] == undefined){
         // the quiz has no question created
         return null;
     }
-    
-    // extract all single open question,
-    // sort the question according to their q num first
-    let soQuestions = [];
 
-    for (let i = 0; i < questions.length; i ++){
-        // remove unused attribute
-        delete questions[i].Quiz_id
-
-        if(questions[i].SO_id != undefined){
-            // find a so question
-            soQuestions.push(questions[i]);
-        }else if(questions[i].TF_id != undefined){
-            // find a TF question
-        }else{
-            // we simply skip this fill in blank stuff
-        }
+    // remove unused attribute
+    for (let i = 0; i < soQuestions.length; i ++){
+        delete soQuestions[i].Quiz_id;
     }
 
+    for (let i = 0; i < tfQuestions.length; i ++){
+        delete tfQuestions[i].Quiz_id;
+    }
+
+    // sort the question according to their q num
     soQuestions.sort(function(questionA, questionB){
+        return questionA.Q_number - questionB.Q_number;
+    });
+
+    tfQuestions.sort(function(questionA, questionB){
         return questionA.Q_number - questionB.Q_number;
     });
 
@@ -59,10 +57,35 @@ async function CreateTestSheet(Quiz_id) {
         soQuestions[i].OptionD = options[3];
     }
 
-    // start generating random options for tf questions
-
     // merge 2 type of questions by Q_number
-    let testSheet = soQuestions;
+    let testSheet = [];
+
+    let soIndex = 0;
+    let tfIndex = 0;
+
+    while(soIndex < soQuestions.length && tfIndex < tfQuestions.length){
+        if(soQuestions[soIndex].Q_number < tfQuestions[tfIndex].Q_number){
+            testSheet.push(soQuestions[soIndex]);
+
+            soIndex ++;
+        }else{
+            testSheet.push(tfQuestions[tfIndex]);
+
+            tfIndex ++;
+        }
+    }
+
+    while(soIndex < soQuestions.length){
+        testSheet.push(soQuestions[soIndex]);
+
+        soIndex ++;
+    }
+
+    while(tfIndex < tfQuestions.length){
+        testSheet.push(tfQuestions[tfIndex]);
+
+        tfIndex ++;
+    }
 
     return testSheet;
 }
@@ -79,7 +102,7 @@ async function GetTestSheet(req, res) {
 
 async function Grading(answerSheet, Quiz_id, Record_id) {
     // get each questions' answer first
-    let questions = await QuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future
+    let questions = await SoQuestionServices.GetSpecificQuizSOQuestion(Quiz_id); // this place should call get all Q in quiz in the future
     
     // sort the question according to their q num first
     questions.sort(function(questionA, questionB){

@@ -1,14 +1,14 @@
 <template>
     <div class="container" data-v-inspector="src/views/QuizView/TakeQuiz.vue:2:5">
-        <QuizHeader :currentQuestionIndex="currentQuestionIndex" :questionCount="questionCount" @exit="backToLastPage()"
+        <QuizHeader v-if="renderFlag" :currentQuestionIndex="currentQuestionIndex" :questionCount="questionCount" @exit="backToLastPage()"
             data-v-inspector="src/views/QuizView/TakeQuiz.vue:3:9" />
-        <QuestionDashboard :questions="testSheet" :currentQuestionIndex="currentQuestionIndex"
+        <QuestionDashboard v-if="renderFlag" :questions="testSheet" :currentQuestionIndex="currentQuestionIndex"
             @navigateToQuestion="navigateToQuestion" />
-        <QuizBody :body="currentBodyDescription" />
+        <QuizBody v-if="renderFlag" :body="currentBodyDescription" />
         <div class="submit-container">
             <button class="submit-button" @click="checkAndSubmit">Submit</button>
         </div>
-        <AnswnerOption :options="currentOptions" :selectedOption="currentSelectedOption"
+        <AnswnerOption v-if="renderFlag" :options="currentOptions" :selectedOption="currentSelectedOption"
             @answerSelected="handleAnswer($event)" />
     </div>
     <SubmitPopup v-if="showSubmitPopup" @submitOption="handleSubmit($event)" />
@@ -44,7 +44,9 @@ export default {
             questionCount: 0,
             lastPath: "/",
             showSubmitPopup: false,
-            incompleteQuestions: []
+            incompleteQuestions: [],
+
+            renderFlag: false,
         };
     },
 
@@ -56,15 +58,32 @@ export default {
 
             this.testSheet = await getTestSheetByQuizID(this.quizID);
             console.log('testsheet:', this.testSheet)
-            this.answerSheet = this.testSheet.map(v => ({
-                SO_id: v.SO_id,
-                Q_number: v.Q_number,
-                Points: v.Points,
-                Choosed_ans: ''
-            }));
+            // this.answerSheet = this.testSheet.map(v => ({
+            //     SO_id: v.SO_id,
+            //     Q_number: v.Q_number,
+            //     Points: v.Points,
+            //     Choosed_ans: ''
+            // }));
+            for(let i = 0; i < this.testSheet.length; i ++){
+                let que = {
+                    Q_number: this.testSheet[i].Q_number,
+                    Points: this.testSheet[i].Points,
+                    Choosed_ans: null
+                }
+
+                if(this.testSheet[i].SO_id != undefined){
+                    que.SO_id = this.testSheet[i].SO_id;
+                }else if(this.testSheet[i].TF_id != undefined){
+                    que.TF_id = this.testSheet[i].TF_id;
+                }
+
+                this.answerSheet.push(que);
+            }
 
             this.questionCount = this.testSheet.length;
             this.lastPath = this.$route.query.lastPath;
+
+            this.renderFlag = true;
         } catch (e) {
             this.backToLastPage();
         }
@@ -154,9 +173,14 @@ export default {
 
             try {
                 const currentQuestion = this.testSheet[this.currentQuestionIndex];
-                return Object.entries(currentQuestion)
-                    .filter(([key, value]) => key.includes("Option"))
-                    .map(([key, value]) => value);
+
+                if(currentQuestion.SO_id != undefined){
+                    return Object.entries(currentQuestion)
+                        .filter(([key, value]) => key.includes("Option"))
+                        .map(([key, value]) => value);
+                }else if(currentQuestion.TF_id != undefined){
+                    return [true, false];
+                }
             } catch (e) {
                 console.error(e);
                 return [];
