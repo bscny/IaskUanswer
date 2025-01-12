@@ -3,6 +3,9 @@ const tfQuestionServices = require("@/db_services/Library/Question/TF_QuestionSe
 const RecordServices = require("@/db_services/Quizing/RecordService.js");
 const DeterminationServices = require("@/db_services/Quizing/DeterminationService.js");
 
+const TestSheetServices = require("@/redis_services/Quizing/TestSheetServices.js");
+const QuestionResultServices = require("@/redis_services/Quizing/RecordServices.js");
+
 // take a quiz id and return a testsheet
 async function CreateTestSheet(Quiz_id) {
     let soQuestions = await SoQuestionServices.GetSpecificQuizSOQuestion(Quiz_id);
@@ -87,11 +90,25 @@ async function CreateTestSheet(Quiz_id) {
         tfIndex ++;
     }
 
+    // save tis test sheet to redis
+    await TestSheetServices.CreateTestSheet(Quiz_id, testSheet);
+
     return testSheet;
 }
 
 async function GetTestSheet(req, res) {
-    const testSheet = await CreateTestSheet(req.params.Quiz_id);
+    // check redis first, if cache hits, use it
+    let testSheet = await TestSheetServices.GetTestSheet(req.params.Quiz_id);
+    
+    if(testSheet[0] != undefined){
+        res.status(200).send(testSheet);
+        console.log("Redis HIT! test sheet found");
+
+        return;
+    }
+
+    // not found in redis, go back to mysql to create one
+    testSheet = await CreateTestSheet(req.params.Quiz_id);
 
     if(testSheet != null){
         res.status(200).send(testSheet);
@@ -101,99 +118,64 @@ async function GetTestSheet(req, res) {
 }
 
 async function Grading(answerSheet, Quiz_id, Record_id) {
-    // get each questions' answer first
-    let soQuestions = await SoQuestionServices.GetSpecificQuizSOQuestion(Quiz_id);
-    let tfQuestions = await tfQuestionServices.GetSpecificQuizTFQuestion(Quiz_id);
-    
-    // sort the question according to their q num first
-    soQuestions.sort(function(questionA, questionB){
-        return questionA.Q_number - questionB.Q_number;
-    });
+    // get original test sheet first
+    const testSheet = await TestSheetServices.GetTestSheet(Quiz_id);
 
-    tfQuestions.sort(function(questionA, questionB){
-        return questionA.Q_number - questionB.Q_number;
-    });
+    if(testSheet[0] == undefined){
+        res.status(500).send("something wrong while getting test sheet to grade, try later");
+
+        return;
+    }
+
+    console.log(testSheet);
 
     // start grading
-    let testResult = []; // will stores this array to redis in the future
+    let testResult = []; // will stores this array to redis's list
     let totalPoints = 0;
-
-    let soIndex = 0;
-    let tfIndex = 0;
 
     for (let i = 0; i < answerSheet.length; i ++){
         // for each question sort by to Q_number
         let isCorrect = false;
+
+        if(answerSheet[i].Choosed_ans == testSheet[i].Answer){
+            // correct
+            isCorrect = true;
+            totalPoints += testSheet[i].Points;
+        }else{
+            // wrong
+            isCorrect = false;
+        }
+
+        testResult.push(Object.assign({}, testSheet[i]));
         
         if(answerSheet[i].SO_id != undefined){
             // make sure dealing with SO question
 
-            // check for safty
-            if(answerSheet[i].SO_id !== soQuestions[soIndex].SO_id){
-                console.log("ERROR in grading SO! Q_number unmatch!");
-                return null;
-            }
+            // remove un-used attributes
+            delete testResult[i].SO_id;
 
-            if(answerSheet[i].Choosed_ans == soQuestions[soIndex].Answer){
-                // correct
-                isCorrect = true;
-                totalPoints += soQuestions[soIndex].Points;
-            }else{
-                // wrong
-                isCorrect = false;
-            }
-
-            testResult.push({
-                Q_number: soQuestions[soIndex].Q_number,
-                Body: soQuestions[soIndex].Body,
-                Answer: soQuestions[soIndex].Answer,
-                // after using redis, this part will be the same as the question's options
-                // right now i just use fixed position
-                OptionA: soQuestions[soIndex].Answer,
-                OptionB: soQuestions[soIndex].OptionA,
-                OptionC: soQuestions[soIndex].OptionB,
-                OptionD: soQuestions[soIndex].OptionC,
-                Points: soQuestions[soIndex].Points,
-                Is_correct: isCorrect,
-                Choosed_ans: answerSheet[soIndex].Choosed_ans
-            });
+            // add new attributes
+            testResult[i].Is_correct = isCorrect;
+            testResult[i].Choosed_ans = answerSheet[i].Choosed_ans;
 
             // save to MySql table so_quiz_determination
-            await DeterminationServices.CreateSODetermination(soQuestions[soIndex].SO_id, Record_id, isCorrect, answerSheet[i].Choosed_ans);
-
-            soIndex ++;
+            await DeterminationServices.CreateSODetermination(testSheet[i].SO_id, Record_id, isCorrect, answerSheet[i].Choosed_ans);
         }else if(answerSheet[i].TF_id != undefined){
             // make sure dealing with TF question
 
-            // check for safty
-            if(answerSheet[i].TF_id !== tfQuestions[tfIndex].TF_id){
-                console.log("ERROR in grading TF! Q_number unmatch!");
-                return null;
-            }
+            // remove un-used attributes
+            delete testResult[i].TF_id;
 
-            if(answerSheet[i].Choosed_ans == tfQuestions[tfIndex].Answer){
-                // correct
-                isCorrect = true;
-                totalPoints += tfQuestions[tfIndex].Points;
-            }else{
-                // wrong
-                isCorrect = false;
-            }
-
-            testResult.push({
-                Q_number: tfQuestions[tfIndex].Q_number,
-                Body: tfQuestions[tfIndex].Body,
-                Answer: tfQuestions[tfIndex].Answer,
-                Points: tfQuestions[tfIndex].Points,
-                Is_correct: isCorrect,
-            });
+            // add new attributes
+            testResult[i].Is_correct = isCorrect;
 
             // save to MySql table tf_quiz_determination
-            await DeterminationServices.CreateTFDetermination(tfQuestions[tfIndex].TF_id, Record_id, isCorrect);
-
-            tfIndex ++;
+            await DeterminationServices.CreateTFDetermination(testSheet[i].TF_id, Record_id, isCorrect);
         }
     }
+
+    // save result to redis
+    QuestionResultServices.CreateQuestionResults(Record_id, testResult);
 
     return totalPoints;
 }

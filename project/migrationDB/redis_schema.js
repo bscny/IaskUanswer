@@ -1,7 +1,7 @@
 let data;
 
 // ------------------------------------------------------------------------------------------------
-// A QuizSheet:
+// A TestSheet:
 data = [
     {
         SO_id: 1,
@@ -26,32 +26,6 @@ data = [
 // redis format:
 for (const question of data) {
     await redisCli.rPush(`TestSheet:${Quiz_id}`, JSON.stringify(question));
-}
-
-// --------------------------------------------------------------------------------------------------
-// User's Records
-data = [
-    {
-        Record_id: 5,
-        Total_points: 20,
-        Quiz_Date: "2025-01-06T14:39:11.000Z",
-        User_id: 1,
-        Quiz_id: 1,
-        Quiz_name: "test q"
-    },
-    {
-        Record_id: 7,
-        Total_points: 50,
-        Quiz_Date: "2025-01-12T14:39:11.000Z",
-        User_id: 1,
-        Quiz_id: 5,
-        Quiz_name: "test q 2"
-    },
-]
-
-// redis format:
-for (const record of data) {
-    await redisCli.rPush(`User:${USER_ID}:Records`, JSON.stringify(record));
 }
 
 // -------------------------------------------------------------------------------------------------------
