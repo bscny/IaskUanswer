@@ -102,7 +102,6 @@ async function GetTestSheet(req, res) {
     
     if(testSheet[0] != undefined){
         res.status(200).send(testSheet);
-        console.log("Redis HIT! test sheet found");
 
         return;
     }
@@ -126,8 +125,6 @@ async function Grading(answerSheet, Quiz_id, Record_id) {
 
         return;
     }
-
-    console.log(testSheet);
 
     // start grading
     let testResult = []; // will stores this array to redis's list
@@ -175,7 +172,7 @@ async function Grading(answerSheet, Quiz_id, Record_id) {
     }
 
     // save result to redis
-    QuestionResultServices.CreateQuestionResults(Record_id, testResult);
+    await QuestionResultServices.CreateQuestionResults(Record_id, testResult);
 
     return totalPoints;
 }

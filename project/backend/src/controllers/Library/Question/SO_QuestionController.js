@@ -2,6 +2,8 @@ const Service = require("@/db_services/Library/Question/QuestionServices.js");
 const SoServices = require("@/db_services/Library/Question/SO_QuestionService.js");
 const TfServices = require("@/db_services/Library/Question/TF_QuestionServices.js");
 
+const RedisServices = require("@/redis_services/Quizing/TestSheetServices.js");
+
 async function DisplaySpecificSOQuestion(req, res) {
     try {
         const { SOId } = req.params;
@@ -43,10 +45,14 @@ async function DisplayRandomSOQuestion(req, res) {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 }
+
 async function CreateSOQuestion(req, res) {
     try {
         const newQuestion = req.body;
         const questionId = await SoServices.CreateSOQuestion(newQuestion);
+
+        await RedisServices.DeleteTestSheet(newQuestion.Quiz_id);
+
         res.status(201).json({ message: "Question created", questionId });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -58,6 +64,9 @@ async function UpdateSOQuestion(req, res) {
         const { SOId } = req.params;
         const updatedData = req.body;
         await SoServices.UpdateSOQuestion(updatedData, SOId);
+
+        await RedisServices.DeleteTestSheet(updatedData.Quiz_id);
+
         res.status(200).json({ message: "Question updated" });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
@@ -80,6 +89,9 @@ async function DeleteSOQuestion(req, res) {
         }
         
         const result = await SoServices.DeleteSOQuestion(SOId);
+
+        await RedisServices.DeleteTestSheet(req.params.Quiz_id);
+
         if (result.affectedRows === 0) {
             res.status(404).send(`no question with ID: ${SOId}`);
         } else {

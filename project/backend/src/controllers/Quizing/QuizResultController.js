@@ -23,11 +23,6 @@ async function GetRecordByRecordID(req, res) {
 async function GetRecordsByUserID(req, res) {
     let result = await RecordServices.GetQuizRecordsByUser(req.params.User_id);
 
-    // if(result[0] == undefined){
-    //     res.status(500).send("Error getting Quiz Records by User_id");
-    //     return;
-    // }
-
     // add quiz name to each data
     for (let i = 0; i < result.length; i++) {
         const Quiz = await QuizServices.GetSpecificQuiz(result[i].Quiz_id);
@@ -50,12 +45,14 @@ async function GetAllQuestionsInRecord(req, res) {
 
     if (cacheResult[0] != undefined) {
         res.status(200).send(cacheResult);
-        console.log("Redis HIT! quiz result's questions found");
 
         return;
     }
 
-    // get all question after taking the quiz
+    // Unfortunately, the record has created to long ago, redis no longer save the data
+    // but it's fine, use mysql to get "almost" the original data (the order of options are not the one while testing)
+
+    // get all question first
     let soResult = await DeterminationServices.GetAllSOQuestionResult(req.params.Record_id);
     let tfResult = await DeterminationServices.GetAllTFQuestionResult(req.params.Record_id);
 
@@ -73,10 +70,9 @@ async function GetAllQuestionsInRecord(req, res) {
         return questionA.Q_number - questionB.Q_number;
     });
 
-    // arrange each SO queation's options
+    // arrange each SO question's options
     for (let i = 0; i < soResult.length; i++) {
-        // assign optionD with the correct answer first,
-        // after using redis, this step is not needed
+        // assign optionD with the correct answer, not the orginal option
         soResult[i].OptionD = soResult[i].Answer;
     }
 

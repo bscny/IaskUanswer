@@ -25,7 +25,7 @@ router.post("/post", QuestionControllers.CreateSOQuestion);
 router.put("/put/:SOId", QuestionControllers.UpdateSOQuestion);
 
 // DeleteSOQuestion
-router.delete("/delete/:SOId", QuestionControllers.DeleteSOQuestion);
+router.delete("/delete/:SOId/:Quiz_id", QuestionControllers.DeleteSOQuestion);
 
 
 
