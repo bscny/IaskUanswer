@@ -1,30 +1,92 @@
-# IaskUanswer
+# Kataohoot
 
-**一個互動式學習平台，結合遊戲化測驗來提升學習效果，靈感來自 Kahoot!**
+一個互動式學習平台，結合遊戲化測驗來提升學習效果，靈感來自 Kahoot!
 
----
-
-## **主要功能**
+## 主要功能
 
 - 使用者創建、管理資料夾
 - 於資料夾內創建、管理問題集
-- 於問題集內管理問題
-- 遊玩他人創造出的公開問題集
-- 查看遊玩歷史排名與錯誤之題目
+- 每個問題集內可存放選擇題與是非題
+- 遊玩他人創造出的公開問題集或自己的問題集
+- 查看遊玩歷史紀錄與錯誤之題目
 
----
+## ER Model
 
-## **檔案結構**
+![kataohoot ER Model](https://github.com/bscny/Kataohoot/blob/hotfix_readme/project-assets/pdfs/kataohoo-ER-Model.pdf)
 
-1. 位於 `project` 資料夾內，有 `frontend` , `backend` 資料夾。
-2. 主要功能放 `src` 資料夾
-    - `src` 資料夾需分門別類，先以檔案類型分，再以檔案提供的功能分
-3. `app.js` 為 main 進入點
+## Table Schema (含 Redis)
 
-## **專案展示**
+![kataohoot Table Schema](https://github.com/bscny/Kataohoot/blob/hotfix_readme/project-assets/pdfs/kataohoo-Schema.pdf)
 
-"專案介面："
+## 檔案結構
 
----
+```
+project
+├── backend
+│   ├── src
+│   │   ├── routes
+│   │   │   ├── Account
+│   │   │   ├── Library
+│   │   │   └── Quizing
+│   │   ├── controllers
+│   │   │   ├── Account
+│   │   │   ├── Library
+│   │   │   └── Quizing
+│   │   ├── db_services
+│   │   │   ├── Account
+│   │   │   ├── Library
+│   │   │   └── Quizing
+│   │   ├── redis_services
+│   │   │   └── Quizing
+│   │   ├── database.js
+│   │   └── redis.js
+│   └── app.js
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   │   ├── Home
+│   │   │   ├── Quiz
+│   │   │   ├── SignInUp
+│   │   │   ├── TakeQuiz
+│   │   │   └── Library
+│   │   ├── router
+│   │   │   └── index.js
+│   │   ├── services
+│   │   │   ├── AccountApi
+│   │   │   ├── LibraryApi
+│   │   │   └── QuizApi
+│   │   ├── stores
+│   │   │   └── LibraryStores
+│   │   └── views
+│   │       ├── Home
+│   │       ├── Quiz
+│   │       ├── SignInUp
+│   │       └── Library
+│   ├── App.vue
+│   └── main.js
+└── migrationDB
+    ├── kataohootSchema.sql
+    ├── seed.sql
+    └── redis_schema.js
+```
 
-## **網址連結**
+## Requirements
+
+- `node` v20.17.0
+- `mysql` Ver 8.0.40-0ubuntu0.22.04.1 for Linux on x86_64
+- `redis` 6.0.16
+
+## 使用說明
+
+1. cd 到 `backend` 資料夾
+2. `npm i`
+3. `npm run dev`
+4. cd 到 `frontend` 資料夾
+5. `npm i`
+6. `npm run dev`
+
+Hint: 注意，redis 與 mysql service 都要跑起來才能作以上步驟
+
+## Demo Video
+
+
