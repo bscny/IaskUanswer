@@ -174,9 +174,9 @@ export default {
             
             // delete from backend
             if(deletedQuestion.SO_id != undefined){
-                await deleteQuestion(deletedQuestion.SO_id);
+                await deleteQuestion(deletedQuestion.SO_id, deletedQuestion.Quiz_id);
             }else if(deletedQuestion.TF_id != undefined){
-                await DeleteTFQuestion(deletedQuestion.TF_id);
+                await DeleteTFQuestion(deletedQuestion.TF_id, deletedQuestion.Quiz_id);
             }
             
             alert("Deleted!!");

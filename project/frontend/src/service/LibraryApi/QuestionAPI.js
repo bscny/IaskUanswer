@@ -17,8 +17,8 @@ async function updateQuestion(questionData) {
     return response.data;
 }
 
-async function deleteQuestion(questionId) {
-    const response = await api.delete(`/Question/soque/delete/${questionId}`);
+async function deleteQuestion(questionId, Quiz_id) {
+    const response = await api.delete(`/Question/soque/delete/${questionId}/${Quiz_id}`);
     return response.data;
 }
 
@@ -53,8 +53,8 @@ async function UpdateTFQuestion(questionData) {
     }
 }
 
-async function DeleteTFQuestion(TF_id) {
-    const response = await api.delete(`/Question/tfque/delete/${TF_id}`);
+async function DeleteTFQuestion(TF_id, Quiz_id) {
+    const response = await api.delete(`/Question/tfque/delete/${TF_id}/${Quiz_id}`);
 
     if(response.status != 200){
         alert("something wrong... try later");

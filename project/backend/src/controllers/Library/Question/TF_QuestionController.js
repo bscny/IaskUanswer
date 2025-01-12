@@ -2,9 +2,13 @@ const Services = require("@/db_services/Library/Question/QuestionServices.js");
 const SoServices = require("@/db_services/Library/Question/SO_QuestionService.js");
 const TfServices = require("@/db_services/Library/Question/TF_QuestionServices.js");
 
+const RedisServices = require("@/redis_services/Quizing/TestSheetServices.js");
+
 async function CreateTFQuestion(req, res) {
     const newTFQue = req.body;
     const newID = await TfServices.CreateTFQuestion(newTFQue);
+    
+    await RedisServices.DeleteTestSheet(newTFQue.Quiz_id);
 
     res.status(200).send(JSON.stringify(newID));
 }
@@ -13,6 +17,8 @@ async function UpdateTFQuestion(req, res) {
     const newTFQue = req.body;
 
     await TfServices.UpdateTFQuestion(newTFQue, req.params.TF_id);
+
+    await RedisServices.DeleteTestSheet(newTFQue.Quiz_id);
 
     res.status(200).send("successful");
 }
@@ -31,6 +37,8 @@ async function DeleteTFQuestion(req, res) {
     }
 
     await TfServices.DeleteTFQuestion(req.params.TF_id);
+
+    await RedisServices.DeleteTestSheet(req.params.Quiz_id);
 
     res.status(200).send("successful");
 }

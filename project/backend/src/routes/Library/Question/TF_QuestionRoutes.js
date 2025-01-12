@@ -16,6 +16,6 @@ router.post("/post", QuestionControllers.CreateTFQuestion);
 router.put("/put/:TF_id", QuestionControllers.UpdateTFQuestion);
 
 // DeleteSOQuestion
-router.delete("/delete/:TF_id", QuestionControllers.DeleteTFQuestion);
+router.delete("/delete/:TF_id/:Quiz_id", QuestionControllers.DeleteTFQuestion);
 
 module.exports = router;
