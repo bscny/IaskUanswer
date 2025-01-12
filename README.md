@@ -7,7 +7,7 @@
 - 使用者創建、管理資料夾
 - 於資料夾內創建、管理問題集
 - 每個問題集內可存放選擇題與是非題
-- 遊玩他人創造出的公開問題集
+- 遊玩他人創造出的公開問題集或自己的問題集
 - 查看遊玩歷史紀錄與錯誤之題目
 
 ## ER Model
@@ -72,9 +72,9 @@ project
 
 ## Requirements
 
-`node` v20.17.0
-`mysql` Ver 8.0.40-0ubuntu0.22.04.1 for Linux on x86_64
-`redis` 6.0.16
+- `node` v20.17.0
+- `mysql` Ver 8.0.40-0ubuntu0.22.04.1 for Linux on x86_64
+- `redis` 6.0.16
 
 ## 使用說明
 
