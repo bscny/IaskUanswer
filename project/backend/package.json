@@ -19,7 +19,8 @@
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
     "module-alias": "^2.2.3",
-    "mysql2": "^3.11.5"
+    "mysql2": "^3.11.5",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
