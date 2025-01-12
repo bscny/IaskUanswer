@@ -4,6 +4,9 @@ async function CreateTestSheet(Quiz_id, TestSheet) {
     for (const question of TestSheet) {
         await redisClient.rPush(`TestSheet:${Quiz_id}`, JSON.stringify(question));
     }
+
+    // set ttl of 1 day
+    await redisClient.expire(`TestSheet:${Quiz_id}`, 24*60*60);
 }
 
 async function GetTestSheet(Quiz_id) {

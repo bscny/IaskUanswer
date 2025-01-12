@@ -36,6 +36,8 @@ async function GetRecordsByUserID(req, res) {
 async function DeleteRecordByRecordID(req, res) {
     const result = await RecordServices.DeleteQuizRecordByID(req.params.Record_id);
 
+    await QuestionResultServices.DeleteQuestionResults(req.params.Record_id);
+
     res.status(200).send("Delete Successfully");
 }
 

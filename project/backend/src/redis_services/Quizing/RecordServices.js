@@ -4,6 +4,9 @@ async function CreateQuestionResults(Record_id, QuestionResults) {
     for (const questionResult of QuestionResults) {
         await redisClient.rPush(`Record:${Record_id}:Question_result`, JSON.stringify(questionResult));
     }
+
+    // set ttl of 30 days
+    await redisClient.expire(`Record:${Record_id}:Question_result`, 30*24*60*60);
 }
 
 async function GetQuestionResults(Record_id) {
