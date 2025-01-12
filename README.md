@@ -12,11 +12,11 @@
 
 ## ER Model
 
-![kataohoot ER Model]()
+![kataohoot ER Model](https://github.com/bscny/Kataohoot/blob/hotfix_readme/project-assets/pdfs/kataohoo-ER-Model.pdf)
 
 ## Table Schema (含 Redis)
 
-![kataohoot Table Schema]()
+![kataohoot Table Schema](https://github.com/bscny/Kataohoot/blob/hotfix_readme/project-assets/pdfs/kataohoo-Schema.pdf)
 
 ## 檔案結構
 
