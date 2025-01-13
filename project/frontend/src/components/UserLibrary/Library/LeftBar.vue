@@ -94,7 +94,7 @@ export default {
     top: 7.8vh;
     left: 0;
     /* bottom: 0; */
-    width: 13vw;
+    width: 15vw;
     border-radius: 5px;
 
     background-color: rgb(160, 148, 148);
@@ -106,7 +106,7 @@ export default {
 
     margin: 2.5vh 0 0 0;
     padding: 0.8vh 1vw 0.8vh 1vw;
-    font-size: 1vw;
+    font-size: 1.5vw;
     background-color: rgb(177, 187, 240);
     color: rgb(255, 255, 255);
     border: none;
@@ -151,7 +151,7 @@ export default {
 }
 
 .folder {
-    min-width: 12vw;
+    min-width: 14vw;
     display: flex;
     justify-content: space-between;
     padding: 0 0 0 0;
@@ -161,10 +161,10 @@ export default {
 .folder-text {
     display: flex;
     margin: 1vh 0 1vh 0;
-    width: 10vw;
+    width: 12vw;
 
     text-align: center;
-    font-size: 1vw;
+    font-size: 1.75vw;
 
     background-color: rgba(0, 0, 0, 0.137);
 }
@@ -187,7 +187,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.137);
     margin: 1vh 0 1vh 1vw;
     width: 10vw;
-    font-size: 1.2vw;
+    font-size: 1.5vw;
 }
 
 .quiz:hover {

@@ -133,7 +133,7 @@ export default {
 <style scoped>
 .container {
     display: flex;
-
+    margin-left: 4vw;
     flex-direction: column;
     justify-content: start;
     align-items: center;
