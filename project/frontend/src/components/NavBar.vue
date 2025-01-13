@@ -134,7 +134,7 @@ export default {
 
 .account-field {
     display: flex;
-
+    max-height: 8vh;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

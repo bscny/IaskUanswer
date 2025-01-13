@@ -1,15 +1,14 @@
 <template>
     <div class="sidebar">
-        <h2 class="nav">
-            Dashboard:
-        </h2>
+
 
         <ul class="options">
             <li>
-                <router-link to="/UserLibrary">My Library</router-link>
+
+                <router-link to="/UserLibrary">Library</router-link>
             </li>
             <li>
-                <router-link to="/QuizView/HistoryPage">Test Records</router-link>
+                <router-link to="/QuizView/HistoryPage">Test History</router-link>
             </li>
         </ul>
     </div>
@@ -35,38 +34,37 @@ export default {
     align-items: start;
     justify-content: start;
     width: 10.42vw;
-    background-color: rgb(134, 134, 134);
-    padding: 20px;
+    background-color: rgb(196, 196, 196);
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     height: 100vh;
+    text-align: center;
+
 }
 
 .nav {
-	position: relative;
-    font-size: 1.7em;
-    margin-bottom: 0.1em;
-	margin-left: 0px;
-	margin-right: 20px;
-}
+    margin-top: 2vh;
+    text-align: center;
 
+}
 .options {
     list-style: none;
+    width: 100%;
     font-size: 2.8vh;
-    padding: 0;
 }
 
-.sidebar li {
+.options li {
     margin: 15px 0;
+    min-width: 100%;
 }
 
-.sidebar a {
+.options a {
     text-decoration: none;
     color: #333;
     font-weight: bold;
     transition: color 0.3s;
 }
 
-.sidebar a:hover {
-    color: #155daa;
+.options li:hover {
+    background-color: #a3a3a3;
 }
 </style>

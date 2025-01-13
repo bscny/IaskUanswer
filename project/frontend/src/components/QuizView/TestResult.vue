@@ -1,30 +1,50 @@
 <template>
     <div class="result-page">
-        <div class="score">
-            <h1 class="total-score">Total Score: {{ totalScore }}</h1>
-            <h5 class="quiz-date">Completed at: {{ QuizDate }}</h5> 
+        <div class="header">
+            <button class="history-button" @click="goToHistoryPage">Back</button>
+
+            <h1 class="total-score">  {{ score }} / {{ totalScore }}</h1>
+            <h5 class="quiz-date">Completed at: {{ QuizDate }}</h5>
         </div>
-        <div class="button-container">
-            <button class="back-button" @click="goToUserLibrary">Back to User Library</button>
-            <button class="history-button" @click="goToHistoryPage">Back to History Page</button>
-            <button class="show-wrong-button" @click="toggleShowWrongOnly">{{ showWrongOnly ? 'Show All' : 'Show Wrong Only' }}</button>
+        <div class="radio-toolbar">
+            <input type="radio" id="all" name="subscription-type" value="showAll" @click="showWrongOnly = false">
+            <label for="all">Show All</label>
+            <input type="radio" id="wrong-only" name="subscription-type" value="showWrongOnly"
+                @click="showWrongOnly = true">
+            <label for="wrong-only">Show Wrong Only</label>
         </div>
-        <div class="questions">
+
+        <div class="questions-grid">
             <div v-for="(question, index) in filteredQuestions" :key="index" class="question">
-                <p>Get Points: {{ question.Is_correct ? `(${question.Points} / ${question.Points})` : `(0 / ${question.Points})` }}</p>
-                <h3>Question {{ question.Q_number }}: {{ question.Body }}</h3>
-                <div v-if="question.OptionA != undefined">
-                    <p :class="{'correct-answer': question.Answer === question.OptionA, 'incorrect-answer': question.Choosed_ans === question.OptionA && !question.Is_correct}">A: {{ question.OptionA }}</p>
-                    <p :class="{'correct-answer': question.Answer === question.OptionB, 'incorrect-answer': question.Choosed_ans === question.OptionB && !question.Is_correct}">B: {{ question.OptionB }}</p>
-                    <p :class="{'correct-answer': question.Answer === question.OptionC, 'incorrect-answer': question.Choosed_ans === question.OptionC && !question.Is_correct}">C: {{ question.OptionC }}</p>
-                    <p :class="{'correct-answer': question.Answer === question.OptionD, 'incorrect-answer': question.Choosed_ans === question.OptionD && !question.Is_correct}">D: {{ question.OptionD }}</p>
+                <span class="question-title">
+                    <h3>Question {{ question.Q_number }} </h3>
+                    <h4>{{ question.Is_correct ? `(${question.Points} /
+                        ${question.Points})` : `(0 / ${question.Points})` }}</h4>
+                </span>
+                <hr color="black">
+                <h3>{{ question.Body }}</h3>
+                <div v-if="question.OptionA != undefined" class="so-options">
+                    <p
+                        :class="{ 'correct-answer': question.Answer === question.OptionA, 'incorrect-answer': question.Choosed_ans === question.OptionA && !question.Is_correct }">
+                        (A) {{ question.OptionA }}</p>
+                    <p
+                        :class="{ 'correct-answer': question.Answer === question.OptionB, 'incorrect-answer': question.Choosed_ans === question.OptionB && !question.Is_correct }">
+                        (B) {{ question.OptionB }}</p>
+                    <p
+                        :class="{ 'correct-answer': question.Answer === question.OptionC, 'incorrect-answer': question.Choosed_ans === question.OptionC && !question.Is_correct }">
+                        (C) {{ question.OptionC }}</p>
+                    <p
+                        :class="{ 'correct-answer': question.Answer === question.OptionD, 'incorrect-answer': question.Choosed_ans === question.OptionD && !question.Is_correct }">
+                        (D) {{ question.OptionD }}</p>
                 </div>
-                <div v-else>
-                    <p :class="{'correct-answer': question.Answer == true, 'incorrect-answer': question.Is_correct == false && question.Answer == false}">
+                <div v-else class="tf-options">
+                    <p
+                        :class="{ 'correct-answer': question.Answer == true, 'incorrect-answer': question.Is_correct == false && question.Answer == false }">
                         True
                     </p>
 
-                    <p :class="{'correct-answer': question.Answer == false, 'incorrect-answer': question.Is_correct == false && question.Answer == true}">
+                    <p
+                        :class="{ 'correct-answer': question.Answer == false, 'incorrect-answer': question.Is_correct == false && question.Answer == true }">
                         False
                     </p>
                 </div>
@@ -37,7 +57,11 @@
 export default {
     name: "TestResult",
     props: {
-        totalScore: {
+        totalScore:{
+            type: Number,
+            required: true
+        },
+        score: {
             type: Number,
             required: true
         },
@@ -64,85 +88,86 @@ export default {
         }
     },
     methods: {
-        goToUserLibrary() {
-            this.$router.push({ name: 'UserLibrary' });
-        },
+
         goToHistoryPage() {
             this.$router.push({ name: 'HistoryPage' });
         },
-        toggleShowWrongOnly() {
-            this.showWrongOnly = !this.showWrongOnly;
-        }
+
     }
 }
 </script>
 
 <style scoped>
-.result-page {
-    margin: 20px;
-    text-align: center;
-    position: relative;
-}
-
-.score {
-    margin: 40px 0;
-    margin-top: 100px;
+.header {
+    margin: 10vh 2vw 5vh 2vw;
+    
     left: 50%;
-    font-size: 25px;
+    font-size: 2vw;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
-.quiz-date {
-    margin-left: 0px;
-    margin-right: 10px;
+.question-title{
+    display: inline-flex;
+    margin: 1vh 1vw 1vh 1vw;
 }
 
-.total-score {
-    text-align: center;
-    margin-left: 600px;
+.question-title > h4{
+    margin-left: 1vw;
+}
+.questions-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5%;
+    margin-top: 3vh;
+    padding: 1.5rem;
+    border-radius: 1rem;
 }
 
 .question {
-    margin-bottom: 20px;
+    border-radius: 1vw;
+    border-style: dotted;
+    padding: 1vw;
     text-align: center;
-    font-size: 25px;
+    font-size: 2vw;
 }
 
 .correct-answer {
-    color: green;
+    background-color: green;
+    margin: 0.5vw;
 }
 
 .incorrect-answer {
-    color: red;
+    background-color: red;
+    margin: 0.5vw;
 }
 
 .user-answer {
     color: blue;
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    width: 100%;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-}
 
 button {
-    padding: 10px 20px;
     background-color: #007bff;
-    color: white;
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px;
-    min-width: 150px;
-    margin-bottom: 55px;
-    font-size: 16px;
+
+    font-size: 2vw;
+}
+
+.so-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 10%;
+}
+
+.tf-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 10%;
 }
 
 button:hover {
@@ -154,18 +179,46 @@ button:hover {
 }
 
 .history-button {
-    background-color: #ffc107;
+    background-color: #c0c0c0;
+    padding: 1vh 1vw 1vh 1vw;
 }
 
 .history-button:hover {
-    background-color: #e0a800;
+    background-color: #838383;
 }
 
-.show-wrong-button {
-    background-color: #ff9800;
+.radio-toolbar {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 8px 0 rgba(0, 0, 0, 0.19);
+    height: 10vh;
+    width: 100%;
+    font-size: 2vw;
+    display: flex;
+    overflow: hidden;
+    border-radius: 1vw;
+    border-style: solid;
 }
 
-.show-wrong-button:hover {
-    background-color: #e68900;
+.radio-toolbar label {
+    width: 100%;
+    display: inline-block;
+    background-color: #FFFFFF;
+    margin-left: -30px;
+    padding: 10px 20px;
+    font-size: 3vw;
+    text-align: center;
+
+}
+
+.radio-toolbar label:hover {
+    background-color: #B4B4B4;
+}
+
+.radio-toolbar input[type="radio"]:checked+label {
+    background-color: #DAA521;
+    color: white;
+}
+
+input[type="radio"] {
+    visibility: hidden;
 }
 </style>

@@ -42,7 +42,7 @@ export default {
             testSheet: [],
             answerSheet: [],
             questionCount: 0,
-            lastPath: "/",
+            lastPathName: "/",
             showSubmitPopup: false,
             incompleteQuestions: [],
 
@@ -52,7 +52,7 @@ export default {
 
     async created() {
         try {
-            this.quizID = useQuizStore().quiz.Quiz_id;
+            this.quizID = this.$route.query.quizID;
             this.userID = this.$route.query.userID;
             this.currentQuestionIndex = 0;
 
@@ -75,7 +75,7 @@ export default {
             }
 
             this.questionCount = this.testSheet.length;
-            this.lastPath = this.$route.query.lastPath;
+            this.lastPathName = this.$route.query.lastPathName;
 
             this.renderFlag = true;
         } catch (e) {
@@ -127,7 +127,7 @@ export default {
 
         backToLastPage() {
             try {
-                this.$router.push(this.lastPath);
+                this.$router.push({name:this.lastPathName});
             } catch (e) {
                 this.$router.push('/');
             }
@@ -195,8 +195,7 @@ export default {
 .container {
     display: flex;
     flex-direction: column;
-    justify-self: space-between;
-    background-color: bisque;
+    justify-self: space-between;    
     width: 100vw;
     height: 100vh;
 }
