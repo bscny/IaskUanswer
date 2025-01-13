@@ -7,7 +7,7 @@
             <h5 class="quiz-date">Completed at: {{ QuizDate }}</h5>
         </div>
         <div class="radio-toolbar">
-            <input type="radio" id="all" name="subscription-type" value="showAll" @click="showWrongOnly = false">
+            <input type="radio" id="all" name="subscription-type" value="showAll" @click="showWrongOnly = false" checked>
             <label for="all">Show All</label>
             <input type="radio" id="wrong-only" name="subscription-type" value="showWrongOnly"
                 @click="showWrongOnly = true">
