@@ -3,12 +3,11 @@
 
 
         <ul class="options">
-            <li>
-
-                <router-link to="/UserLibrary">Library</router-link>
+            <li @click="toUserLibrary()">
+                Library
             </li>
-            <li>
-                <router-link to="/QuizView/HistoryPage">Test History</router-link>
+            <li @click="toHistoryPage">
+                 History
             </li>
         </ul>
     </div>
@@ -20,6 +19,15 @@ export default {
     data() {
         return {};
     },
+    methods:{
+        toUserLibrary(){
+            this.$emit("sidebarRoute", "UserLibrary")
+        },
+        toHistoryPage(){
+            this.$emit("sidebarRoute", "HistoryPage")
+
+        }
+    }
 };
 </script>
 
@@ -49,19 +57,16 @@ export default {
 .options {
     list-style: none;
     width: 100%;
-    font-size: 2.8vh;
+    font-size: 2vw;
 }
 
 .options li {
     margin: 15px 0;
     min-width: 100%;
-}
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: rgb(184, 184, 184);
 
-.options a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    transition: color 0.3s;
 }
 
 .options li:hover {

@@ -1,7 +1,7 @@
 <template>
     <NavBar />
 
-    <SideBar />
+    <SideBar @sidebarRoute="handleSidebarRoute($event)"/>
 
     <div class="body">
         <QuizGrid v-if="quizzes != null" :quizzes="quizzes" @gridClick="tryQuiz($event)"/>
@@ -29,20 +29,19 @@ export default {
         return {
             quizzes: [],
             showSubmitPopup: false,
-            tringQuizID: -1
+            tringQuizID: -1,
         };
     },
 
     async beforeCreate() {
         const response = await GetRandQuiz(9);
-        console.log(response.quizzes)
         this.quizzes = response.quizzes;
     },
 
     methods: {
         tryQuiz(id){
             console.log("try")
-            if(localStorage.getItem("userdata") === undefined){
+            if(this.userData == undefined){
                 this.$router.push("/Login");
                 return;
             }
@@ -63,9 +62,22 @@ export default {
                     }
                 });
             }
-
             this.showSubmitPopup = false;
+        },
 
+        handleSidebarRoute(destName){
+            console.log("router")
+            if(this.userData == undefined){
+                this.$router.push({name:"Login"});
+                return
+            }
+            this.$router.push({name:destName});
+
+        }
+    },
+    computed:{
+        userData(){
+            return localStorage.getItem("userdata");
         }
     }
 }
