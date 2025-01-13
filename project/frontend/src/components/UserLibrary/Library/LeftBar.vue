@@ -1,20 +1,36 @@
 <template>
     <nav class="leftbar">
-        <button class="create-folder-button"  @click="CreateFolder()">
+        <button class="create-folder-button" @click="CreateFolder()">
             Create Folder
         </button>
 
         <ul class="folders-flexbox" v-for="folder in folders" :key="folder.Folder_id">
-            <button class="edit-folder-button"  @click="EditFolder(folder)">
-                Edit Folder
-            </button>
-            
-            <div class="folder"  @click="ToggleShow(folder)">
-                {{ folder.Folder_name }}
+
+
+            <div class="folder">
+
+
+                <div class="folder-text" @click="ToggleShow(folder)">
+
+                    <span v-if="folder.show">
+                        ▾
+                    </span>
+                    <span v-else>
+                        ▸
+                    </span>
+                    <span class="folder-name">
+                        {{ folder.Folder_name }} 
+
+                    </span>
+                </div>
+
+                <button class="edit-folder-button" @click="EditFolder(folder)">
+                    Edit
+                </button>
             </div>
 
             <div v-if="folder.show">
-                <ul v-for="quiz in folder.quizzes" :key="quiz.Quiz_id"  @click="DisplayQuestions(quiz)">
+                <ul v-for="quiz in folder.quizzes" :key="quiz.Quiz_id" @click="DisplayQuestions(quiz)">
                     <div class="quiz">
                         {{ quiz.Quiz_name }}
                     </div>
@@ -26,7 +42,7 @@
 
 <script>
 
-export default{
+export default {
     name: "LeftBar",
     components: {
     },
@@ -35,26 +51,26 @@ export default{
         folders: Array,
     },
 
-    data(){
-        return{
+    data() {
+        return {
         }
     },
 
     methods: {
-        
-        CreateFolder(){
+
+        CreateFolder() {
             this.$emit("CreateFolder");
         },
 
-        EditFolder(folder){
+        EditFolder(folder) {
             this.$emit("EditFolder", folder);
         },
 
-        ToggleShow(folder){
+        ToggleShow(folder) {
             folder.show = !folder.show;
         },
 
-        DisplayQuestions(quiz){
+        DisplayQuestions(quiz) {
             this.$emit("DisplayQuestions", quiz);
         }
     },
@@ -78,7 +94,7 @@ export default{
     top: 7.8vh;
     left: 0;
     /* bottom: 0; */
-    width: 12vw;
+    width: 15vw;
     border-radius: 5px;
 
     background-color: rgb(160, 148, 148);
@@ -90,7 +106,7 @@ export default{
 
     margin: 2.5vh 0 0 0;
     padding: 0.8vh 1vw 0.8vh 1vw;
-    font-size: 1vw;
+    font-size: 1.5vw;
     background-color: rgb(177, 187, 240);
     color: rgb(255, 255, 255);
     border: none;
@@ -118,8 +134,8 @@ export default{
 .edit-folder-button {
     display: block;
 
-    margin: 3.5vh 0 0 0;
-    padding: 0.5vh 0.5vw;
+    margin: 0 0 0 0.75vw;
+    padding: 0.05vh 0.05vw;
     background-color: #db5d67;
     color: white;
     border: none;
@@ -135,31 +151,47 @@ export default{
 }
 
 .folder {
-    display: block;
-
-    margin: 1vh 0 1vh 0;
+    min-width: 14vw;
+    display: flex;
+    justify-content: space-between;
     padding: 0 0 0 0;
-    width: auto;
-    font-size: 1.5vw;
+    margin-top: 1vh;
+}
+
+.folder-text {
+    display: flex;
+    margin: 1vh 0 1vh 0;
+    width: 12vw;
+
+    text-align: center;
+    font-size: 1.75vw;
 
     background-color: rgba(0, 0, 0, 0.137);
 }
 
-.folder:hover {
+.folder-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 0.05vw;
+}
+.folder-text:hover {
     background-color: #e0e0e0;
     cursor: pointer;
 }
 
 .quiz {
     display: block;
-
-    margin: 1vh 0 1vh 0.5vw;
-    width: auto;
-    font-size: 1.2vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.137);
+    margin: 1vh 0 1vh 1vw;
+    width: 10vw;
+    font-size: 1.5vw;
 }
 
 .quiz:hover {
-    background-color: #9c9c9c;
+    background-color: #e0e0e0;
     cursor: pointer;
 }
 </style>

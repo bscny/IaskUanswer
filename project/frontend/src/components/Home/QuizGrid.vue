@@ -19,7 +19,7 @@ export default {
     methods: {
         goToQuiz(id) {
             console.log(`go to quiz ${id}`);
-            // this.$router.push(`/quiz/${id}`);
+            this.$emit("gridClick", id);
         },
     },
     data() {
@@ -39,7 +39,6 @@ export default {
     padding: 1.5rem;
     border-radius: 1rem;
     border-color: black;
-    background-color: #f9f9f9;
 }
 
 .grid-item {

@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="container">
         <NavBar />
-        <h1>History Page</h1>
+        <h1 class="breadcrumb">History Page</h1>
         <div v-if="records.length">
             <TestRecord
                 v-for="record in records"
@@ -12,7 +12,7 @@
             />
         </div>
         <div v-else>
-            <p>No records found.</p>
+            <p class="no-record">No records found.</p>
         </div>
     </div>
 </template>
@@ -60,23 +60,34 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-    text-align: center;
-    margin: 20px 0;
-}
 
-button {
+.container{
     display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
-button:hover {
-    background-color: #218838;
+.breadcrumb {
+  --b: 5px;   /* the border thickness */
+  --a: 35deg;  /* control the shape */
+  --c: #64908A;
+  margin-top: 10vh;
+  line-height: 1.8; /* control the height */
+  padding-inline: calc(var(--b) + .2em) calc(.5lh*tan(var(--a)) + var(--b)/cos(var(--a)));
+  position: relative;
+  width: fit-content;
+}
+.breadcrumb:before {
+  content:"";
+  position: absolute;
+  inset: 0;
+  background: var(--c);
+  clip-path: polygon(0 0,calc(100% - .5lh*tan(var(--a))) 0,100% 50%,calc(100% - .5lh*tan(var(--a))) 100%,0 100%,0 0,var(--b) var(--b),var(--b) calc(100% - var(--b)),calc(100% - .5lh*tan(var(--a)) - var(--b)*(1/cos(var(--a)) - tan(var(--a)))) calc(100% - var(--b)),calc(100% - var(--b)/cos(var(--a))) 50%,calc(100% - .5lh*tan(var(--a)) - var(--b)*(1/cos(var(--a)) - tan(var(--a)))) var(--b),var(--b) var(--b));
+}
+
+.no-record{
+    position: fixed;
+    color: red;
+    left: 25%;
+    font-size: 7.5vw;
+    text-align: center;
 }
 </style>

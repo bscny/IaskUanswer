@@ -40,8 +40,8 @@
             </div>
     
             <div class="option-grid" v-if="question.SO_id !== undefined">
-                <div class="options">
-                    Ans: {{ question.Answer }}
+                <div class="options so-answer">
+                    {{ question.Answer }}
                 </div>
     
                 <div class="options">
@@ -59,10 +59,10 @@
     
             <div class="option-grid" v-if="question.TF_id !== undefined">
                 <div class="options-TF" v-if="question.Answer == true">
-                    Ans: True
+                    True
                 </div>
                 <div class="options-TF" v-else>
-                    Ans: False
+                    False
                 </div>
             </div>
     
@@ -133,7 +133,7 @@ export default {
 <style scoped>
 .container {
     display: flex;
-
+    margin-left: 4vw;
     flex-direction: column;
     justify-content: start;
     align-items: center;
@@ -206,7 +206,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: start;
-
+    margin-top: 5vh;
     width: 100%;
 
     border-top: solid;
@@ -282,10 +282,14 @@ export default {
     font-size: 2vw;
 }
 
+.so-answer{
+    color: #37b13f;
+}
 .options-TF {
     font-size: 2vw;
     grid-row: span 2;
     grid-column: span 2;
+    color: #37b13f;
 }
 
 .create-question-flexbox {

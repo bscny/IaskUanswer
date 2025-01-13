@@ -1,27 +1,26 @@
 <template>
-    <NavBar />
-    <LeftBar :folders="folders" @CreateFolder="SetCreateFolder()" 
-                                @EditFolder="SetEditFolder($event)"
-                                @DisplayQuestions="SetDisplay($event)" />
+    <div class="container">
 
-    <div v-if="canCreateFolder">
-        <FolderCreatePop    @Cancel="CancelAction()" 
-                            @Created="FolderCreated($event)" />
-    </div>
+        <NavBar />
 
-    <div v-if="canEditFolder">
-        <FolderEditPop :folder="curLookingFolder"   @Cancel="CancelAction()" 
-                                                    @Edited="FolderEdited($event)"
-                                                    @CreateQuiz="AddQuizToFolder($event)" 
-                                                    @Deleted="FolderDeleted($event)" />
-    </div>
 
-    <div class="display-area" v-if="curLookingQuiz != null">
-        <DisplayQuestion    :quiz="curLookingQuiz" 
-                            :questions="curLookingQuestions"
-                            :editMode="false"
-                            @EditingQuiz="EditQuiz()" 
-                            @TryingQuiz="TryCurrentQuiz()"/>
+        <LeftBar :folders="folders" @CreateFolder="SetCreateFolder()" @EditFolder="SetEditFolder($event)"
+            @DisplayQuestions="SetDisplay($event)" />
+
+        <div v-if="canCreateFolder">
+            <FolderCreatePop @Cancel="CancelAction()" @Created="FolderCreated($event)" />
+        </div>
+
+        <div v-if="canEditFolder">
+            <FolderEditPop :folder="curLookingFolder" @Cancel="CancelAction()" @Edited="FolderEdited($event)"
+                @CreateQuiz="AddQuizToFolder($event)" @Deleted="FolderDeleted($event)" />
+        </div>
+
+        <div class="display-area" v-if="curLookingQuiz != null">
+            <DisplayQuestion :quiz="curLookingQuiz" :questions="curLookingQuestions" :editMode="false"
+                @EditingQuiz="EditQuiz()" @TryingQuiz="TryCurrentQuiz()" />
+        </div>
+
     </div>
 </template>
 
@@ -193,8 +192,10 @@ export default {
             this.$router.push({
                 name: "TakeQuiz",
                 query: {
-                    lastPath: this.$route.name,
-                    userID: userID
+                    lastPathName: this.$route.name,
+                    userID: userID,
+                    quizID: this.curLookingQuiz.Quiz_id
+
                 }
             });
         },
@@ -239,7 +240,7 @@ export default {
             // fill in blank... you are hard to deal with.....
 
         },
-        
+
         async SetDisplay(quiz) {
             this.curLookingQuiz = quiz;
             await this.FetchQuestion();
@@ -261,6 +262,7 @@ export default {
 </script>
 
 <style scoped>
+
 .display-area {
     margin: 10vh 5vw 10vh 14vw;
 }

@@ -90,4 +90,6 @@ Hint: 注意，redis 與 mysql service 都要跑起來才能作以上步驟
 
 ## Demo Video
 
+## Presentation
 
+![簡報](https://www.canva.com/design/DAGcEF4oyAo/PfosZZtWLQZy6ubxInWB7g/edit)
