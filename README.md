@@ -75,6 +75,7 @@ project
 - `node` v20.17.0
 - `mysql` Ver 8.0.40-0ubuntu0.22.04.1 for Linux on x86_64
 - `redis` 6.0.16
+- `.env` 檔案建置(請參照 `.env.example`)
 
 ## 使用說明
 
