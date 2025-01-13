@@ -12,7 +12,7 @@
             />
         </div>
         <div v-else>
-            <p>No records found.</p>
+            <p class="no-record">No records found.</p>
         </div>
     </div>
 </template>
@@ -83,5 +83,11 @@ export default {
   clip-path: polygon(0 0,calc(100% - .5lh*tan(var(--a))) 0,100% 50%,calc(100% - .5lh*tan(var(--a))) 100%,0 100%,0 0,var(--b) var(--b),var(--b) calc(100% - var(--b)),calc(100% - .5lh*tan(var(--a)) - var(--b)*(1/cos(var(--a)) - tan(var(--a)))) calc(100% - var(--b)),calc(100% - var(--b)/cos(var(--a))) 50%,calc(100% - .5lh*tan(var(--a)) - var(--b)*(1/cos(var(--a)) - tan(var(--a)))) var(--b),var(--b) var(--b));
 }
 
-
+.no-record{
+    position: fixed;
+    color: red;
+    left: 25%;
+    font-size: 7.5vw;
+    text-align: center;
+}
 </style>
